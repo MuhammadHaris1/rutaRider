@@ -34,7 +34,7 @@ render() {
                         <Button onPress={() => this.props.goto('Map')}>
                             <Image source={this.props.active == "location" ? RouteiconActive : Routeicon} style={{height: 30, width: 30}} />
                         </Button>
-                        <Button onPress={() => this.props.goto('WeeklyStatistics')}>
+                        <Button onPress={() => this.props.goto('History')}>
                         <   Image source={this.props.active == "statistics" ? statisticsActive : statistics} style={{height: 30, width: 30}} />
                         </Button>
                     </FooterTab>

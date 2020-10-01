@@ -176,6 +176,7 @@ export function acceptRide(data, rideReqDetails, oldLocation) {
 export function startRide(data, obj) {
   return function(dispatch) {
     obj.status = 'start'
+    console.log('data', data)
     return new Promise((resolve, reject) => {
       axios.post(`${API_ENDPOINT}startRide.php`, data)
     .then(async(res) => {

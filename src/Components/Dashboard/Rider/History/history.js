@@ -180,7 +180,9 @@ class History extends React.Component {
                     
                     
 
-                <FooterComponent  goto={(e) => this.props.navigation.navigate(e)} active={"history"} />
+                    <FooterComponent goto={(e) => this.props.navigation.navigate(e, {
+                        reqDetailParam: false 
+                            })} active={"statistics"} />
             </ImageBackground>
             </View>
         )

@@ -112,7 +112,7 @@ class Map extends Component {
         activeRideData.rideReqDetails.drop_longitude = Number(e.drop_longitude)
         updateRide(activeRideData)
         try {
-            // await AsyncStorage.setItem('activeRide', JSON.stringify(activeRideData));
+            await AsyncStorage.setItem('activeRide', JSON.stringify(activeRideData));
             console.log("SET SUCCESFULLY")
           } catch (error) {           
             console.log('error =>', error)
@@ -130,7 +130,7 @@ class Map extends Component {
         const { activeRideData, setRideDataToAsync } = this.props
         var activeRide = await AsyncStorage.getItem('activeRide')
         this.watchPosition()
-        console.log("activeRideData", activeRideData, " activeRide ", JSON.parse(activeRide))
+        // console.log("activeRideData", activeRideData, " activeRide ", JSON.parse(activeRide))
         
 
         if(reqDetailParam) {
@@ -222,7 +222,7 @@ class Map extends Component {
         const { sendLiveLocation, activeRideData } = this.props
 
         var activeRide = await AsyncStorage.getItem('activeRide')
-        console.log("POsition activeRide", activeRide , "activeRideData ",  activeRideData)
+        // console.log("POsition activeRide", activeRide , "activeRideData ",  activeRideData)
 
 
 
@@ -265,7 +265,7 @@ class Map extends Component {
 
 
                         var convertVal = JSON.parse(activeRide)
-                        console.log("POsition activeRide", typeof convertVal, "activeRideData ", typeof activeRideData)
+                        // console.log("POsition activeRide", typeof convertVal, "activeRideData ", typeof activeRideData)
         
                         var data = new FormData();
                         data.append('action', 'liveLocation');
@@ -339,7 +339,7 @@ class Map extends Component {
     onDone = () => {
         const {setLocation} = this.props.navigation.state.params
         const {focusedlocation} = this.state
-        console.log('setLocation', setLocation)
+        // console.log('setLocation', setLocation)
         var coords = {
             latitude  : focusedlocation.latitude,
             longitude  : focusedlocation.longitude,
@@ -589,7 +589,7 @@ class Map extends Component {
     renderRideDetails = () => {
         const { rideDetail,  rideUserDetails, rideReqDetails} = this.state
         const { activeRideData } = this.props
-        console.log(' rideUserDetails rideUserDetails', rideUserDetails, activeRideData)
+        // console.log(' rideUserDetails rideUserDetails', rideUserDetails, activeRideData)
 
         return (
             <View style={{ flex: 1, backgroundColor:'rgb(41, 46, 66)', position: 'absolute', top: 0, bottom: 0,left: 0, right: 0, height:'100%' }}>
@@ -705,22 +705,53 @@ class Map extends Component {
 
 
 
-    startRide = () => {
+    startRide = async () => {
         const { coordinates } = this.state
-        const { activeRideData , userDetails, startRide} = this.props
-        console.log('activeRideData', activeRideData, 'CURRENT LOCATION', coordinates[0])
+        const { activeRideData , userDetails, startRide, updateRide} = this.props
+        var activeRide = await AsyncStorage.getItem('activeRide')
+
+        // console.log('activeRideData', activeRideData, 'CURRENT LOCATION', coordinates[0])
         var data = new FormData();
         data.append('action', 'rideStart');
-        data.append('latitude', coordinates[0].latitude);
-        data.append('longitude', coordinates[0].longitude);
-        data.append('rider_id', userDetails.data.id);
-        data.append('booking_id', activeRideData.rideReqDetails.booking_id);
-        data.append('name', 'Testing location');
+        // data.append('latitude', coordinates[0].latitude);
+        // data.append('longitude', coordinates[0].longitude);
+        // data.append('user_id', userDetails.data.id);
+        if(activeRideData){
+            data.append('booking_id', activeRideData.rideReqDetails.booking_id);
+        }else {
+            data.append('booking_id', JSON.parse(activeRide).rideReqDetails.booking_id);
+        }
+        // data.append('name', 'Testing location');
 
         startRide(data, activeRideData)
-        .then((res) => {
+        .then(async (res) => {
+            if(activeRideData){
+                var obj = {
+                    latitude: Number(activeRideData.rideReqDetails.drop_latitude),
+                    longitude: Number(activeRideData.rideReqDetails.drop_longitude)
+                  }
+            }else {
+                var obj = {
+                    latitude: Number(JSON.parse(activeRide).rideReqDetails.drop_latitude),
+                    longitude: Number(JSON.parse(activeRide).rideReqDetails.drop_longitude)
+                  }
+            }
+            // coordinates[1] = obj
+
+            
+            coordinates.splice(1, 1, obj)
+            activeRideData.coordinate[1] = obj
+            updateRide(activeRideData)
+            try {
+                await AsyncStorage.setItem('activeRide', JSON.stringify(activeRideData));
+                console.log("SET SUCCESFULLY")
+            } catch (error) {           
+                console.log('error =>', error)
+            }
+            
             this.setState({
-                abc:''
+                abc:'',
+                coordinates
             })
         })
 
