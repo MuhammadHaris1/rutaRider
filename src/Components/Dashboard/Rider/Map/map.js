@@ -81,7 +81,7 @@ class Map extends Component {
         })
 
         this.userChannel.bind('live-location', (e) => {
-            console.log('live-location', e)
+            // console.log('live-location', e)
             this.locationChanged(e)
         })
 
@@ -92,12 +92,10 @@ class Map extends Component {
     }
 
 
-    // locationChanged = (location) => {
-    //     this.riderMarker.animateMarkerToCoordinate(
-    //         { latitude: Number(location.latitude), longitude: Number(location.longitude) },
-    //         500
-    //        );
-    // }
+    locationChanged = (location) => {
+        console.log("{latitude: Number(location.latitude), longitude: Number(location.longitude)},500", {latitude: Number(location.latitude), longitude: Number(location.longitude)},500)
+        this.riderMarker.animateMarkerToCoordinate({latitude: Number(location.latitude), longitude: Number(location.longitude)},500);
+    }
 
 
     handleExtendBooking = async (e) => {
@@ -273,6 +271,8 @@ class Map extends Component {
                         data.append('longitude', position.coords.latitude);
                         data.append('latitude', position.coords.longitude);
                         data.append('booking_id', convertVal.rideReqDetails.booking_id);
+                        data.append('rider_id', this.props.userDetails.data.id);
+
                         sendLiveLocation(data)
                         console.log("CALL activeRide")
 
@@ -306,6 +306,8 @@ class Map extends Component {
                                 data.append('longitude', position.coords.latitude);
                                 data.append('latitude', position.coords.longitude);
                                 data.append('booking_id', activeRideData.rideReqDetails.booking_id);
+                                data.append('rider_id', this.props.userDetails.data.id);
+
                                 sendLiveLocation(data)
                                 console.log("CALL activeRideData")
                                 
@@ -793,15 +795,15 @@ class Map extends Component {
 
  
     render() {
-        // console.log("this.state.searchLocation", this.state.searchLocation )
+        console.log("coordinates", this.state.coordinates)
         const { activeRideData } = this.props
         let marker = null;
-        const { focusedlocation } = this.state;
+        const { focusedlocation, coordinates } = this.state;
         if (this.state.coordinates.length >= 1) {
             marker = this.state.coordinates.map((coordinate, index) =>
                 {
                     if(index == 0) {
-                        return <MarkerAnimated ref={(e) => this.riderMarker = e}  image={car} title={'Start'} key={`coordinate_${index}`} coordinate={coordinate} />
+                        return <MarkerAnimated flat={true} ref={(ref) => this.riderMarker = ref}  image={car} title={'Start'} key={`coordinate_${index}`} coordinate={coordinate} />
                     }else if (index == 1) {
                        return <MapView.Marker  title={'End'} key={`coordinate_${index}`} coordinate={coordinate} />
                     }
