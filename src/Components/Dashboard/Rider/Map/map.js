@@ -482,7 +482,7 @@ class Map extends Component {
                                 <View>
                                     <CountDown
                                         size={30}
-                                        until={1200}
+                                        until={20}
                                         onFinish={() => {
                                             Alert.alert("Alert", "Ride Expired")
                                             this.setState({rideReq: !rideReq})
