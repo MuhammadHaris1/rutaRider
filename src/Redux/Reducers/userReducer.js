@@ -94,6 +94,14 @@ export default function reducer(
     }
 
 
+  case 'RENDER_LOADER': {
+      return {
+        ...state,
+        fetching: true,
+        fetched: false,
+      };
+    }
+
     case 'CLEAR_PROCESSING': {
       return {
         ...state,

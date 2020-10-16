@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, TouchableOpacity, ImageBackground, ScrollView, Image} from 'react-native'
+import {View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, Platform} from 'react-native'
 import { connect } from 'react-redux';
 import {Button} from 'native-base'
 const welcome = require('../../../../assets/welcome.png')
@@ -11,6 +11,7 @@ const button = require('../../../../assets/Button.png')
 class Welcome extends React.Component {
     constructor(props){
         super(props);
+
     }
 
 
@@ -30,7 +31,7 @@ class Welcome extends React.Component {
                         
                         <View style={{  width:'100%', marginTop:20}}>
                             <Text style={{
-                                fontFamily:'AVENGEANCE HEROIC AVENGER BI', 
+                                fontFamily: Platform.os === "android" ? 'AVENGEANCE HEROIC AVENGER BI' : null, 
                                 fontSize:45, color:'#fff', letterSpacing:10, textAlign:'center', width:'100%'}}>
                                 WELCOME
                             </Text>

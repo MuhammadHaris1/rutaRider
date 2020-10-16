@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, Image, AsyncStorage, ImageBackground } from 'react-native'
+import { Text, View, Image, AsyncStorage, ImageBackground, Platform } from 'react-native'
 const splashBack = require('../../assets/Splash.png')
 import { Spinner } from 'native-base'
 const Logo = require('../../assets/Logo.png')
@@ -67,7 +67,7 @@ class Splash extends Component {
 
                     <View style={{  width:'100%', marginTop:20}}>
                         <Text style={{
-                            fontFamily:'AVENGEANCE HEROIC AVENGER BI', 
+                            fontFamily: Platform.os === "android" ? 'AVENGEANCE HEROIC AVENGER BI': null, 
                             fontSize:45, color:'#fff', letterSpacing:10, textAlign:'center', width:'100%'}}>
                             RUTA
                         </Text>

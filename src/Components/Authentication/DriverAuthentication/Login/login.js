@@ -110,7 +110,7 @@ class DriverLogin extends React.Component {
                         </View>
 
                         <View >
-                            <Button transparent onPress={() => this.props.navigation.navigate('UserLogin')} style={{width:'40%', alignSelf:'center', marginTop:2}} full rounded>
+                            <Button transparent onPress={() => this.props.navigation.navigate('ForgotPassword')} style={{width:'40%', alignSelf:'center', marginTop:2}} full rounded>
                                 <Text style={{color:'#fff', textAlign:'center'}}>
                                     Forgot Password?
                                 </Text>

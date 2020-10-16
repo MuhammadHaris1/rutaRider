@@ -283,5 +283,51 @@ export function updateRide(data) {
   }
 }
 
+export function forgotPassword(formmdata) {
+  return function(dispatch) {
+    dispatch({type:'RENDER_LOADER'})
+    return new Promise((res, rej) => {
+      axios.post('https://hnh6.xyz/route/api/forget_password.php', formmdata)
+      .then((resposne) => {
+        console.log('RSPONSE', resposne)
+        if(resposne.data.status){
+          dispatch({ type: "CLEAR_PROCESSING" });
+          res({status: resposne.data.status, message: resposne.data.message, userId: resposne.data.userId})
+        }else {
+          dispatch({ type: "CLEAR_PROCESSING" });
+          rej({status: resposne.data.status, message: resposne.data.message})
+        }
+      })
+      .catch((err) => {
+        dispatch({ type: "CLEAR_PROCESSING" });
+        rej({status: false, message: 'Something Went Wrong'})
+      })
+    })
+  }
+}
+
+
+export function changePassword(formmdata) {
+  return function(dispatch) {
+    dispatch({type:'RENDER_LOADER'})
+    return new Promise((res, rej) => {
+      axios.post('https://hnh6.xyz/route/api/forget_password.php', formmdata)
+      .then((resposne) => {
+        if(resposne.data.status){
+          dispatch({ type: "CLEAR_PROCESSING" });
+          res({status: resposne.data.status, message: resposne.data.message})
+        }else {
+          dispatch({ type: "CLEAR_PROCESSING" });
+          rej({status: resposne.data.status, message: resposne.data.message})
+        }
+      })
+      .catch((err) => {
+        dispatch({ type: "CLEAR_PROCESSING" });
+        rej({status: false, message: 'Something Went Wrong'})
+      })
+    })
+  }
+}
+
 
 

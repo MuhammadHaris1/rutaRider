@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, ImageBackground, Image, TouchableOpacity, Dimensions, Modal, FlatList, BackHandler, Alert } from 'react-native'
+import { View, Text, ScrollView, ImageBackground, Image, TouchableOpacity, Dimensions, Modal, FlatList, BackHandler, Alert, Platform } from 'react-native'
 import { connect } from 'react-redux';
 import { signup, updateVehicle, getHistory } from '../../.././../Redux/Actions/userAction'
 import { Item, Input, Label, Button } from 'native-base';
@@ -67,7 +67,7 @@ class Profile extends React.Component {
         const { userDetails, getHistory } = this.props
         console.log('this.props', userDetails.data.vehicle)
         getHistory(userDetails.data.id)
-        if (userDetails.data.vehicle.id !== null) {
+        if (userDetails.data.vehicle.id != null) {
             this.setState({ selectedImage: this.state.carImages[0], addVehicle: false })
         } else {
             this.setState({ selectedImage: this.state.carImages[0], addVehicle: true })
@@ -279,7 +279,7 @@ class Profile extends React.Component {
                                     </Text>
                             </View>
 
-                            <View style={{ alignItems: 'center' }}>
+                            <View style={{ alignItems: 'center', height:'100%' }}>
 
                                 <View>
                                     <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
@@ -319,9 +319,9 @@ class Profile extends React.Component {
                                 </TouchableOpacity >
 
                                 <View>
-                                    <Button onPress={() => {
+                                    <Button  onPress={() => {
                                         this.addAndEditVehicle()
-                                    }} style={{ width: '80%', marginTop: 20, borderColor: '#3A91FA' }} transparent full rounded>
+                                    }} style={{ width: '80%', marginVertical: '10%', borderColor: '#3A91FA', backgroundColor:'#3A91FA' }} full rounded>
                                         <Text style={{ color: '#fff' }}>
                                             SAVE
                                     </Text>
@@ -376,7 +376,7 @@ class Profile extends React.Component {
                                 <TouchableOpacity onPress={() => this.setState({ modalVisible: true, })} style={{ top: 110 }}>
                                     <Text style={{
                                         color: '#fff', textDecorationLine: 'underline',
-                                        fontFamily:'Auckland Free'
+                                        fontFamily: Platform.os === "android" ? 'Auckland Free': null
                                     }}>
                                         View Vehicle
                                     </Text>

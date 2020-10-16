@@ -490,7 +490,7 @@ class Map extends Component {
                                         }}
                                         digitStyle={{backgroundColor: 'transparent',}}
                                         digitTxtStyle={{color: '#1CC625', 
-                                        fontFamily: 'digital'
+                                        // fontFamily: 'digital'
                                     }}
                                         timeLabelStyle={{color: 'red', fontWeight: 'bold'}}
                                         separatorStyle={{color: '#1CC625'}}

@@ -20,6 +20,7 @@ import DrawerMenu from "./drawer";
 import Emergency from '../Components/Dashboard/Rider/EmergencyCall/emergencyCall'
 import { UserStack } from "./userNavigation";
 import History from "../Components/Dashboard/Rider/History/history";
+import ForgotPassword from "../Components/Authentication/DriverAuthentication/Forgot/forgotPassword";
 
 
 
@@ -70,6 +71,14 @@ const AuthStack = createStackNavigator({
 
     DriverSignup: {
         screen: DriverSignup,
+        navigationOptions: () => ({
+            headerBackTitle: null,
+            header: null,
+        }),
+    },
+
+    ForgotPassword: {
+        screen: ForgotPassword,
         navigationOptions: () => ({
             headerBackTitle: null,
             header: null,
