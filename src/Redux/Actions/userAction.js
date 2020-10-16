@@ -295,6 +295,7 @@ export function forgotPassword(formmdata) {
           res({status: resposne.data.status, message: resposne.data.message, userId: resposne.data.userId})
         }else {
           dispatch({ type: "CLEAR_PROCESSING" });
+          Alert.alert("Alert", resposne.data.message)
           rej({status: resposne.data.status, message: resposne.data.message})
         }
       })

@@ -84,10 +84,10 @@ const ForgotPassword = (props) => {
     const { fetching } = props
 
         return (
-            <View style={{backgroundColor: 'rgba(43,48,68, 1)', width:'90%', alignSelf:'center', borderRadius:10, padding: 30, marginTop:'20%'}}>
+            <View style={{backgroundColor: 'rgba(43,48,68, 1)', width:'90%', alignSelf:'center', borderRadius:10, padding: 30, marginTop:'10%'}}>
                         <View style={{alignItems:'center'}}> 
                             <Item rounded regular style={{ width: '98%', marginTop: '2%', borderColor:'#3A91FA' }}>
-                                <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => setEmail(e)} placeholder='Email' />
+                                <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => setEmail(e)} placeholder='Enter Your Email' />
                             </Item>
                         </View>
 
@@ -112,7 +112,7 @@ const ForgotPassword = (props) => {
     const renderCode = () => {
         const { fetching } = props
         return(
-            <View style={{backgroundColor: 'rgba(43,48,68, 1)', width:'90%', alignSelf:'center', borderRadius:10, padding: 30, marginTop:'20%'}}>
+            <View style={{backgroundColor: 'rgba(43,48,68, 1)', width:'90%', alignSelf:'center', borderRadius:10, padding: 30, marginTop:'10%'}}>
                 <CodeInput
                     activeColor='#3A91FA'
                     inactiveColor='#3A91FA'
@@ -144,7 +144,7 @@ const ForgotPassword = (props) => {
     const renderChangePassword = () => {
         const { fetching } = props
         return (
-            <View style={{backgroundColor: 'rgba(43,48,68, 1)', width:'90%', alignSelf:'center', borderRadius:10, padding: 30, marginTop:'20%'}}>
+            <View style={{backgroundColor: 'rgba(43,48,68, 1)', width:'90%', alignSelf:'center', borderRadius:10, padding: 30, marginTop:'10%'}}>
                         <View style={{alignItems:'center'}}> 
                             <Item rounded regular style={{ width: '98%', marginTop: '2%', borderColor:'#3A91FA' }}>
                                 <Input secureTextEntry style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => setNewPass(e)} placeholder='New Password' />
@@ -177,7 +177,7 @@ const ForgotPassword = (props) => {
             <ImageBackground source={welcome} style={{height:"100%", width:'100%', flex: 1, justifyContent:'center'}}> 
                 <ScrollView>
                     <View style={{height:"100%", width:'100%', flex: 1, }}>
-                        <View style={{alignItems:'center', marginTop:'20%'}}>
+                        <View style={{alignItems:'center', marginTop:'5%'}}>
                             <Image source={Logo} style={{width: 149, height:189}} />
                         </View>
                     </View>

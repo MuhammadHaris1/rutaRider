@@ -31,7 +31,7 @@ class Welcome extends React.Component {
                         
                         <View style={{  width:'100%', marginTop:20}}>
                             <Text style={{
-                                fontFamily: Platform.os === "android" ? 'AVENGEANCE HEROIC AVENGER BI' : null, 
+                                fontFamily: Platform.OS === "android" ? 'AVENGEANCE HEROIC AVENGER BI' : null, 
                                 fontSize:45, color:'#fff', letterSpacing:10, textAlign:'center', width:'100%'}}>
                                 WELCOME
                             </Text>

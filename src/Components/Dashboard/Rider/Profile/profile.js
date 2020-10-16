@@ -376,7 +376,7 @@ class Profile extends React.Component {
                                 <TouchableOpacity onPress={() => this.setState({ modalVisible: true, })} style={{ top: 110 }}>
                                     <Text style={{
                                         color: '#fff', textDecorationLine: 'underline',
-                                        fontFamily: Platform.os === "android" ? 'Auckland Free': null
+                                        fontFamily: Platform.OS === "android" ? 'Auckland Free': null
                                     }}>
                                         View Vehicle
                                     </Text>
