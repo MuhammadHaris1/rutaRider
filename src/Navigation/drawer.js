@@ -62,21 +62,21 @@ class DrawerMenu extends React.Component {
                             </TouchableOpacity>
 
 
-                            {/* <TouchableOpacity
+                            <TouchableOpacity
                             style={styles.menuItem}
                             onPress={() => {
-                                this.props.navigation.navigate('WeeklyStatistics')
+                                this.props.navigation.navigate('Payment')
                                 this.props.navigation.closeDrawer()
                             }}
                             >
                                 <View style={{ marginLeft: 10, width: 30 }}>
-                                    <Image source={require('../../assets/statisticsActive.png')} style={{ height: 20, width: 20 }} />
+                                    <Image source={require('../../assets/payment.png')} style={{ height: 20, width: 20 }} />
                                 </View>
 
                                 <View style={{ marginLeft: 20 }}>
-                                    <Text style={styles.menuItemText}>Statistics</Text>
+                                    <Text style={styles.menuItemText}>Payment</Text>
                                 </View>
-                            </TouchableOpacity> */}
+                            </TouchableOpacity>
 
                             <TouchableOpacity
                             style={styles.menuItem}

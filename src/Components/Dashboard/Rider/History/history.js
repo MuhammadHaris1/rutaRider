@@ -6,92 +6,12 @@ import { Header } from 'react-native-elements'
 const welcome2 = require('../../../../../assets/welcome2.png')
 const back = require('../../../../../assets/back.png')
 const sidebar = require('../../../../../assets/sidebar.png')
-import MapView ,{
-    MAP_TYPES,
-    PROVIDER_DEFAULT,
-    ProviderPropType,
-    UrlTile,
-  }  from 'react-native-maps';
+import MapView  from 'react-native-maps';
 
 class History extends React.Component {
     constructor (props) {
         super(props)
         this.state = {
-
-            history: [
-                {
-                    date: '1/12/2000',
-                    price: '250 PKR',
-                    carModal: 'Suzuki WagonR 2019',
-                    DriverName: 'John Doe',
-                    focusedlocation: {
-                    latitude: 24.9912986,
-                    longitude: 67.1322322,
-                    latitudeDelta: 0.0122,
-                    longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.0122
-                },
-                },
-                {
-                    date: '1/12/2000',
-                    price: '250 PKR',
-                    carModal: 'Suzuki WagonR 2019',
-                    DriverName: 'John Doe',
-                    focusedlocation: {
-                    latitude: 24.9912986,
-                    longitude: 67.1322322,
-                    latitudeDelta: 0.0122,
-                    longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.0122
-                },
-                },
-                {
-                    date: '1/12/2000',
-                    price: '250 PKR',
-                    carModal: 'Suzuki WagonR 2019',
-                    DriverName: 'John Doe',
-                    focusedlocation: {
-                    latitude: 24.9912986,
-                    longitude: 67.1322322,
-                    latitudeDelta: 0.0122,
-                    longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.0122
-                },
-                },
-                {
-                    date: '1/12/2000',
-                    price: '250 PKR',
-                    carModal: 'Suzuki WagonR 2019',
-                    DriverName: 'John Doe',
-                    focusedlocation: {
-                    latitude: 24.9912986,
-                    longitude: 67.1322322,
-                    latitudeDelta: 0.0122,
-                    longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.0122
-                    },
-                },
-                {
-                    date: '1/12/2000',
-                    price: '250 PKR',
-                    carModal: 'Suzuki WagonR 2019',
-                    DriverName: 'John Doe',
-                    focusedlocation: {
-                        latitude: 24.9912986,
-                        longitude: 67.1322322,
-                        latitudeDelta: 0.0122,
-                        longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.0122
-                        },
-                },
-                {
-                    date: '1/12/2000',
-                    price: '250 PKR',
-                    carModal: 'Suzuki WagonR 2019',
-                    DriverName: 'John Doe',
-                    focusedlocation: {
-                        latitude: 24.9912986,
-                        longitude: 67.1322322,
-                        latitudeDelta: 0.0122,
-                        longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.0122
-                        },
-                }
-            ]
 
         }
     }

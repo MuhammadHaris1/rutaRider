@@ -61,7 +61,7 @@ class Emergency extends React.Component {
                             <Text style={{color:'#fff', fontSize:35}}>{this.state.emergencyNumber}</Text>    
                         </View> : null} 
 
-                        <View >
+                        <View>
                             <Button style={{width:'40%', alignSelf:'center', marginTop:2 ,
                             backgroundColor: 'rgba(45, 48, 67, 0.8)'}} full rounded>
                                 <Text style={{color:'#fff', textAlign:'center'}}>

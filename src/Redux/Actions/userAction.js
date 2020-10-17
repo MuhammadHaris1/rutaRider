@@ -331,4 +331,24 @@ export function changePassword(formmdata) {
 }
 
 
+export function getPaymentDetails(id) {
+  return function(dispatch) {
+    dispatch({type:'FETCHING_PAYMENT_DETAIL'})
+    axios.get(`https://hnh6.xyz/route/api/amountNKm.php?riderId=${id}`)
+    .then((res) => {
+      console.log('paymentDetail RESPONSE', res)
+      if(res.data.status){
+        dispatch({ type: "FETCHED_PAYMENT_DETAIL", payload: res.data.data});
+      }else {
+        dispatch({ type: "CLEAR_PROCESSING" });
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+      dispatch({ type: "CLEAR_PROCESSING" });
+    })
+  }
+}
+
+
 

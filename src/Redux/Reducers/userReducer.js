@@ -2,7 +2,8 @@ export default function reducer(
   state = {
     userDetails: null,
     activeRideData: null ,
-    history: null
+    history: null,
+    paymentDetail: null
   },
   action
 ) {
@@ -107,6 +108,18 @@ export default function reducer(
         ...state,
         fetching: false,
         fetched: true,
+      };
+    }
+
+    case 'FETCHING_PAYMENT_DETAIL': {
+      return { ...state, fetching: true };
+    }
+    case 'FETCHED_PAYMENT_DETAIL': {
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        paymentDetail: action.payload,
       };
     }
 

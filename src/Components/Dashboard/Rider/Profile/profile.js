@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, ScrollView, ImageBackground, Image, TouchableOpacity, Dimensions, Modal, FlatList, BackHandler, Alert, Platform } from 'react-native'
 import { connect } from 'react-redux';
-import { signup, updateVehicle, getHistory } from '../../.././../Redux/Actions/userAction'
+import { getPaymentDetails, updateVehicle, getHistory } from '../../.././../Redux/Actions/userAction'
 import { Item, Input, Label, Button } from 'native-base';
 import { Avatar, Header, } from 'react-native-elements'
 import FooterComponent from '../../Rider/Footer/footer'
@@ -66,9 +66,10 @@ class Profile extends React.Component {
 
 
     componentDidMount = () => {
-        const { userDetails, getHistory } = this.props
+        const { userDetails, getHistory, getPaymentDetails } = this.props
         console.log('this.props', userDetails.data.vehicle)
         getHistory(userDetails.data.id)
+        getPaymentDetails(userDetails.data.id)
         if (userDetails.data.vehicle.id != null) {
             this.setState({ selectedImage: this.state.carImages[0], addVehicle: false })
         } else {
@@ -343,7 +344,7 @@ class Profile extends React.Component {
     }
 
     render() {
-        const { userDetails } = this.props
+        const { userDetails, paymentDetail } = this.props
 
         return (
             <View style={{ flex: 1 }}>
@@ -434,7 +435,7 @@ class Profile extends React.Component {
 
 
 
-                                <View style={{ width: '20%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 15, }}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('Payment')} style={{ width: '20%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 15, }}>
                                     <View style={{ top: hp(1.5) }}>
                                         <Image source={km} style={{ height: 35, width: 35, alignSelf: 'center' }} />
                                     </View>
@@ -442,10 +443,10 @@ class Profile extends React.Component {
                                     <View style={{ height: 2, backgroundColor: '#3A91FA', width: '80%', alignSelf: 'center', marginVertical: hp(2) }} />
 
                                     <View style={{ marginVertical: hp(1) }}>
-                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{userDetails.data.trips}</Text>
+                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{paymentDetail.km}</Text>
                                         <Text style={{ color: '#fff', textAlign: 'center' }}>Total Kilometers</Text>
                                     </View>
-                                </View>
+                                </TouchableOpacity>
 
                             </View>
 
@@ -492,11 +493,12 @@ const mapStateToProps = state => {
     return {
         userDetails: state.user.userDetails,
         fetching: state.user.fetching,
+        paymentDetail: state.user.paymentDetail
     };
 };
 
 const mapDispatchToProps = {
-    updateVehicle, getHistory
+    updateVehicle, getHistory, getPaymentDetails
 };
 
 

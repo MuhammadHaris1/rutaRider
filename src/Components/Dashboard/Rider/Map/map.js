@@ -42,7 +42,7 @@ import Pusher from 'pusher-js/react-native';
 import pusherConfig from '../../../../Constant/pusher.json'
 
 import { connect } from 'react-redux';
-import { acceptRide, startRide, compeleteRide, getHistory, getUserDetail, setRideDataToAsync, sendLiveLocation, updateRide} from '../../.././../Redux/Actions/userAction'
+import { acceptRide, startRide, compeleteRide, getHistory, getUserDetail, setRideDataToAsync, sendLiveLocation, updateRide, getPaymentDetails} from '../../.././../Redux/Actions/userAction'
 
 
 
@@ -788,6 +788,7 @@ class Map extends Component {
         .then((res) => {
             getHistory(userDetails.data.id)
             getUserDetail(userDetails.data.id)
+            getPaymentDetails(userDetails.data.id)
             this.setState({
                 rideReqDetails: '',
                 ideUserDetails: null,
@@ -945,7 +946,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    acceptRide, startRide, compeleteRide, getHistory, getUserDetail, setRideDataToAsync, sendLiveLocation, updateRide
+    acceptRide, startRide, compeleteRide, getHistory, getUserDetail, setRideDataToAsync, sendLiveLocation, updateRide, getPaymentDetails
 };
 
 

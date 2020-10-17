@@ -21,7 +21,7 @@ import Emergency from '../Components/Dashboard/Rider/EmergencyCall/emergencyCall
 import { UserStack } from "./userNavigation";
 import History from "../Components/Dashboard/Rider/History/history";
 import ForgotPassword from "../Components/Authentication/DriverAuthentication/Forgot/forgotPassword";
-
+import Payment from "../Components/Dashboard/Rider/Payment/payment";
 
 
 
@@ -132,6 +132,14 @@ const Drawer = createDrawerNavigator({
         }),
     },
 
+    Payment: {
+        screen: Payment,
+        navigationOptions: () => ({
+            headerBackTitle: null,
+            header: null,
+        }),
+    },
+
    
 
  },
@@ -219,6 +227,14 @@ const DriverStack = createStackNavigator({
 
     History: {
         screen: History,
+        navigationOptions: () => ({
+            headerBackTitle: null,
+            header: null,
+        }),
+    },
+
+    Payment: {
+        screen: Payment,
         navigationOptions: () => ({
             headerBackTitle: null,
             header: null,
