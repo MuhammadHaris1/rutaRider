@@ -62,7 +62,7 @@ class DrawerMenu extends React.Component {
                             </TouchableOpacity>
 
 
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                             style={styles.menuItem}
                             onPress={() => {
                                 this.props.navigation.navigate('WeeklyStatistics')
@@ -76,7 +76,7 @@ class DrawerMenu extends React.Component {
                                 <View style={{ marginLeft: 20 }}>
                                     <Text style={styles.menuItemText}>Statistics</Text>
                                 </View>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
 
                             <TouchableOpacity
                             style={styles.menuItem}

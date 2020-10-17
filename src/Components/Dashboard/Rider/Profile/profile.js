@@ -11,6 +11,8 @@ const sidebar = require('../../../../../assets/sidebar.png')
 const experience = require('../../../../../assets/experience.png')
 const Trips = require('../../../../../assets/Trips.png')
 const Profilestar = require('../../../../../assets/Profilestar.png')
+const km = require('../../../../../assets/km.png')
+
 
 import Pusher from 'pusher-js/react-native'
 import pusherConfig from '../../../../Constant/pusher.json'
@@ -387,9 +389,9 @@ class Profile extends React.Component {
 
 
 
-                            <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-around', top: hp(5) }}>
+                            <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-around', top: hp(5), padding: 5 }}>
 
-                                <View style={{ width: '25%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 10, }}>
+                                <View style={{ width: '20%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 10, }}>
                                     <View style={{ top: hp(1.5) }}>
                                         <Image source={Profilestar} style={{ height: 35, width: 35, alignSelf: 'center' }} />
                                     </View>
@@ -403,7 +405,7 @@ class Profile extends React.Component {
                                 </View>
 
 
-                                <View style={{ width: '25%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 15, }}>
+                                <View style={{ width: '20%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 15, }}>
                                     <View style={{ top: hp(1.5) }}>
                                         <Image source={experience} style={{ height: 35, width: 35, alignSelf: 'center' }} />
                                     </View>
@@ -417,7 +419,7 @@ class Profile extends React.Component {
                                 </View>
 
 
-                                <View style={{ width: '25%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 15, }}>
+                                <View style={{ width: '20%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 15, }}>
                                     <View style={{ top: hp(1.5) }}>
                                         <Image source={Trips} style={{ height: 35, width: 35, alignSelf: 'center' }} />
                                     </View>
@@ -427,6 +429,21 @@ class Profile extends React.Component {
                                     <View style={{ marginVertical: hp(1) }}>
                                         <Text style={{ color: '#fff', textAlign: 'center' }}>{userDetails.data.trips}</Text>
                                         <Text style={{ color: '#fff', textAlign: 'center' }}>Trips</Text>
+                                    </View>
+                                </View>
+
+
+
+                                <View style={{ width: '20%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 15, }}>
+                                    <View style={{ top: hp(1.5) }}>
+                                        <Image source={km} style={{ height: 35, width: 35, alignSelf: 'center' }} />
+                                    </View>
+
+                                    <View style={{ height: 2, backgroundColor: '#3A91FA', width: '80%', alignSelf: 'center', marginVertical: hp(2) }} />
+
+                                    <View style={{ marginVertical: hp(1) }}>
+                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{userDetails.data.trips}</Text>
+                                        <Text style={{ color: '#fff', textAlign: 'center' }}>Total Kilometers</Text>
                                     </View>
                                 </View>
 

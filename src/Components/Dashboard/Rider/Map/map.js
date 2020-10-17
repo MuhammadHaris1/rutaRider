@@ -18,6 +18,8 @@ import MapView ,{
   }  from 'react-native-maps';
 import { Item, Input, Label, Button } from 'native-base';
 import {SearchBar, Header, Avatar} from 'react-native-elements'
+import {getDistance, getPreciseDistance} from 'geolib';
+
 // const GOOGLE_PLACES_API_KEY = 'AIzaSyA2J_Jl0o3MN_QfkZ55BnF128lpTzO6CxY'; // never save your real api key in a snack!
 
 import Geolocation from '@react-native-community/geolocation';
@@ -469,7 +471,7 @@ class Map extends Component {
     renderRideReq = () => {
         const { rideReq, rideReqDetails, coordinates } = this.state
         const { acceptRide } = this.props
-        // console.log("rideReqDetails rideReqDetails", rideReqDetails)
+        console.log("coordinates coordinates", coordinates)
         return(
             <View style={{ flex: 1, position: 'absolute', top: 0, bottom: 0,left: 0, right: 0 }}>
                     <Modal
@@ -764,7 +766,13 @@ class Map extends Component {
 
     comeleteRide = () => {
         const { coordinates } = this.state
-        const { activeRideData , userDetails, startRide, compeleteRide, getHistory, getUserDetail} = this.props
+        const { activeRideData , userDetails, startRide, compeleteRide, getHistory, getUserDetail} = this.props;
+        var dis = getDistance(
+            {latitude: activeRideData.rideReqDetails.pick_latitude, longitude: activeRideData.rideReqDetails.pick_longitude},
+            coordinates[0],
+          );
+        var disKm = dis/1000
+        // Alert.alert("alert", `Distance\n\n${dis} Meter\nOR\n${dis / 1000} KM`);
         var FormData = require('form-data');
         var data = new FormData();
         data.append('action', 'rideCompleted');
@@ -773,6 +781,9 @@ class Map extends Component {
         data.append('pick_latitude', activeRideData.rideReqDetails.pick_longitude);
         data.append('drop_longitude', activeRideData.rideReqDetails.drop_latitude);
         data.append('drop_latitude', activeRideData.rideReqDetails.drop_longitude);
+        data.append('km', Number(disKm));
+        console.log('FormData FormData', data)
+        
         compeleteRide(data)
         .then((res) => {
             getHistory(userDetails.data.id)
@@ -782,8 +793,6 @@ class Map extends Component {
                 ideUserDetails: null,
                 coordinates: [coordinates[0]]
             })
-            
-            
         })
 
 
