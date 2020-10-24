@@ -22,7 +22,7 @@ import { UserStack } from "./userNavigation";
 import History from "../Components/Dashboard/Rider/History/history";
 import ForgotPassword from "../Components/Authentication/DriverAuthentication/Forgot/forgotPassword";
 import Payment from "../Components/Dashboard/Rider/Payment/payment";
-
+import PaymentDetails from "../Components/Dashboard/Rider/Payment/paymentDetails";
 
 
 const AuthStack = createStackNavigator({
@@ -139,6 +139,8 @@ const Drawer = createDrawerNavigator({
             header: null,
         }),
     },
+
+    
 
    
 
