@@ -12,8 +12,8 @@ class DriverLogin extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            email:'Muzammil@gmail.com',
-            password: 'Hnh123'
+            email:'A@a.com',
+            password: 'a'
         }
     }
 

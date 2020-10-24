@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ImageBackground, Image, ScrollView, TouchableOpacity, StyleSheet, Dimensions} from 'react-native'
+import { View, Text, ImageBackground, Image, ScrollView, TouchableOpacity, StyleSheet, Dimensions, RefreshControl} from 'react-native'
 import { connect } from 'react-redux';
 import FooterComponent from '../Footer/footer'
 import { Header } from 'react-native-elements'
@@ -7,16 +7,28 @@ const welcome2 = require('../../../../../assets/welcome2.png')
 const back = require('../../../../../assets/back.png')
 const sidebar = require('../../../../../assets/sidebar.png')
 import MapView  from 'react-native-maps';
+import {getUserDetail, getHistory, getPaymentDetails} from '../../../../Redux/Actions/userAction'
 
 class History extends React.Component {
     constructor (props) {
         super(props)
         this.state = {
-
+            refreshing: false,
         }
     }
 
 
+    onRefresh = () => {
+        const { userDetails, getHistory, getUserDetail, getPaymentDetails } = this.props
+        this.setState({ refreshing: true })
+        getHistory(userDetails.data.id)
+        getUserDetail(userDetails.data.id)
+        getPaymentDetails(userDetails.data.id)
+        if (!this.props.fetching) {
+            this.setState({ refreshing: false })
+        }
+
+    }
 
     render() {
         const { history } = this.props
@@ -24,7 +36,7 @@ class History extends React.Component {
             <View style={{flex: 1}}>
             <ImageBackground source={welcome2} style={{height:"100%", width:'102%', flex: 1, justifyContent:'center',right:5}}> 
 
-            <ScrollView contentContainerStyle={{paddingBottom: 70}}>
+            <ScrollView refreshControl={<RefreshControl colors={["#3A91FA"]} refreshing={this.props.fetching} onRefresh={this.onRefresh} />} contentContainerStyle={{paddingBottom: 70}}>
                 <View style={{flex: 1 }}>
                     <Header
                         containerStyle={{backgroundColor:'transparent', borderBottomWidth: 0}}
@@ -120,7 +132,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    
+    getUserDetail, getHistory, getPaymentDetails
 };
 
 

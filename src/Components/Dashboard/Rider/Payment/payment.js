@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ImageBackground, Image, ScrollView, TouchableOpacity, StyleSheet, Dimensions} from 'react-native'
+import { View, Text, ImageBackground, Image, ScrollView, TouchableOpacity, StyleSheet, Dimensions, RefreshControl} from 'react-native'
 import { connect } from 'react-redux';
 import FooterComponent from '../Footer/footer'
 import { Header } from 'react-native-elements'
@@ -14,10 +14,12 @@ class Payment extends React.Component {
     constructor (props) {
         super(props)
         this.state = {
-
+            
         }
     }
 
+
+    
 
 
     render() {
@@ -61,12 +63,25 @@ class Payment extends React.Component {
                                 <Text style={{width: wp(30), color:'#fff', textAlign:'center'}}>
                                     {userDetails.data.first_name} {userDetails.data.last_name}
                                 </Text>
-                                <Text style={{width: wp(30), color:'#fff', textAlign:'center'}}> 
-                                    {paymentDetail.km}
-                                </Text>
-                                <Text style={{width: wp(30), color:'#fff', textAlign:'center'}}>
-                                    ${paymentDetail.total_amount}
-                                </Text>
+                               {paymentDetail ?
+                               <>
+                                    <Text style={{width: wp(30), color:'#fff', textAlign:'center'}}> 
+                                        {paymentDetail.km}
+                                    </Text>
+                                    <Text style={{width: wp(30), color:'#fff', textAlign:'center'}}>
+                                        ${paymentDetail.total_amount}
+                                    </Text>
+                                </>
+                                :
+                                <>
+                                    <Text style={{width: wp(30), color:'#fff', textAlign:'center'}}> 
+                                        0
+                                    </Text>
+                                    <Text style={{width: wp(30), color:'#fff', textAlign:'center'}}>
+                                        $0
+                                    </Text>
+                                </>
+                                }
                             </View>
                         </View>
 

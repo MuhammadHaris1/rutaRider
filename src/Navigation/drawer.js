@@ -12,7 +12,8 @@ import {
 } from "react-native";
 
 import { NavigationActions } from "react-navigation";
-import { Container, Header, Body, Content } from 'native-base'
+import { logout } from '../Redux/Actions/userAction'
+import { connect } from 'react-redux';
 import { Avatar, Button, Icon } from "react-native-elements"
 import backgound from "../../assets/welcome2.png";
 
@@ -122,9 +123,7 @@ class DrawerMenu extends React.Component {
                               flexDirection: "row"
                               }}
                             onPress={() => {
-                                AsyncStorage.clear()
-                                this.props.navigation.navigate('Welcome')
-                                this.props.navigation.closeDrawer()
+                                this.props.logout()
 
                             }}
                             >
@@ -171,4 +170,17 @@ DrawerMenu.defaultProps = {};
 
 DrawerMenu.propTypes = {};
 
-export default DrawerMenu;
+const mapStateToProps = state => {
+    return {
+        userDetails: state.user.userDetails,
+        fetching: state.user.fetching,
+        paymentDetail: state.user.paymentDetail
+    };
+};
+
+const mapDispatchToProps = {
+    logout
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(DrawerMenu);

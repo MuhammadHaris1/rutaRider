@@ -7,7 +7,7 @@ import {
     StyleSheet,
     Share,
     Image,
-    Modal, Alert, ScrollView, Linking, AsyncStorage, PermissionsAndroid
+    Modal, Alert, ScrollView, Linking, AsyncStorage, PermissionsAndroid, ActivityIndicator,
 } from 'react-native';
 import MapView ,{
     MAP_TYPES,
@@ -16,9 +16,9 @@ import MapView ,{
     PROVIDER_GOOGLE,
     UrlTile, MarkerAnimated
   }  from 'react-native-maps';
-import { Item, Input, Label, Button } from 'native-base';
-import {SearchBar, Header, Avatar} from 'react-native-elements'
+import {SearchBar, Header, Avatar, Rating, AirbnbRating} from 'react-native-elements'
 import {getDistance, getPreciseDistance} from 'geolib';
+import { Item, Input } from 'native-base'
 
 // const GOOGLE_PLACES_API_KEY = 'AIzaSyA2J_Jl0o3MN_QfkZ55BnF128lpTzO6CxY'; // never save your real api key in a snack!
 
@@ -42,7 +42,8 @@ import Pusher from 'pusher-js/react-native';
 import pusherConfig from '../../../../Constant/pusher.json'
 
 import { connect } from 'react-redux';
-import { acceptRide, startRide, compeleteRide, getHistory, getUserDetail, setRideDataToAsync, sendLiveLocation, updateRide, getPaymentDetails} from '../../.././../Redux/Actions/userAction'
+import { acceptRide, startRide, compeleteRide, getHistory, getUserDetail, setRideDataToAsync, sendLiveLocation, updateRide, getPaymentDetails, giveRating} from '../../.././../Redux/Actions/userAction'
+import { Form } from 'native-base';
 
 
 
@@ -66,7 +67,10 @@ class Map extends Component {
             rideDetail: false,
             rideReqDetails: '',
             rideUserDetails: null,
-            status: 'pending'
+            status: 'pending',
+            ratingRender:  false,
+            ratingDescription: '',
+            ratingCount: 1
         }
 
 
@@ -199,6 +203,7 @@ class Map extends Component {
     getLocationHandler = async () => {
 
         Geolocation.getCurrentPosition(pos => {
+            console.log('POSITION POSITION', pos)
             const coordsEvent = {
                 nativeEvent: {
                     coordinate: {
@@ -210,7 +215,7 @@ class Map extends Component {
             this.pickLocationHandler(coordsEvent);
         },
             err => {
-                console.log(err);
+                console.log('POSITION POSITION',err);
                 alert("Fetching the position failed, please enable GPS manually!");
             })
     }
@@ -681,7 +686,7 @@ class Map extends Component {
                                                 </Text>
                                             </View> */}
 
-                                            <View style={{flexDirection:'row', justifyContent:'space-around', backgroundColor:'#3A91FA', width:"100%", padding: 5, marginTop: 10 , right: 10}}>
+                                            {/* <View style={{flexDirection:'row', justifyContent:'space-around', backgroundColor:'#3A91FA', width:"100%", padding: 5, marginTop: 10 , right: 10}}>
                                                 <Text style={{color:'#fff', width:'40%', textAlign:'center'}}>
                                                     Estimate Amount
                                                 </Text>
@@ -689,7 +694,7 @@ class Map extends Component {
                                                 <Text style={{color:'#fff', width:'40%', textAlign:'center'}}>
                                                     350 PKR
                                                 </Text>
-                                            </View>
+                                            </View> */}
                                     </View>
 
 
@@ -766,7 +771,7 @@ class Map extends Component {
 
     comeleteRide = () => {
         const { coordinates } = this.state
-        const { activeRideData , userDetails, startRide, compeleteRide, getHistory, getUserDetail} = this.props;
+        const { activeRideData , userDetails, compeleteRide, getHistory, getUserDetail} = this.props;
         var dis = getDistance(
             {latitude: activeRideData.rideReqDetails.pick_latitude, longitude: activeRideData.rideReqDetails.pick_longitude},
             coordinates[0],
@@ -792,16 +797,90 @@ class Map extends Component {
             this.setState({
                 rideReqDetails: '',
                 ideUserDetails: null,
-                coordinates: [coordinates[0]]
+                coordinates: [coordinates[0]],
+                ratingRender: false,
+                ratingCount: 0,
+                ratingDescription:''
             })
         })
-
-
+        .catch((err) => {
+            console.log("ERR ERR", err)
+        })
     }
 
 
+    renderRating = () => {
+        const { ratingRender, ratingCount, ratingDescription } = this.state
+        const {fetching, giveRating, activeRideData , userDetails,  } = this.props
+        return(
+            <View style={{ flex: 1, position: 'absolute', top: 0, bottom: 0,left: 0, right: 0 }}>
+                <Modal
+                    transparent={true}
+                    visible={ratingRender}
+                    onRequestClose={() => {this.setState({ratingRender:!ratingRender})}}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
+                            <View style={{backgroundColor:'rgb(35, 37, 50)', justifyContent:'center', alignContent:'center', padding:15, width:'85%', borderRadius:10}}>
+                                <View style={{alignSelf:'center', width:'100%'}}>
+                                    <Text style={{fontWeight:'bold', fontSize: 18, color:'#fff', textAlign:'center'}}>Rating</Text>
+
+                                    <AirbnbRating
+                                        defaultRating={ratingCount}
+                                        count={5}
+                                        onFinishRating={(rating) => this.setState({ratingCount: rating})}
+                                        size={20}
+                                        />
+                                    
+                                    <View style={{alignSelf:'center'}}> 
+                                        <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA' }}>
+                                            <Input
+                                            value={this.state.ratingDescription}
+                                            style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => {
+                                                if(e.length <= 30 ) {
+                                                    this.setState({ ratingDescription: e }) 
+                                                }else {
+                                                    Alert.alert("Alert", "You Reached Review limit")
+                                                }
+                                            }} placeholder='Enter Your Review' />
+                                        </Item>
+                                        <Text style={{color:'red', textAlign:'right'}}>Max 30 letter, {30 - this.state.ratingDescription.length} Remaining 
+                                        </Text>
+                                    </View>
 
 
+                                    {!fetching ? 
+                                    <TouchableOpacity
+                                    onPress={() => {
+                                        const data = new FormData()
+                                        data.append('riderId', userDetails.data.id);
+                                        data.append('booking_id', activeRideData.rideReqDetails.booking_id);
+                                        data.append('rating', ratingCount);
+                                        data.append('review', ratingDescription);
+                                        data.append('action', 'addRating');
+                                        giveRating(data)
+                                        .then(res => {
+                                            this.comeleteRide()
+                                        })
+                                        .catch((err) =>{
+                                            console.log("error", err)
+                                        })
+                                    }}
+                                    style={{backgroundColor:'#3A91FA', width:'60%', alignSelf:'center', flexDirection:'row',  justifyContent:'space-around', padding: 10, borderRadius: 20, marginTop: 20}}>
+                                        <Text style={{color:'#fff' ,}}>Send feedback</Text>
+                                    </TouchableOpacity> 
+                                    :
+                                    <ActivityIndicator color="#3A91FA" />
+                                    }
+                                    
+
+                                </View>
+
+                            </View>
+                    </View>
+                </Modal>
+            </View>
+
+        )
+    }
 
  
     render() {
@@ -828,7 +907,7 @@ class Map extends Component {
                 {this.rideClosedModal()}
                 {this.renderRideReq()}
                 {this.renderRideDetails()}
-
+                {this.renderRating()}
                
                     <MapView
                         provider={PROVIDER_GOOGLE}
@@ -910,7 +989,15 @@ class Map extends Component {
 
                     :
 
-                    <TouchableOpacity onPress={() => {this.comeleteRide()}} style={{backgroundColor:'#232532',  position:'absolute', bottom:40, width:'100%', paddingVertical: 15}}>
+                    <TouchableOpacity onPress={() => {
+                        this.setState({
+                            ratingRender: true
+                        })
+                        // const year = (new Date()).getFullYear();
+                        // const years = Array.from(new Array(30),( val, index) => year - index);   
+                        // console.log("YEARS YEARS", years)       
+                        // this.comeleteRide()
+                        }} style={{backgroundColor:'#232532',  position:'absolute', bottom:40, width:'100%', paddingVertical: 15}}>
                         <Text style={{color:'#fff', fontWeight:'bold', textAlign:'center', bottom: 10}}>COMPELETE</Text> 
                     </TouchableOpacity>
                     )
@@ -946,11 +1033,12 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    acceptRide, startRide, compeleteRide, getHistory, getUserDetail, setRideDataToAsync, sendLiveLocation, updateRide, getPaymentDetails
+    acceptRide, startRide, compeleteRide, getHistory, getUserDetail, setRideDataToAsync, sendLiveLocation, updateRide, getPaymentDetails, giveRating
 };
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Map);
+
 
 
 

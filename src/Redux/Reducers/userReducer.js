@@ -123,6 +123,28 @@ export default function reducer(
       };
     }
 
+    case 'SEND_FEEDBACK_PROCESSING': {
+      return { ...state, fetching: true };
+    }
+    case 'SEND_FEEDBACK_PROCESSED': {
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+      };
+    }
+
+
+    case 'LOGOUT_SUCCESSFULL': {
+      return {
+        ...state,
+        userDetails: null,
+        activeRideData: null ,
+        history: null,
+        paymentDetail: null
+      };
+    }
+
   }
   return state;
 }

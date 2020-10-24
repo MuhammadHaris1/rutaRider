@@ -230,6 +230,8 @@ export  function getHistory(id) {
       console.log("HISTORY GET ", resposne.data)
       if(resposne.data.status){
         dispatch({ type: "GET_HISTORY_PROCESSED", payload: resposne.data});
+      }else {
+        dispatch({ type: "ERROR", payload: 'An unexpected error occured!' }); dispatch({ type: "CLEAR_PROCESSING" });
       }
     })
     .catch((err) => {
@@ -254,7 +256,12 @@ export function getUserDetail(id){
                 console.log('error =>', error)
               }
             
+        }else {
+          dispatch({ type: "CLEAR_PROCESSING" });
         }
+      })
+      .catch((err) => {
+        dispatch({ type: "CLEAR_PROCESSING" });
       })
   }
 }
@@ -336,7 +343,7 @@ export function getPaymentDetails(id) {
     dispatch({type:'FETCHING_PAYMENT_DETAIL'})
     axios.get(`https://hnh6.xyz/route/api/amountNKm.php?riderId=${id}`)
     .then((res) => {
-      console.log('paymentDetail RESPONSE', res)
+      console.log('paymentDetail RESPONSE', res.data)
       if(res.data.status){
         dispatch({ type: "FETCHED_PAYMENT_DETAIL", payload: res.data.data});
       }else {
@@ -347,6 +354,39 @@ export function getPaymentDetails(id) {
       console.log(err)
       dispatch({ type: "CLEAR_PROCESSING" });
     })
+  }
+}
+
+
+export function giveRating(formData) {
+  return function(dispatch) {
+    dispatch({type:'SEND_FEEDBACK_PROCESSING'})
+    return new Promise((resolve, reject) => {
+      axios.post('https://hnh6.xyz/route/api/rating.php', formData)
+      .then((res) => {
+        if(res.data.status) {
+          dispatch({ type: "SEND_FEEDBACK_PROCESSED", payload: null});
+          resolve({status: res.data.status})
+        }else{
+          dispatch({ type: "ERROR", payload: 'An unexpected error occured!' }); dispatch({ type: "CLEAR_PROCESSING" });
+          Alert.alert("Alert", res.data.message)
+        }
+      })
+      .catch((err) => {
+        dispatch({ type: "ERROR", payload: 'An unexpected error occured!' }); dispatch({ type: "CLEAR_PROCESSING" });
+      })
+    })
+
+  }
+}
+
+
+export function logout() {
+  return function(dispatch) {
+    dispatch({type:'LOGOUT_SUCCESSFULL'})
+    AsyncStorage.clear()
+    // NavigtionService.closeDrawer()
+    NavigtionService.navigate('DriverLogin')
   }
 }
 

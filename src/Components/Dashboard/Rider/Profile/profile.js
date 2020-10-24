@@ -1,7 +1,7 @@
 import React from 'react'
-import { View, Text, ScrollView, ImageBackground, Image, TouchableOpacity, Dimensions, Modal, FlatList, BackHandler, Alert, Platform } from 'react-native'
+import { View, Text, ScrollView, ImageBackground, Image, TouchableOpacity, Dimensions, Modal, FlatList, BackHandler, Alert, Platform, RefreshControl, } from 'react-native'
 import { connect } from 'react-redux';
-import { getPaymentDetails, updateVehicle, getHistory } from '../../.././../Redux/Actions/userAction'
+import { getPaymentDetails, updateVehicle, getHistory, getUserDetail } from '../../.././../Redux/Actions/userAction'
 import { Item, Input, Label, Button } from 'native-base';
 import { Avatar, Header, } from 'react-native-elements'
 import FooterComponent from '../../Rider/Footer/footer'
@@ -18,6 +18,8 @@ import Pusher from 'pusher-js/react-native'
 import pusherConfig from '../../../../Constant/pusher.json'
 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import {Picker} from '@react-native-community/picker';
+
 
 import ImagePicker from 'react-native-image-picker'
 const options = {
@@ -25,6 +27,7 @@ const options = {
     storageOptions: {
         skipBackup: true,
         path: 'images',
+        refreshing: false,
     },
 };
 
@@ -45,7 +48,9 @@ class Profile extends React.Component {
             selectedImage: '',
             addVehicle: false,
             name: '',
-            colour: ''
+            colour: '',
+            model:'2020',
+            refreshing: false
         }
 
         this.pusher = new Pusher(pusherConfig.key, pusherConfig);
@@ -243,7 +248,7 @@ class Profile extends React.Component {
                                     </Text>
 
                                 <Text style={{ color: '#fff', width:'50%', textAlign:'center' }}>
-                                    {profileData.data.vehicle.reg_number}
+                                    {profileData.data.vehicle.license}
                                 </Text>
                             </View>
 
@@ -257,7 +262,8 @@ class Profile extends React.Component {
 
     renderAddVehicle = () => {
         const { addVehicle } = this.state
-
+        const year = (new Date()).getFullYear();
+        const years = Array.from(new Array(11),( val, index) => year - index); 
         return (
             <View style={{ flex: 1, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
                 <Modal
@@ -296,10 +302,24 @@ class Profile extends React.Component {
                                     </Item>
                                 </View>
 
-                                <View>
-                                    <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
+                                <View style={{borderRadius: 30, borderColor: '#3A91FA', borderWidth: 1, marginTop:'2%',}}>
+                                    {/* <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
                                         <Input style={{ color: '#fff' }} keyboardType="number-pad" placeholderTextColor="#fff" onChangeText={(e) => this.setState({ model: e })} placeholder='Vehicle Model' />
-                                    </Item>
+                                    </Item> */}
+                                    <Picker
+                                        selectedValue={this.state.model}
+                                        style={{height: 50, width: wp(75), color:'#fff'}}
+                                        onValueChange={(itemValue, itemIndex) =>
+                                            this.setState({model: itemValue})
+                                        }>
+                                        {years.map((val, ind) => {
+                                            // console.log("STRING", val, typeof val)
+                                            return(
+                                                <Picker.Item color="#000" key={ind} label={val.toString()} value={val.toLocaleString()} />
+                                            )
+                                        })}
+                                        </Picker>
+
                                 </View>
 
                                 <View>
@@ -343,13 +363,27 @@ class Profile extends React.Component {
 
     }
 
+
+    onRefresh = () => {
+        const { userDetails, getHistory, getUserDetail, getPaymentDetails } = this.props
+        this.setState({ refreshing: true })
+        // getHistory(userDetails.data.id)
+        getUserDetail(userDetails.data.id)
+        getPaymentDetails(userDetails.data.id)
+        console.log("this.props.fetching", this.props.fetching)
+        if (!this.props.fetching) {
+            this.setState({ refreshing: false })
+        }
+
+    }
+
     render() {
         const { userDetails, paymentDetail } = this.props
-
+        var rating = Number(userDetails.data.rating)
         return (
             <View style={{ flex: 1 }}>
                 <ImageBackground source={profileBack} style={{ height: "100%", width: '102%', flex: 1, right: 5 }}>
-                    <ScrollView contentContainerStyle={{ paddingBottom: 70 }}>
+                    <ScrollView refreshControl={<RefreshControl colors={["#3A91FA"]} refreshing={this.props.fetching} onRefresh={this.onRefresh} />} contentContainerStyle={{ paddingBottom: 70 }}>
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
 
                             {this.renderModal()}
@@ -400,7 +434,7 @@ class Profile extends React.Component {
                                     <View style={{ height: 2, backgroundColor: '#3A91FA', width: '80%', alignSelf: 'center', marginVertical: hp(2) }} />
 
                                     <View style={{ marginVertical: hp(1) }}>
-                                        <Text style={{ color: '#fff', textAlign: 'center' }}>0</Text>
+                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{rating.toFixed(1)}</Text>
                                         <Text style={{ color: '#fff', textAlign: 'center' }}>Rating</Text>
                                     </View>
                                 </View>
@@ -443,7 +477,10 @@ class Profile extends React.Component {
                                     <View style={{ height: 2, backgroundColor: '#3A91FA', width: '80%', alignSelf: 'center', marginVertical: hp(2) }} />
 
                                     <View style={{ marginVertical: hp(1) }}>
-                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{paymentDetail.km}</Text>
+                                      {paymentDetail ?  <Text style={{ color: '#fff', textAlign: 'center' }}>{paymentDetail.km}</Text>
+                                       :
+                                       <Text style={{ color: '#fff', textAlign: 'center' }}>0</Text>
+                                      }
                                         <Text style={{ color: '#fff', textAlign: 'center' }}>Total Kilometers</Text>
                                     </View>
                                 </TouchableOpacity>
@@ -464,10 +501,10 @@ class Profile extends React.Component {
                                     <Text style={{ color: '#3A91FA', textAlign: 'center', right: 15, fontSize: 25 }}>E</Text>
                                     <Text style={{ color: '#fff', textAlign: 'center', top: 5, fontSize: 17 }}>{userDetails.data.email}</Text>
                                 </View>
-                                <View style={{ flexDirection: 'row' }}>
+                                {/* <View style={{ flexDirection: 'row' }}>
                                     <Text style={{ color: '#3A91FA', textAlign: 'center', right: 15, fontSize: 25 }}>A</Text>
                                     <Text style={{ color: '#fff', textAlign: 'center', top: 5, fontSize: 17 }}>{userDetails.data.email}</Text>
-                                </View>
+                                </View> */}
                                 <View style={{ flexDirection: 'row' }}>
                                     <Text style={{ color: '#3A91FA', textAlign: 'center', right: 15, fontSize: 25 }}>C</Text>
                                     <Text style={{ color: '#fff', textAlign: 'center', top: 5, fontSize: 17 }}>{userDetails.data.ph_number}</Text>
@@ -498,7 +535,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    updateVehicle, getHistory, getPaymentDetails
+    updateVehicle, getHistory, getPaymentDetails, getUserDetail
 };
 
 
