@@ -50,7 +50,8 @@ class Profile extends React.Component {
             name: '',
             colour: '',
             model:'2020',
-            refreshing: false
+            refreshing: false,
+            brand: 'Zotye'
         }
 
         this.pusher = new Pusher(pusherConfig.key, pusherConfig);
@@ -109,7 +110,7 @@ class Profile extends React.Component {
     }
 
     addAndEditVehicle = () => {
-        const { model, licenseNumber, nicNumber, fileName, fileUri , colour, name} = this.state
+        const { model, licenseNumber, nicNumber, fileName, fileUri , colour, name, brand} = this.state
         const { userDetails, updateVehicle } = this.props
 
         userDetails.data.vehicle = { ...userDetails.data.vehicle, model, license: licenseNumber , colour, name}
@@ -128,13 +129,14 @@ class Profile extends React.Component {
         formData.append('license', licenseNumber);
         formData.append('vehicle_no', nicNumber);
         formData.append('name', name);
+        formData.append('brand', brand);
         formData.append('colour', colour);
 
         formData.append('vehicle_paper', file);
 
 
 
-        if (model && licenseNumber && nicNumber && fileUri && name && colour ) {
+        if (model && licenseNumber && nicNumber && fileUri && name && colour && brand) {
             if(Number(model) >= 2010) {
                 updateVehicle(userDetails, userDetails.data.id, formData)
                 .then((res) => {
@@ -263,7 +265,8 @@ class Profile extends React.Component {
     renderAddVehicle = () => {
         const { addVehicle } = this.state
         const year = (new Date()).getFullYear();
-        const years = Array.from(new Array(11),( val, index) => year - index); 
+        const years = Array.from(new Array(11),( val, index) => year - index);
+        var brands = ["Zotye", "Volvo", "Tata","Ssang Young", "Soueast","Skoda","Renault","BMW","Daewoo","Ford","Holden","Honda","Hyundai","Isuzu","Kia","Lexus","Mazda", "Mitsubishi","Nissan","Peugeot","Subaru","Suzuki","Toyota","Volkswagen","other"] 
         return (
             <View style={{ flex: 1, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
                 <Modal
@@ -303,9 +306,6 @@ class Profile extends React.Component {
                                 </View>
 
                                 <View style={{borderRadius: 30, borderColor: '#3A91FA', borderWidth: 1, marginTop:'2%',}}>
-                                    {/* <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input style={{ color: '#fff' }} keyboardType="number-pad" placeholderTextColor="#fff" onChangeText={(e) => this.setState({ model: e })} placeholder='Vehicle Model' />
-                                    </Item> */}
                                     <Picker
                                         selectedValue={this.state.model}
                                         style={{height: 50, width: wp(75), color:'#fff'}}
@@ -313,6 +313,23 @@ class Profile extends React.Component {
                                             this.setState({model: itemValue})
                                         }>
                                         {years.map((val, ind) => {
+                                            // console.log("STRING", val, typeof val)
+                                            return(
+                                                <Picker.Item color="#000" key={ind} label={val.toString()} value={val.toLocaleString()} />
+                                            )
+                                        })}
+                                        </Picker>
+
+                                </View>
+
+                                <View style={{borderRadius: 30, borderColor: '#3A91FA', borderWidth: 1, marginTop:'2%',}}>
+                                    <Picker
+                                        selectedValue={this.state.brand}
+                                        style={{height: 50, width: wp(75), color:'#fff'}}
+                                        onValueChange={(itemValue, itemIndex) =>
+                                            this.setState({brand: itemValue})
+                                        }>
+                                        {brands.map((val, ind) => {
                                             // console.log("STRING", val, typeof val)
                                             return(
                                                 <Picker.Item color="#000" key={ind} label={val.toString()} value={val.toLocaleString()} />
