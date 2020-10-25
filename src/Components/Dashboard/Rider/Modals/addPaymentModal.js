@@ -11,7 +11,7 @@ const RenderAddPayment = (props) => {
         <View style={styles.mainContainer}>
             <Modal
                 transparent={true}
-                visible={props.addPayment}
+                visible={props.addPayment === true}
                 onRequestClose={() => {
                     // this.setState({addVehicle:!addVehicle})
                     BackHandler.exitApp()

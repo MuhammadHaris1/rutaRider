@@ -410,6 +410,7 @@ class Profile extends React.Component {
         const { userDetails, paymentDetail, } = this.props
         const {addPayment} = this.state
         var rating = Number(userDetails.data.rating)
+        console.log('ADDPAYMENT', addPayment)
         return (
             <View style={{ flex: 1 }}>
                 <ImageBackground source={profileBack} style={{ height: "100%", width: '102%', flex: 1, right: 5 }}>
