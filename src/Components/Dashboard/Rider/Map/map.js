@@ -43,10 +43,7 @@ import pusherConfig from '../../../../Constant/pusher.json'
 
 import { connect } from 'react-redux';
 import { acceptRide, startRide, compeleteRide, getHistory, getUserDetail, setRideDataToAsync, sendLiveLocation, updateRide, getPaymentDetails, giveRating} from '../../.././../Redux/Actions/userAction'
-import { Form } from 'native-base';
-
-
-
+import RenderParcelRequest from '../Modals/renderParcelRide';
 class Map extends Component {
     constructor(props) {
         super(props);
@@ -61,7 +58,6 @@ class Map extends Component {
             address:'',
             searchLocation: false,
             coordinates: [],
-            rideclosed: false,
             rideReq: false,
             duration: '',
             rideDetail: false,
@@ -70,7 +66,8 @@ class Map extends Component {
             status: 'pending',
             ratingRender:  false,
             ratingDescription: '',
-            ratingCount: 1
+            ratingCount: 1,
+            parcelReq: false
         }
 
 
@@ -414,41 +411,6 @@ class Map extends Component {
 
 
 
-    rideClosedModal = () => {
-        const { rideclosed } = this.state
-        return(
-            <View style={{ flex: 1, position: 'absolute', top: 0, bottom: 0,left: 0, right: 0 }}>
-                    <Modal
-                        transparent={true}
-                        visible={rideclosed}
-                        onRequestClose={() => {this.setState({rideclosed:!rideclosed})}}>
-                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
-                            <View style={{backgroundColor:'rgb(35, 37, 50)', justifyContent:'center', alignContent:'center', padding:15, width:'85%', borderRadius:10}}>
-                                <View style={{alignItems:'center'}}>
-                                    <Text style={{color:'red', textAlign:'center', fontWeight:'bold', fontSize: 30}}>
-                                        RIDE CLOSED
-                                    </Text>
-                                </View>
-                                
-                                <View style={{backgroundColor:'#3A91FA', width:'70%', alignSelf:'center', flexDirection:'row',  justifyContent:'space-around', padding: 10, borderRadius: 20, marginTop: 20}}>
-                                    <Text style={{color:'#fff'}}>Paid</Text>
-                                    <Text style={{color:'#fff'}}>$$</Text>
-                                </View>
-
-                                <TouchableOpacity onPress={() => this.setState({rideclosed: !this.state.rideclosed, rideReq: true})} style={{alignItems:'center', paddingVertical: 20}}>
-                                    <Text style={{textAlign:'center', fontWeight:'bold', textDecorationLine:'underline', color:'#fff'}}>
-                                        WANT ADDITIONAL SERVICE?
-                                    </Text>
-                                </TouchableOpacity>
-
-
-                            </View>
-                        </View>
-                    </Modal>
-                </View>
-        )
-    }
-
 
 
     //RIDER REQUEST WORK
@@ -478,13 +440,13 @@ class Map extends Component {
         const { acceptRide } = this.props
         console.log("coordinates coordinates", coordinates)
         return(
-            <View style={{ flex: 1, position: 'absolute', top: 0, bottom: 0,left: 0, right: 0 }}>
+            <View style={{ flex: 1}}>
                     <Modal
                         transparent={true}
-                        visible={rideReq}
+                        visible={acceptRide}
                         onRequestClose={() => {this.setState({rideReq:!rideReq})}}>
-                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
-                            <View style={{backgroundColor:'rgb(35, 37, 50)', justifyContent:'center', alignContent:'center', padding:15, width:'85%', borderRadius:10}}>
+                        <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
+                            <View style={{backgroundColor:'rgb(35, 37, 50)', justifyContent:'center', alignContent:'center', padding:15, width:'100%', borderRadius:10}}>
                                 
                                 <View>
                                     <CountDown
@@ -676,25 +638,7 @@ class Map extends Component {
                                                 </Text>
                                             </View>
 
-                                            {/* <View style={{flexDirection:'row', justifyContent:'space-around', backgroundColor:'#3A91FA', width:"100%", padding: 5, marginTop: 10}}>
-                                                <Text style={{color:'#fff'}}>
-                                                    Car Number
-                                                </Text>
-
-                                                <Text style={{color:'#fff'}}>
-                                                    DFG-123
-                                                </Text>
-                                            </View> */}
-
-                                            {/* <View style={{flexDirection:'row', justifyContent:'space-around', backgroundColor:'#3A91FA', width:"100%", padding: 5, marginTop: 10 , right: 10}}>
-                                                <Text style={{color:'#fff', width:'40%', textAlign:'center'}}>
-                                                    Estimate Amount
-                                                </Text>
-
-                                                <Text style={{color:'#fff', width:'40%', textAlign:'center'}}>
-                                                    350 PKR
-                                                </Text>
-                                            </View> */}
+                    
                                     </View>
 
 
@@ -887,7 +831,7 @@ class Map extends Component {
         console.log("coordinates", this.state.coordinates)
         const { activeRideData } = this.props
         let marker = null;
-        const { focusedlocation, coordinates } = this.state;
+        const { parcelReq } = this.state;
         if (this.state.coordinates.length >= 1) {
             marker = this.state.coordinates.map((coordinate, index) =>
                 {
@@ -900,15 +844,14 @@ class Map extends Component {
               )
 
         }
-        // console.log("this.state.coordinates.length >= 2", this.state.coordinates, "USR DETAILS BY ID", this.state.rideUserDetails, "activeRideData", activeRideData)
+
         return(
             <View style={{flex: 1}} >
 
-                {this.rideClosedModal()}
                 {this.renderRideReq()}
                 {this.renderRideDetails()}
                 {this.renderRating()}
-               
+                <RenderParcelRequest parcelReq={parcelReq}/>
                     <MapView
                         provider={PROVIDER_GOOGLE}
                         // mapType={this.mapType}
@@ -969,17 +912,6 @@ class Map extends Component {
                                 </TouchableOpacity>
                             }
                             />
-                {/* <TouchableOpacity onPress={() => {this.setState({rideclosed: true})}} style={{backgroundColor:'#232532', flexDirection:'row',  position:'absolute', bottom:40, width:'100%', paddingVertical: 15}}>
-                    <View style={{bottom:10, alignItems:'center', alignContent:'center', justifyContent:'center'}}>
-                        <Image source={location} style={{height:30, width:30}} />
-                    </View>
-
-                    <View style={{alignItems:'center', paddingHorizontal: 20, bottom:10,}}>
-                            <Text style={{color:'#fff', fontWeight:'bold', textAlign:'center'}}>YOU ARE ON THE PATH TO YOUR GOAL</Text> 
-                            <Text style={{color:'#fff', textAlign:'center'}}>RUN TIME IS {Math.round(this.state.duration)} MIN</Text>    
-                    </View> 
-
-                </TouchableOpacity> */}
 
                 {               
                     activeRideData && (activeRideData.status == "pending" ? 
@@ -993,10 +925,6 @@ class Map extends Component {
                         this.setState({
                             ratingRender: true
                         })
-                        // const year = (new Date()).getFullYear();
-                        // const years = Array.from(new Array(30),( val, index) => year - index);   
-                        // console.log("YEARS YEARS", years)       
-                        // this.comeleteRide()
                         }} style={{backgroundColor:'#232532',  position:'absolute', bottom:40, width:'100%', paddingVertical: 15}}>
                         <Text style={{color:'#fff', fontWeight:'bold', textAlign:'center', bottom: 10}}>COMPELETE</Text> 
                     </TouchableOpacity>
@@ -1040,118 +968,3 @@ const mapDispatchToProps = {
 export default connect(mapStateToProps, mapDispatchToProps)(Map);
 
 
-
-
-
-
-// import React from 'react';
-// import { StyleSheet, View, Text, Dimensions } from 'react-native';
-
-// import MapView, {
-//   MAP_TYPES,
-//   PROVIDER_DEFAULT,
-//   ProviderPropType,
-//   UrlTile,
-// } from 'react-native-maps';
-
-// const { width, height } = Dimensions.get('window');
-
-// const ASPECT_RATIO = width / height;
-// const LATITUDE = 37.78825;
-// const LONGITUDE = -122.4324;
-// const LATITUDE_DELTA = 0.0922;
-// const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-
-// class Map extends React.Component {
-//   constructor(props, context) {
-//     super(props, context);
-
-//     this.state = {
-//       region: {
-//         latitude: LATITUDE,
-//         longitude: LONGITUDE,
-//         latitudeDelta: LATITUDE_DELTA,
-//         longitudeDelta: LONGITUDE_DELTA,
-//       },
-//     };
-//   }
-
-//   get mapType() {
-//     // MapKit does not support 'none' as a base map
-//     return this.props.provider === PROVIDER_DEFAULT
-//       ? MAP_TYPES.STANDARD
-//       : MAP_TYPES.NONE;
-//   }
-
-//   render() {
-//     const { region } = this.state;
-//     return (
-//       <View style={styles.container}>
-//         <MapView
-//           provider={this.props.provider}
-//           mapType={this.mapType}
-//           style={styles.map}
-//           initialRegion={region}
-//           customMapStyle={{backgroundColor:'#000'}}
-//         >
-        //   <UrlTile
-        //     urlTemplate="http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"
-        //     zIndex={-1}
-        //   />
-//         </MapView>
-//         <View style={styles.buttonContainer}>
-//           <View style={styles.bubble}>
-//             <Text>Custom Tiles</Text>
-//           </View>
-//         </View>
-//       </View>
-//     );
-//   }
-// }
-
-// Map.propTypes = {
-//   provider: ProviderPropType,
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     position: 'absolute',
-//     top: 0,
-//     left: 0,
-//     right: 0,
-//     bottom: 0,
-//     justifyContent: 'flex-end',
-//     alignItems: 'center',
-//   },
-//   map: {
-//     position: 'absolute',
-//     top: 0,
-//     left: 0,
-//     right: 0,
-//     bottom: 0,
-//   },
-//   bubble: {
-//     flex: 1,
-//     backgroundColor: 'rgba(255,255,255,0.7)',
-//     paddingHorizontal: 18,
-//     paddingVertical: 12,
-//     borderRadius: 20,
-//   },
-//   latlng: {
-//     width: 200,
-//     alignItems: 'stretch',
-//   },
-//   button: {
-//     width: 80,
-//     paddingHorizontal: 12,
-//     alignItems: 'center',
-//     marginHorizontal: 10,
-//   },
-//   buttonContainer: {
-//     flexDirection: 'row',
-//     marginVertical: 20,
-//     backgroundColor: 'transparent',
-//   },
-// });
-
-// export default Map;

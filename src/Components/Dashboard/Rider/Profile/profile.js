@@ -13,7 +13,6 @@ const Trips = require('../../../../../assets/Trips.png')
 const Profilestar = require('../../../../../assets/Profilestar.png')
 const km = require('../../../../../assets/km.png')
 
-
 import Pusher from 'pusher-js/react-native'
 import pusherConfig from '../../../../Constant/pusher.json'
 
@@ -22,6 +21,9 @@ import {Picker} from '@react-native-community/picker';
 
 
 import ImagePicker from 'react-native-image-picker'
+import RenderAddPayment from '../Modals/addPaymentModal';
+
+
 const options = {
     title: 'Select Avatar',
     storageOptions: {
@@ -51,7 +53,8 @@ class Profile extends React.Component {
             colour: '',
             model:'2020',
             refreshing: false,
-            brand: 'Zotye'
+            brand: 'Zotye',
+            addPayment: false
         }
 
         this.pusher = new Pusher(pusherConfig.key, pusherConfig);
@@ -73,13 +76,19 @@ class Profile extends React.Component {
 
     componentDidMount = () => {
         const { userDetails, getHistory, getPaymentDetails } = this.props
-        console.log('this.props', userDetails.data.vehicle)
+        console.log('userDetails.data.card_details', userDetails.data.card_details)
         getHistory(userDetails.data.id)
         getPaymentDetails(userDetails.data.id)
         if (userDetails.data.vehicle.id != null) {
             this.setState({ selectedImage: this.state.carImages[0], addVehicle: false })
         } else {
             this.setState({ selectedImage: this.state.carImages[0], addVehicle: true })
+        }
+
+        if(!userDetails.data.card_details){
+            this.setState({
+                addPayment: true
+            })
         }
     }
 
@@ -381,6 +390,9 @@ class Profile extends React.Component {
     }
 
 
+    
+
+
     onRefresh = () => {
         const { userDetails, getHistory, getUserDetail, getPaymentDetails } = this.props
         this.setState({ refreshing: true })
@@ -395,7 +407,8 @@ class Profile extends React.Component {
     }
 
     render() {
-        const { userDetails, paymentDetail } = this.props
+        const { userDetails, paymentDetail, } = this.props
+        const {addPayment} = this.state
         var rating = Number(userDetails.data.rating)
         return (
             <View style={{ flex: 1 }}>
@@ -405,6 +418,7 @@ class Profile extends React.Component {
 
                             {this.renderModal()}
                             {this.renderAddVehicle()}
+                            <RenderAddPayment addPayment={addPayment} />
 
                             <Header
                                 containerStyle={{ backgroundColor: 'transparent', borderBottomWidth: 0 }}
