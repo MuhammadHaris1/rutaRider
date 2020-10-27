@@ -448,11 +448,11 @@ class Map extends Component {
                         onRequestClose={() => {this.setState({rideReq:!rideReq})}}>
                         <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
                             <View style={{backgroundColor:'rgb(35, 37, 50)', justifyContent:'center', alignContent:'center', padding:15, width:'100%', borderRadius:10}}>
-                                
+                               <ScrollView> 
                                 <View>
                                     <CountDown
                                         size={30}
-                                        until={200}
+                                        until={20}
                                         onFinish={() => {
                                             Alert.alert("Alert", "Ride Expired")
                                             this.setState({rideReq: !rideReq})
@@ -580,6 +580,48 @@ class Map extends Component {
                                                 if(res.status){
                                                     this.setState(prevState => {
                                                         return {
+                                                            coordinates: [
+                                                                ...prevState.coordinates,
+                                                                {
+                                                                    latitude: Number(rideReqDetails.pick_latitude),
+                                                                    longitude: Number(rideReqDetails.pick_longitude)
+                                                                  },
+                                                            ],
+                                                            rideReq: false,
+                                                            rideDetail: true,
+                                                            agreement: false,
+                                                            rideUserDetails: res.userData
+                                                        };
+                                                    })
+                                                    console.log("RESPONSE MAP FILE", res)
+        
+        
+                                                    this.props.navigation.state.params.reqDetailParam = null
+                                                }else {
+                                                    Alert.alert("Alert", res.message)
+                                                    this.props.navigation.state.params.reqDetailParam = null
+        
+                                                }
+                                            })
+        
+                                        }else {
+                                            Alert.alert("Alert", "Please first accept our terms")
+                                        }
+                                    }else {
+
+                                        var data = new FormData();
+                                            data.append('action', 'removeAlert');
+                                            data.append('rider_id', this.props.userDetails.data.id);
+                                            data.append('booking_id', rideReqDetails.booking_id);
+                                            data.append('rider_latitude', this.state.coordinates[0].latitude);
+                                            data.append('rider_longitude', this.state.coordinates[0].longitude);
+                                            data.append('rider_location_name', 'DHA');
+        
+                                            acceptRide(data, rideReqDetails, this.state.coordinates[0])
+                                            .then(async (res) => {
+                                                if(res.status){
+                                                    this.setState(prevState => {
+                                                        return {
                                                             // focusedlocation: {
                                                             //     ...prevState.focusedlocation,
                                                             //     latitude: Number(rideReqDetails.pick_latitude),
@@ -607,17 +649,14 @@ class Map extends Component {
         
                                                 }
                                             })
-        
-                                        }else {
-                                            Alert.alert("Alert", "Please first accept our terms")
-                                        }
+                                        
                                     }
                                     
                                 }} style={{backgroundColor:'#3A91FA', width:'60%', alignSelf:'center', flexDirection:'row',  justifyContent:'space-around', padding: 10, borderRadius: 20, marginTop: 20}}>
                                     <Text style={{color:'#fff' ,}}>ACCEPT</Text>
                                 </TouchableOpacity>
 
-
+                                </ScrollView>
                             </View>
                         </View>
                     </Modal>
