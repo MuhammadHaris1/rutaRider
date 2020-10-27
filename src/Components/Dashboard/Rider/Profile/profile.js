@@ -85,11 +85,11 @@ class Profile extends React.Component {
             this.setState({ selectedImage: this.state.carImages[0], addVehicle: true })
         }
 
-        if(!userDetails.data.card_details){
-            this.setState({
-                addPayment: true
-            })
-        }
+        // if(!userDetails.data.card_details){
+        //     this.setState({
+        //         addPayment: true
+        //     })
+        // }
     }
 
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, TouchableOpacity, Text, StyleSheet, ScrollView, Modal } from 'react-native'
+import { View, TouchableOpacity, Text, StyleSheet, ScrollView, Modal, BackHandler } from 'react-native'
 import PaymentDetails from '../Payment/paymentDetails'
 const RenderAddPayment = (props) => {
 
