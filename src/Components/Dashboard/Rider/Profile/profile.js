@@ -136,10 +136,10 @@ class Profile extends React.Component {
                     type: 'image/png'
                 }
                 imageArr.push(file)
+                this.setState({imageArr})
                 
             }
           });
-          this.setState({imageArr})
     }
 
     addAndEditVehicle = () => {
@@ -155,19 +155,21 @@ class Profile extends React.Component {
         //     name: fileName,
         //     type: 'image/png'
         // }
+        var extractModal = model.replace(',','')
 
         const formData = new FormData()
         formData.append('action', 'addVehicle');
-        formData.append('model', model);
+        formData.append('model', extractModal);
         formData.append('license', licenseNumber);
         formData.append('vehicle_no', nicNumber);
         formData.append('name', name);
         formData.append('brand', brand);
         formData.append('colour', colour);
-        formData.append('vehicleDocuments', imageArr)
+        for (let index = 0; index < imageArr.length; index++) {
+            formData.append('vehicleDocuments', imageArr[index])
+        }
         // formData.append('vehicle_paper', file);
-        var extractModal = model.replace(',','')
-        console.log('Model', extractModal)
+        // console.log('Model', extractModal)
 
 
         if (model && licenseNumber && nicNumber && imageArr.length >= 1 && name && colour && brand) {
@@ -298,7 +300,8 @@ class Profile extends React.Component {
 
 
     renderAddVehicle = () => {
-        const { addVehicle } = this.state
+        const { addVehicle, imageArr } = this.state
+        console.log("IMAGEARR", imageArr)
         const year = (new Date()).getFullYear();
         const years = Array.from(new Array(11),( val, index) => year - index);
         var brands = ["Zotye", "Volvo", "Tata","Ssang Young", "Soueast","Skoda","Renault","BMW","Daewoo","Ford","Holden","Honda","Hyundai","Isuzu","Kia","Lexus","Mazda", "Mitsubishi","Nissan","Peugeot","Subaru","Suzuki","Toyota","Volkswagen","other"] 
@@ -392,6 +395,25 @@ class Profile extends React.Component {
                                         <Input style={{ color: '#fff' }} disabled value={this.state.fileName} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ email: e })} placeholder='Upload Vehicle Papers' />
                                     </Item>
                                 </TouchableOpacity >
+
+                                {imageArr.length >= 1 && 
+                                <View style={{height: 220, width: "98%", alignSelf:'center', justifyContent:'flex-start'}}>
+                                    <FlatList 
+                                    horizontal
+                                    showsHorizontalScrollIndicator={false}
+                                    data={imageArr}
+                                    extraData={this.state}
+                                    renderItem={({item, index}) => {
+                                        console.log("item.uri => ", item)
+                                        return(
+                                            <View style={{padding:20}}>
+                                                <Image source={{uri: item.uri}} style={{height: 200, width: 240, borderRadius: 10}} />
+                                            </View>
+                                        )
+                                    }}
+                                    />
+                                </View>
+                                }
 
                                 <View>
                                     <Button  onPress={() => {
