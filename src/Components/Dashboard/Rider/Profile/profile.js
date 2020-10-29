@@ -20,7 +20,9 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import {Picker} from '@react-native-community/picker';
 
 
-import ImagePicker from 'react-native-image-picker'
+// import ImagePicker from 'react-native-image-picker'
+import ImagePicker from 'react-native-image-crop-picker';
+
 import RenderAddPayment from '../Modals/addPaymentModal';
 
 
@@ -54,7 +56,8 @@ class Profile extends React.Component {
             model:'2020',
             refreshing: false,
             brand: 'Zotye',
-            addPayment: false
+            addPayment: false,
+            imageArr: []
         }
 
         this.pusher = new Pusher(pusherConfig.key, pusherConfig);
@@ -94,43 +97,64 @@ class Profile extends React.Component {
 
 
     openGallery = () => {
-        ImagePicker.showImagePicker(options, (response) => {
-            console.log('Response = ', response);
+        const {imageArr} = this.state
+        this.setState({imageArr : []})
+        // ImagePicker.showImagePicker(options, (response) => {
+        //     console.log('Response = ', response);
 
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            } else {
-                //   const source = { uri: response.uri };
-                // You can also display the image using data:
-                const source = { uri: 'data:image/jpeg;base64,' + response.data };
-                console.log("uri: response.uri", source, response)
+        //     if (response.didCancel) {
+        //         console.log('User cancelled image picker');
+        //     } else if (response.error) {
+        //         console.log('ImagePicker Error: ', response.error);
+        //     } else if (response.customButton) {
+        //         console.log('User tapped custom button: ', response.customButton);
+        //     } else {
+        //         //   const source = { uri: response.uri };
+        //         // You can also display the image using data:
+        //         const source = { uri: 'data:image/jpeg;base64,' + response.data };
+        //         console.log("uri: response.uri", source, response)
 
-                this.setState({
-                    profilePic: source,
-                    fileName: response.fileName,
-                    fileUri: response.uri
-                });
+        //         this.setState({
+        //             profilePic: source,
+        //             fileName: response.fileName,
+        //             fileUri: response.uri
+        //         });
+        //     }
+
+        // });
+        ImagePicker.openPicker({
+            multiple: true,
+          }).then(images => {
+            // console.log('images =>' , images, images[0].filename);
+            for (let index = 0; index < images.length; index++) {
+                var path = images[index].path
+                let filename = path.substring(path.lastIndexOf('/') + 1, path.length)
+                // console.log('filename =>' , filename);
+                var file = {
+                    uri: path,
+                    name: filename,
+                    type: 'image/png'
+                }
+                imageArr.push(file)
+                
             }
-        });
+          });
+          this.setState({imageArr})
     }
 
     addAndEditVehicle = () => {
-        const { model, licenseNumber, nicNumber, fileName, fileUri , colour, name, brand} = this.state
+        const { model, licenseNumber, nicNumber, fileName, fileUri , colour, name, brand, imageArr} = this.state
         const { userDetails, updateVehicle } = this.props
 
         userDetails.data.vehicle = { ...userDetails.data.vehicle, model, license: licenseNumber , colour, name}
 
         console.log(userDetails)
 
-        var file = {
-            uri: fileUri,
-            name: fileName,
-            type: 'image/png'
-        }
+        // var file = {
+        //     uri: fileUri,
+        //     name: fileName,
+        //     type: 'image/png'
+        // }
 
         const formData = new FormData()
         formData.append('action', 'addVehicle');
@@ -140,13 +164,15 @@ class Profile extends React.Component {
         formData.append('name', name);
         formData.append('brand', brand);
         formData.append('colour', colour);
+        formData.append('vehicleDocuments', imageArr)
+        // formData.append('vehicle_paper', file);
+        var extractModal = model.replace(',','')
+        console.log('Model', extractModal)
 
-        formData.append('vehicle_paper', file);
 
-
-
-        if (model && licenseNumber && nicNumber && fileUri && name && colour && brand) {
-            if(Number(model) >= 2010) {
+        if (model && licenseNumber && nicNumber && imageArr.length >= 1 && name && colour && brand) {
+            if(Number(extractModal) >= 2010) {
+                console.log('FORMDATA', formData)
                 updateVehicle(userDetails, userDetails.data.id, formData)
                 .then((res) => {
                     if(res.status) {
