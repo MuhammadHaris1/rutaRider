@@ -1,4 +1,4 @@
-const API_ENDPOINT = 'https://hnh6.xyz/route/api/'
+const API_ENDPOINT = 'http://ruta.hnhp.website/route/api/'
 
 export {
     API_ENDPOINT

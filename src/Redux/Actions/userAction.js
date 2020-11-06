@@ -294,7 +294,7 @@ export function forgotPassword(formmdata) {
   return function(dispatch) {
     dispatch({type:'RENDER_LOADER'})
     return new Promise((res, rej) => {
-      axios.post('https://hnh6.xyz/route/api/forget_password.php', formmdata)
+      axios.post(`${API_ENDPOINT}forget_password.php`, formmdata)
       .then((resposne) => {
         console.log('RSPONSE', resposne)
         if(resposne.data.status){
@@ -319,7 +319,7 @@ export function changePassword(formmdata) {
   return function(dispatch) {
     dispatch({type:'RENDER_LOADER'})
     return new Promise((res, rej) => {
-      axios.post('https://hnh6.xyz/route/api/forget_password.php', formmdata)
+      axios.post(`${API_ENDPOINT}forget_password.php`, formmdata)
       .then((resposne) => {
         if(resposne.data.status){
           dispatch({ type: "CLEAR_PROCESSING" });
@@ -341,7 +341,7 @@ export function changePassword(formmdata) {
 export function getPaymentDetails(id) {
   return function(dispatch) {
     dispatch({type:'FETCHING_PAYMENT_DETAIL'})
-    axios.get(`https://hnh6.xyz/route/api/amountNKm.php?riderId=${id}`)
+    axios.get(`${API_ENDPOINT}amountNKm.php?riderId=${id}`)
     .then((res) => {
       console.log('paymentDetail RESPONSE', res.data)
       if(res.data.status){
@@ -362,7 +362,7 @@ export function giveRating(formData) {
   return function(dispatch) {
     dispatch({type:'SEND_FEEDBACK_PROCESSING'})
     return new Promise((resolve, reject) => {
-      axios.post('https://hnh6.xyz/route/api/rating.php', formData)
+      axios.post(`${API_ENDPOINT}rating.php`, formData)
       .then((res) => {
         if(res.data.status) {
           dispatch({ type: "SEND_FEEDBACK_PROCESSED", payload: null});
