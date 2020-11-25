@@ -15,7 +15,7 @@ target 'route' do
   use_react_native!(:path => config["reactNativePath"])
   permissions_path = '../node_modules/react-native-permissions/ios'
   
-  
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
   pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways.podspec"
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse.podspec"
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"

@@ -96,6 +96,24 @@ class DrawerMenu extends React.Component {
                             </TouchableOpacity>
 
 
+
+                            <TouchableOpacity
+                            style={styles.menuItem}
+                            onPress={() => {
+                                this.props.navigation.navigate('ScheduleBooking')
+                                this.props.navigation.closeDrawer()
+                            }}
+                            >
+                                <View style={{ marginLeft: 10, width: 30 }}>
+                                    <Image source={require('../../assets/schedule.png')} style={{ height: 20, width: 20 }} />
+                                </View>
+
+                                <View style={{ marginLeft: 20 }}>
+                                    <Text style={styles.menuItemText}>Schedule Booking</Text>
+                                </View>
+                            </TouchableOpacity>
+
+
                             {/* <TouchableOpacity
                             style={styles.menuItem}
                             onPress={() => {

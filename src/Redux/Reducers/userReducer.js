@@ -3,7 +3,8 @@ export default function reducer(
     userDetails: null,
     activeRideData: null ,
     history: null,
-    paymentDetail: null
+    paymentDetail: null,
+    emergencyNumber: null
   },
   action
 ) {
@@ -142,6 +143,18 @@ export default function reducer(
         activeRideData: null ,
         history: null,
         paymentDetail: null
+      };
+    }
+
+    case 'GET_NUMBERS_PROCESSING': {
+      return { ...state, fetching: true };
+    }
+    case 'GET_NUMBERS_PROCESSED': {
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        emergencyNumber: action.payload,
       };
     }
 

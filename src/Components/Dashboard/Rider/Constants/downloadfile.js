@@ -21,7 +21,7 @@ import RNFetchBlob from 'rn-fetch-blob'
 export default downloadFile = (url) => {
     let dirs = RNFetchBlob.fs.dirs
     let filePath = `${dirs.DocumentDir}/${'rutaAgreement'}.pdf`
-
+    console.log("URL =>" ,url)
     RNFetchBlob.config({
         path: filePath,
         addAndroidDownloads: {

@@ -381,6 +381,25 @@ export function giveRating(formData) {
 }
 
 
+export function getEmergencyNumber() {
+  return function(dispatch) {
+    dispatch({type:'GET_NUMBERS_PROCESSING'})
+    axios.get(`https://hnh6.xyz/route/api/emergencyContacts.php?action=getEmergencyContacts`)
+    .then((res) => {
+      if(res.data.status) {
+        dispatch({type:'GET_NUMBERS_PROCESSED', payload: res.data.data})
+      }else {
+        dispatch({ type: "CLEAR_PROCESSING" });
+        console.log("res.data", res.data)
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+}
+
+
 export function logout() {
   return function(dispatch) {
     dispatch({type:'LOGOUT_SUCCESSFULL'})

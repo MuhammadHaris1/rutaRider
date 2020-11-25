@@ -452,7 +452,7 @@ class Map extends Component {
                                 <View>
                                     <CountDown
                                         size={30}
-                                        until={20}
+                                        until={2000}
                                         onFinish={() => {
                                             Alert.alert("Alert", "Ride Expired")
                                             this.setState({rideReq: !rideReq})
@@ -551,7 +551,10 @@ class Map extends Component {
 
                                             <View style={{flexDirection:'row', justifyContent:'flex-start', padding: 5, marginTop: 10,}}>
                                                 <CheckBox checked={agreement} onPress={() => this.setState({agreement: !agreement})} />
-                                                <TouchableOpacity onPress={() => downloadfile('https://hnh6.xyz/route/public/pdf/agreement.pdf')}>
+                                                <TouchableOpacity onPress={() => {
+                                                    downloadfile('https://hnh6.xyz/route/public/pdf/agreement.pdf')
+                                                    // Alert.alert("Alert", "agreement")
+                                                }}>
                                                     <Text style={{color:'#3A91FA', paddingVertical: '5%'}}>
                                                         I Agree to the ruta Terms & Condition
                                                     </Text>
