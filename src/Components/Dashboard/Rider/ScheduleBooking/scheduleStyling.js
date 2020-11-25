@@ -42,5 +42,11 @@ export const styles = StyleSheet.create({
     },
     whiteNormalTxt: {
         color:'#fff'
+    },
+    btnStyle: {
+        alignSelf:'center', 
+        marginTop:20, 
+        backgroundColor:'#3A91FA',
+        width:'90%'
     }
 })
