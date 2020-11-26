@@ -394,6 +394,7 @@ export function getEmergencyNumber() {
       }
     })
     .catch((err) => {
+      dispatch({ type: "CLEAR_PROCESSING" });
       console.log(err)
     })
   }
@@ -406,6 +407,58 @@ export function logout() {
     AsyncStorage.clear()
     // NavigtionService.closeDrawer()
     NavigtionService.navigate('DriverLogin')
+  }
+}
+
+
+export function createSchedule(data) {
+  return function(dispatch) {
+    dispatch({type: 'RENDER_LOADER'})
+    dispatch({type:'CREATE_SCHEDULE_PROCESSING'})
+    return new Promise((resolve, reject) => {
+      axios.post(`https://hnh6.xyz/route/api/schedule.php`, data)
+      .then((res) => {
+        console.log(" onSubmit res", res, data)
+        if(res.data.status) {
+          dispatch({ type: "CLEAR_PROCESSING" });
+          dispatch({type:'CREATE_SCHEDULE_PROCESSED', payload: res.data})
+          resolve({status: res.data.status, message: res.data.message})
+        }else {
+          dispatch({ type: "CLEAR_PROCESSING" });
+          console.log("res.data", res.data)
+          reject({status: res.data.status, message: res.data.message})
+        }
+      })
+      .catch((err) => {
+        console.log(" onSubmit err", err, data)
+        dispatch({ type: "CLEAR_PROCESSING" });
+        console.log(err)
+      })
+    })
+  }
+}
+
+
+export function getSchedule(id) {
+  return function(dispatch) {
+    const scheduleData = new FormData()
+    scheduleData.append("action", "getSchedule")
+    scheduleData.append("rider_id",id)
+    dispatch({type:'GET_SCHEDULE_PROCESSING'})
+    axios.post(`https://hnh6.xyz/route/api/schedule.php`, scheduleData)
+    .then((res) => {
+      if(res.data.status) {
+        console.log("res.data GET_SCHEDULE", res.data, scheduleData)
+        dispatch({type:'GET_SCHEDULE_PROCESSED', payload: res.data.data})
+      }else {
+        dispatch({ type: "CLEAR_PROCESSING" });
+        console.log('GET_SCHEDULE err', res.data, scheduleData)
+      }
+    })
+    .catch((err) => {
+      dispatch({ type: "CLEAR_PROCESSING" });
+      console.log('GET_SCHEDULE err', err)
+    })
   }
 }
 

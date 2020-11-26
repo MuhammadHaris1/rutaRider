@@ -1,12 +1,13 @@
 import { Button, Input, Item, Label } from 'native-base'
 import React, { useState } from 'react'
-import { View, Text, Image, ImageBackground } from 'react-native'
+import { View, Text, Image, ImageBackground, ActivityIndicator, Alert } from 'react-native'
 import { HeaderCustom } from '../Constants/Header'
 import { SearchLocation } from '../Constants/locationSearch'
 import { styles } from './scheduleStyling'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment'
-
+import { connect } from 'react-redux'
+import { createSchedule, getSchedule } from '../../../../Redux/Actions/userAction'
 const CreateSchedule = (props) => {
 
     const [type, setType] = useState('')
@@ -19,6 +20,9 @@ const CreateSchedule = (props) => {
     const [mode, setMode] = useState('date')
     const [time, setTime] = useState('')
     const [date, setDate] = useState('')
+    const [price, setPrice] = useState('')
+    const [seat, setSeat] = useState('')
+
 
     const showDatePicker = () => {
       setDatePickerVisibility(true);
@@ -29,7 +33,7 @@ const CreateSchedule = (props) => {
     };
   
     const handleConfirm = (e) => {
-      var time = moment(e).format('LTS')
+      var time = moment(e).format('HH:mm')
       var date = moment(e).format('MM/DD/YYYY')
       if(mode == "time") {
         setTime(time)
@@ -88,7 +92,47 @@ const CreateSchedule = (props) => {
 
     }
 
+    const onSubmit = () => {
+        const {getSchedule, userDetails, createSchedule} = props
+        var data = {
+           'action': 'addSchedule',
+           'rider_id': userDetails.data.id,
+           'pickup_longitude': fromCordinate.lat,
+           'pickup_latitude': fromCordinate.lng,
+           'drop_longitude': toCordinate.lat,
+           'drop_latitude': toCordinate.lng,
+           'pick_location_name': fromAddress,
+           'drop_location_name': toAddress,
+           'timing': time,
+           'price': price,
+           'seat': seat,
+           'date': date 
+           }; 
 
+           var formData = new FormData()
+            formData.append("action", "addSchedule");
+            formData.append("rider_id", userDetails.data.id);
+            formData.append("pickup_longitude", fromCordinate.longitude);
+            formData.append("pickup_latitude", fromCordinate.latitude);
+            formData.append("drop_longitude", toCordinate.longitude);
+            formData.append("drop_latitude", toCordinate.latitude);
+            formData.append("pick_location_name", fromAddress);
+            formData.append("drop_location_name", toAddress);
+            formData.append("timing", time);
+            formData.append("price", price);
+            formData.append("seat", seat);
+            formData.append("date", '2020-11-26');
+           createSchedule(formData)
+           .then((res) => {
+               Alert.alert("Alert", res.message)
+               getSchedule(userDetails.data.id)
+               console.log(" onSubmit res", res, data)
+               props.navigation.goBack()
+           })       
+           .catch((err) => {
+            Alert.alert("Alert", err.message)
+           })
+    }
     return(
         <View style={{flex:1}}>
             {<SearchLocation visible={visible} closed={onClosed} onSelect={onSelect} />}
@@ -136,12 +180,14 @@ const CreateSchedule = (props) => {
                     <View style={[styles.row, styles.spaceBtw, styles.itemContainer, {width:'90%', alignSelf:'center'}]}>
                         <Item fixedLabel style={{width:'45%'}}>
                             <Input 
-                            keyboardType="number-pad"
+                            onChangeText={(e) => setPrice(e)}
+                            keyboardType="phone-pad"
                             style={styles.whiteNormalTxt} placeholder="Price" 
                             placeholderTextColor="#fff"/>
                         </Item>
                         <Item fixedLabel style={{width:'45%'}}>
                             <Input 
+                             onChangeText={(e) => setSeat(e)}
                              keyboardType="number-pad"
                              style={styles.whiteNormalTxt} placeholder="Seat" placeholderTextColor="#fff" />
                         </Item>
@@ -156,20 +202,33 @@ const CreateSchedule = (props) => {
                     </View>
 
                     <View style={styles.itemContainer}>
-                        <Button onPress={() => {
-                            showDatePicker()
+                       {!props.fetching ? <Button onPress={() => {
+                            onSubmit()
                         }} style={styles.btnStyle} full rounded>
                             <Text style={{color:'#fff'}}>
                                 Continue
                             </Text>
-                        </Button>
+                        </Button> :
+                        <ActivityIndicator size="large" color="#3A91FA" />
+                        }
                     </View>
-                </View>
-
-                
+                </View> 
             </ImageBackground>
         </View>
     )
 }
 
-export default CreateSchedule;
+
+const mapStateToProps = state => {
+    return {
+        userDetails: state.user.userDetails,
+        fetching: state.user.fetching,
+    };
+};
+
+const mapDispatchToProps = {
+    createSchedule, getSchedule
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateSchedule);

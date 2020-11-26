@@ -20,9 +20,12 @@ export const SearchLocation = (props) => {
                 <View style={{ flex: 1, backgroundColor:'rgb(209, 210, 212)' }}
                 >
                     <GooglePlacesAutocomplete
-                        currentLocation={true}
+                        currentLocation
+                        currentLocationLabel="Current Location"
                         enableHighAccuracyLocation
                         nearbyPlacesAPI='None'
+                        numberOfLines={10}
+                        enablePoweredByContainer={false}
                         query={{
                             key: GOOGLE_PLACES_API_KEY,
                             language: 'en', // language of the results

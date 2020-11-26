@@ -6,7 +6,7 @@ import { styles } from './scheduleStyling';
 import LinearGradient from 'react-native-linear-gradient';
 
 const ScheduleBooking = (props) => {
-
+    const { schedule } = props
     const scheduleBookings = [
         {
             from: 'Karachi',
@@ -51,53 +51,66 @@ const ScheduleBooking = (props) => {
                     </View>
                     
                     <ScrollView>
-                    {scheduleBookings.map((val, ind) => {
-                        return(
-                            <View key={ind} style={[styles.scheduleCard]}>
-                                <LinearGradient style={[styles.round, {width:'100%'}]}
-                                 colors={['#3895FC', '#16C7FE', "#01E5FE"]} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }}>
-                                    <View style={[styles.itemContainer, styles.round]}>
-                                        <Text style={styles.whiteBoldTxt}>
-                                            {val.from} - {val.destination}
-                                        </Text>
-                                    </View>
-                                </LinearGradient>
+                     {schedule ?
+                        <View>
+                            {schedule.map((val, ind) => {
+                                return(
+                                    <View key={ind} style={[styles.scheduleCard]}>
+                                        <LinearGradient style={[styles.round, {width:'100%'}]}
+                                        colors={['#3895FC', '#16C7FE', "#01E5FE"]} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }}>
+                                            <View style={[styles.itemContainer, styles.round]}>
+                                                <Text style={styles.whiteBoldTxt}>
+                                                    {val.pickup_name} - {val.destination_name}
+                                                </Text>
+                                            </View>
+                                        </LinearGradient>
 
-                                <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
-                                    <Text style={styles.whiteNormalTxt}>
-                                       Timing 
-                                    </Text>
-                                    <Text style={styles.whiteNormalTxt}>
-                                        {val.timing}
-                                    </Text>
-                                </View>
-                                <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
-                                    <Text style={styles.whiteNormalTxt}>
-                                       Date 
-                                    </Text>
-                                    <Text style={styles.whiteNormalTxt}>
-                                        {val.date}
-                                    </Text>
-                                </View>
-                                <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
-                                    <Text style={styles.whiteNormalTxt}>
-                                        Available Seats 
-                                    </Text>
-                                    <Text style={styles.whiteNormalTxt}>
-                                        {val.availableSeats}
-                                    </Text>
-                                </View>
-                                <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
-                                    <Text style={styles.whiteNormalTxt}>
-                                       Price 
-                                    </Text>
-                                    <Text style={styles.whiteNormalTxt}>
-                                        Rs: {val.price}
-                                    </Text>
-                                </View>
-                            </View>
-                        )
-                    })}
+                                        <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
+                                            <Text style={styles.whiteNormalTxt}>
+                                            Timing 
+                                            </Text>
+                                            <Text style={styles.whiteNormalTxt}>
+                                                {val.timing}
+                                            </Text>
+                                        </View>
+                                        <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
+                                            <Text style={styles.whiteNormalTxt}>
+                                            Date 
+                                            </Text>
+                                            <Text style={styles.whiteNormalTxt}>
+                                                {val.date}
+                                            </Text>
+                                        </View>
+                                        <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
+                                            <Text style={styles.whiteNormalTxt}>
+                                                Available Seats 
+                                            </Text>
+                                            <Text style={styles.whiteNormalTxt}>
+                                                {val.seat}
+                                            </Text>
+                                        </View>
+                                        <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
+                                            <Text style={styles.whiteNormalTxt}>
+                                            Price 
+                                            </Text>
+                                            <Text style={styles.whiteNormalTxt}>
+                                                Rs: {val.price}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                )
+                            })}
+                        </View> 
+                        
+                    : 
+                    
+                    <View style={{justifyContent: 'center', alignContent:'center', top: '60%'}}>
+                        <Text style={{color:"#fff", alignSelf:'center', fontSize: 20}}>
+                            You have't create any Schedule!
+                        </Text>
+                    </View>
+                    }
+                    
                     </ScrollView>
                 </View>
             </ImageBackground>
@@ -110,6 +123,7 @@ const mapStateToProps = state => {
 	return {
         userDetails: state.user.userDetails,
         fetching: state.user.fetching,
+        schedule: state.user.schedule,
 	};
   };
   

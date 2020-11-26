@@ -4,7 +4,8 @@ export default function reducer(
     activeRideData: null ,
     history: null,
     paymentDetail: null,
-    emergencyNumber: null
+    emergencyNumber: null,
+    schedule: null
   },
   action
 ) {
@@ -158,6 +159,18 @@ export default function reducer(
       };
     }
 
+
+    case 'GET_SCHEDULE_PROCESSING': {
+      return { ...state, fetching: true };
+    }
+    case 'GET_SCHEDULE_PROCESSED': {
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        schedule: action.payload,
+      };
+    }
   }
   return state;
 }
