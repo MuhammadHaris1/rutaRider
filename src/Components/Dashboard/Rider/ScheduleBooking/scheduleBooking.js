@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { HeaderCustom } from '../Constants/Header';
 import { styles } from './scheduleStyling';
 import LinearGradient from 'react-native-linear-gradient';
+import { Accordion } from 'native-base';
 
 const ScheduleBooking = (props) => {
     const { schedule } = props
@@ -41,7 +42,7 @@ const ScheduleBooking = (props) => {
             price: '1450'
         },
     ]
-
+    let arrow = "<----->"
     return(
         <View>
             <ImageBackground style={styles.backroundImage} source={require('../../../../../assets/Splash.png')}>
@@ -59,9 +60,29 @@ const ScheduleBooking = (props) => {
                                         <LinearGradient style={[styles.round, {width:'100%'}]}
                                         colors={['#3895FC', '#16C7FE', "#01E5FE"]} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }}>
                                             <View style={[styles.itemContainer, styles.round]}>
-                                                <Text style={styles.whiteBoldTxt}>
+                                                {/* <Text style={styles.whiteNormalTxt}>
                                                     {val.pickup_name} - {val.destination_name}
-                                                </Text>
+                                                </Text> */}
+                                                <Accordion 
+                                                expandedIcon
+                                                style={{borderWidth: 0}}
+                                                headerStyle={{backgroundColor:'transparent'}}
+                                                renderHeader={(e) => {
+                                                    return(
+                                                        <Text
+                                                        numberOfLines={1}
+                                                        style={{...styles.whiteBoldTxt, width: '70%'}}>
+                                                             {val.pickup_name} - {val.destination_name}
+                                                        </Text>
+                                                    )
+                                                }}
+                                                dataArray={[val]} renderContent={(e) => {
+                                                    return(
+                                                        <Text style={styles.whiteNormalTxt}>
+                                                            {val.pickup_name} - {val.destination_name}
+                                                        </Text>
+                                                    )
+                                                }} expanded={ind}/>
                                             </View>
                                         </LinearGradient>
 

@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
         padding: 10,
     },
     round: {
-        borderRadius: 20
+        borderRadius: 10
     },
     scheduleCard : {
         backgroundColor: 'rgba(209, 210, 212, 0.4)',
