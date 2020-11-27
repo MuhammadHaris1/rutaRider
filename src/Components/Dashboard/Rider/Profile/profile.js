@@ -472,9 +472,6 @@ class Profile extends React.Component {
 
                             <Header
                                 containerStyle={{ backgroundColor: 'transparent', borderBottomWidth: 0 }}
-                                // leftComponent={<TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                                //     <Image source={sidebar} style={{height: 20, width: 20}} />
-                                // </TouchableOpacity>}
                                 rightComponent={
                                     <TouchableOpacity onPress={() => this.props.navigation.toggleDrawer()}>
                                         <Image source={sidebar} style={{ height: 20, width: 20 }} />
@@ -482,13 +479,16 @@ class Profile extends React.Component {
                                 }
                             />
 
-                            <View style={{ marginTop: hp(13), flexDirection: 'row', alignSelf: 'center', left: wp(10) }}>
+                            <View style={{ marginTop: hp(10), flexDirection: 'row', alignSelf: 'center', left: wp(10) }}>
 
                                 <Avatar
+                                    accessory={{style:{top: '80%', left: 0}}}
+                                    showAccessory
+                                    onAccessoryPress={() => this.props.navigation.navigate('EditProfile')}
                                     containerStyle={{ borderWidth: 15, borderColor: '#fff', borderRadius: 100, }}
                                     size="xlarge"
                                     rounded
-                                    source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTGkKTkKnqZE23RyW0_npSDjVKIVg_uLRmZbw&usqp=CAU' }}
+                                    source={{ uri: 'https://i2.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1' }}
                                 />
 
                                 <TouchableOpacity onPress={() => this.setState({ modalVisible: true, })} style={{ top: 110 }}>

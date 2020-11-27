@@ -463,4 +463,34 @@ export function getSchedule(id) {
 }
 
 
+export function updateProfile(data, fetchProfileData) {
+  return function (dispatch) {
+    dispatch({ type: "LOGIN_PROCESSING" });
+    return new Promise((resolve, reject) => {
+      axios.post(`${API_ENDPOINT}user.php`, data)
+      .then(async (response) => {
+        dispatch({ type: "LOGIN_PROCESSED", payload: response.data });
+        // console.log("responde UPDATE PROFILE", response)
+        // dispatch({ type: "CLEAR_PROCESSING" });
+        if (response.data.status === true) {
+          resolve({status: response.data.status, message: response.data.message})
+          try {
+            await AsyncStorage.setItem('User', JSON.stringify(response.data));
+            fetchProfileData(response.data)
+          } catch (error) {
+            console.log('error =>', error)
+
+          }
+          Alert.alert("Alert", response.data.message)
+        } else {
+          resolve({status: response.data.status, message: response.data.message})
+          Alert.alert("Alert", response.data.message)
+        }
+      })
+      .catch((err) => {
+        dispatch({ type: "ERROR", payload: 'An unexpected error occured!' }); dispatch({ type: "CLEAR_PROCESSING" });
+      })
+    })
+  }
+}
 
