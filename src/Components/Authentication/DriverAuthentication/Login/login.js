@@ -7,20 +7,36 @@ const signinBack = require('../../../../../assets/signinBack.png')
 const Logo = require('../../../../../assets/Logo.png')
 import axios from 'axios'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import messaging from '@react-native-firebase/messaging';
+
 
 class DriverLogin extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             email:'miqdad12@gmail.com',
-            password: 'hnh123'
+            password: 'hnh123',
+            token:''
         }
     }
 
+    componentDidMount = async () => {
+        const authStatus = await messaging().requestPermission();
+        const enabled =
+          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+          console.log("enabled enabled", enabled)
+        if (enabled) {
+            messaging().getToken().then(token => {
+                console.log('Authorization status & token :', authStatus, token);
+                this.setState({ token })
+            })
+        }
 
+    }
 
     signin = () => {
-        const { email, password } = this.state
+        const { email, password, token } = this.state
         const { login } = this.props
         const { fetchProfileData } = this.props.screenProps
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -35,6 +51,7 @@ class DriverLogin extends React.Component {
             var data = new FormData();
             data.append('email', email);
             data.append('password', password);
+            data.append('token', token)
             // this.props.screenProps.fetchProfileData(convertVal)
             login(data, fetchProfileData)
         }

@@ -109,6 +109,8 @@ const EditProfile = (props) => {
                         }
                     </View>
                     </ScrollView>
+                
+                
                 </View>
             </ImageBackground>
         </View>
