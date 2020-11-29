@@ -26,6 +26,7 @@ class DrawerMenu extends React.Component {
 
     render() {
         const {profileData} = this.props.screenProps
+        const {userDetails} = this.props
         return( 
             <View style={{flex: 1}}>
                 <ImageBackground source={backgound} style={{height:"100%", width:'100%', flex: 1, justifyContent:'center'}}> 
@@ -141,7 +142,19 @@ class DrawerMenu extends React.Component {
                               flexDirection: "row"
                               }}
                             onPress={() => {
-                                this.props.logout()
+                                this.props.logout(userDetails.data.id)
+                                .then( async (result) => {
+                                    if(result.status) {
+                                        await AsyncStorage.clear()
+                                        this.props.navigation.navigate('DriverLogin')
+                                        this.props.navigation.closeDrawer()
+                                    }else {
+                                        Alert.alert("Alert", "Connection interrupt")
+                                    }
+                                })
+                                .catch((err) => {
+                                    Alert.alert("Alert", "Connection interrupt")
+                                })
 
                             }}
                             >

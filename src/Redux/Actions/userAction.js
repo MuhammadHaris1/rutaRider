@@ -401,14 +401,14 @@ export function getEmergencyNumber() {
 }
 
 
-export function logout() {
-  return function(dispatch) {
-    dispatch({type:'LOGOUT_SUCCESSFULL'})
-    AsyncStorage.clear()
-    // NavigtionService.closeDrawer()
-    NavigtionService.navigate('DriverLogin')
-  }
-}
+// export function logout() {
+//   return function(dispatch) {
+//     dispatch({type:'LOGOUT_SUCCESSFULL'})
+//     AsyncStorage.clear()
+//     // NavigtionService.closeDrawer()
+//     NavigtionService.navigate('DriverLogin')
+//   }
+// }
 
 
 export function createSchedule(data) {
@@ -490,6 +490,38 @@ export function updateProfile(data, fetchProfileData) {
       .catch((err) => {
         dispatch({ type: "ERROR", payload: 'An unexpected error occured!' }); dispatch({ type: "CLEAR_PROCESSING" });
       })
+    })
+  }
+}
+
+
+
+export function logout(id) {
+  return function(dispatch) {
+    var data = new FormData();
+    data.append('action', 'token_remove');
+    data.append('id', id);
+    var config = {
+      method: 'post',
+      url: `${API_ENDPOINT}user.php`,
+      data : data
+    };
+    return new Promise((resolve, reject) => {
+      axios(config)
+      .then((response) => {
+        if(response.data.status) {
+          console.log("RESPONSE => if", response.data)
+          resolve({status: response.data.status })
+        }else {
+          console.log("RESPONSE => else", response.data)
+          reject({status: response.data.status })
+        }
+      })
+      .catch((error) => {
+        console.log("error => error", error)
+        console.log(error);
+        reject({status: false })
+      });
     })
   }
 }
