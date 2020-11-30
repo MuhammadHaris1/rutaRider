@@ -21,6 +21,36 @@ import backgound from "../../assets/welcome2.png";
 class DrawerMenu extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            tabArr : [
+                {
+                    name: 'Profile',
+                    icon: require('../../assets/ProfileActive.png'),
+                    navigate: 'ProProfile'
+                },
+                {
+                    name: 'Notification',
+                    icon: require('../../assets/notification.png'),
+                    navigate: 'Notification'
+                },
+                {
+                    name: 'Payment',
+                    icon: require('../../assets/payment.png'),
+                    navigate: 'Payment'
+                },
+                {
+                    name: 'History',
+                    icon: require('../../assets/history.png'),
+                    navigate: 'History'
+                },
+                {
+                    name: 'Schedule Booking',
+                    icon: require('../../assets/schedule.png'),
+                    navigate: 'ScheduleBooking'
+                },
+                
+            ]
+        }
     }
 
 
@@ -44,92 +74,28 @@ class DrawerMenu extends React.Component {
                         </View>
 
                         <View style={{ alignItems:'center', marginVertical: 10 }}>
-        <                   Text style={{fontSize: 23, color:'#fff'}}>{profileData.data.first_name} {profileData.data.last_name}</Text>
+                            < Text style={{fontSize: 23, color:'#fff'}}>{profileData.data.first_name} {profileData.data.last_name}</Text>
                         </View>
                             
-                        <TouchableOpacity
-                            style={styles.menuItem}
-                            onPress={() => {
-                                this.props.navigation.navigate('ProProfile')
-                                this.props.navigation.closeDrawer()
-                            }}
-                            >
-                                <View style={{ marginLeft: 10, width: 30 }}>
-                                    <Image source={require('../../assets/ProfileActive.png')} style={{ height: 20, width: 20 }} />
-                                </View>
-
-                                <View style={{ marginLeft: 20 }}>
-                                    <Text style={styles.menuItemText}>Profile</Text>
-                                </View>
-                            </TouchableOpacity>
-
-
-                            <TouchableOpacity
-                            style={styles.menuItem}
-                            onPress={() => {
-                                this.props.navigation.navigate('Payment')
-                                this.props.navigation.closeDrawer()
-                            }}
-                            >
-                                <View style={{ marginLeft: 10, width: 30 }}>
-                                    <Image source={require('../../assets/payment.png')} style={{ height: 20, width: 20 }} />
-                                </View>
-
-                                <View style={{ marginLeft: 20 }}>
-                                    <Text style={styles.menuItemText}>Payment</Text>
-                                </View>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                            style={styles.menuItem}
-                            onPress={() => {
-                                this.props.navigation.navigate('History')
-                                this.props.navigation.closeDrawer()
-                            }}
-                            >
-                                <View style={{ marginLeft: 10, width: 30 }}>
-                                    <Image source={require('../../assets/history.png')} style={{ height: 20, width: 20 }} />
-                                </View>
-
-                                <View style={{ marginLeft: 20 }}>
-                                    <Text style={styles.menuItemText}>History</Text>
-                                </View>
-                            </TouchableOpacity>
-
-
-
-                            <TouchableOpacity
-                            style={styles.menuItem}
-                            onPress={() => {
-                                this.props.navigation.navigate('ScheduleBooking')
-                                this.props.navigation.closeDrawer()
-                            }}
-                            >
-                                <View style={{ marginLeft: 10, width: 30 }}>
-                                    <Image source={require('../../assets/schedule.png')} style={{ height: 20, width: 20 }} />
-                                </View>
-
-                                <View style={{ marginLeft: 20 }}>
-                                    <Text style={styles.menuItemText}>Schedule Booking</Text>
-                                </View>
-                            </TouchableOpacity>
-
-
-                            {/* <TouchableOpacity
-                            style={styles.menuItem}
-                            onPress={() => {
-                                this.props.navigation.navigate('Emergency')
-                                this.props.navigation.closeDrawer()
-                            }}
-                            >
-                                <View style={{ marginLeft: 10, width: 30 }}>
-                                    <Image source={require('../../assets/call.png')} style={{ height: 20, width: 20 }} />
-                                </View>
-
-                                <View style={{ marginLeft: 20 }}>
-                                    <Text style={styles.menuItemText}>Emergency Call</Text>
-                                </View>
-                            </TouchableOpacity> */}
+                            {this.state.tabArr.map((val, ind) => {
+                                return(
+                                    <TouchableOpacity
+                                    style={styles.menuItem}
+                                    onPress={() => {
+                                        this.props.navigation.navigate(val.navigate)
+                                        this.props.navigation.closeDrawer()
+                                    }}
+                                    >
+                                    <View style={{ marginLeft: 10, width: 30 }}>
+                                        <Image source={val.icon} style={{ height: 20, width: 20 }} />
+                                    </View>
+    
+                                    <View style={{ marginLeft: 20 }}>
+                                        <Text style={styles.menuItemText}>{val.name}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                )
+                            })}
 
                         </View>
                     </ScrollView>
@@ -184,7 +150,7 @@ const styles = StyleSheet.create({
       // backgroundColor: "rgba(12, 12, 12, 0.2)",
     //   marginBottom: 2,
     backgroundColor:'rgba(74, 83, 116, 0.9)',
-    marginTop: 30,
+    marginTop: 5,
     display: "flex",
     flexDirection: "row"
     },
