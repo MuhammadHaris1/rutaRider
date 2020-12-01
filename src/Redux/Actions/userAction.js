@@ -526,3 +526,26 @@ export function logout(id) {
   }
 }
 
+
+export function getNotification(id) {
+  return function(dispatch) {
+    dispatch({type:'GET_NOTIFICATION_PROCESSING'})
+    var data = new FormData();
+    data.append('action', 'show_notification'); 
+    data.append('user_id', id); 
+
+    axios.post(`https://hnh6.xyz/route/api/notifications.php`, data)
+    .then((res) => {
+      if(res.data.status) {
+        dispatch({type:'GET_NOTIFICATION_PROCESSED', payload: res.data.data})
+      }else {
+        dispatch({ type: "CLEAR_PROCESSING" });
+        console.log("res.data", res.data)
+      }
+    })
+    .catch((err) => {
+      dispatch({ type: "CLEAR_PROCESSING" });
+      console.log(err)
+    })
+  }
+}

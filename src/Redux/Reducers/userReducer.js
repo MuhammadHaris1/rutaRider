@@ -5,7 +5,8 @@ export default function reducer(
     history: null,
     paymentDetail: null,
     emergencyNumber: null,
-    schedule: null
+    schedule: null,
+    notification: null
   },
   action
 ) {
@@ -169,6 +170,18 @@ export default function reducer(
         fetching: false,
         fetched: true,
         schedule: action.payload,
+      };
+    }
+
+    case 'GET_NOTIFICATION_PROCESSING': {
+      return { ...state, fetching: true };
+    }
+    case 'GET_NOTIFICATION_PROCESSED': {
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        notification: action.payload,
       };
     }
   }
