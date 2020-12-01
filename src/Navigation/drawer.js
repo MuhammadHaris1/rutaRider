@@ -33,11 +33,11 @@ class DrawerMenu extends React.Component {
                     icon: require('../../assets/notification.png'),
                     navigate: 'Notification'
                 },
-                // {
-                //     name: 'Ride Request',
-                //     icon: require('../../assets/request.png'),
-                //     navigate:'RideReq'
-                // },
+                {
+                    name: 'Ride Request',
+                    icon: require('../../assets/request.png'),
+                    navigate:'RideReq'
+                },
                 {
                     name: 'Payment',
                     icon: require('../../assets/payment.png'),
