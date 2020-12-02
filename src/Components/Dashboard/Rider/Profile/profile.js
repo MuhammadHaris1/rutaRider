@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, ScrollView, ImageBackground, Image, TouchableOpacity, Dimensions, Modal, FlatList, BackHandler, Alert, Platform, RefreshControl, } from 'react-native'
 import { connect } from 'react-redux';
-import { getPaymentDetails, updateVehicle, getHistory, getUserDetail, getEmergencyNumber, getSchedule, getNotification } from '../../.././../Redux/Actions/userAction'
+import { getPaymentDetails, updateVehicle, getHistory, getUserDetail, getEmergencyNumber, getSchedule, getNotification, getBookingReq } from '../../.././../Redux/Actions/userAction'
 import { Item, Input, Label, Button } from 'native-base';
 import { Avatar, Header, } from 'react-native-elements'
 import FooterComponent from '../../Rider/Footer/footer'
@@ -78,12 +78,13 @@ class Profile extends React.Component {
 
 
     componentDidMount = () => {
-        const { userDetails, getHistory, getPaymentDetails, getEmergencyNumber, getSchedule, getNotification } = this.props        
+        const { userDetails, getHistory, getPaymentDetails, getEmergencyNumber, getSchedule, getNotification, getBookingReq } = this.props        
         getHistory(userDetails.data.id)
         getEmergencyNumber()
         getPaymentDetails(userDetails.data.id)
         getSchedule(userDetails.data.id)
         getNotification(userDetails.data.id)
+        getBookingReq(userDetails.data.id)
         if (userDetails.data.vehicle.id != null) {
             this.setState({ selectedImage: this.state.carImages[0], addVehicle: false })
         } else {
@@ -617,7 +618,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    updateVehicle, getHistory, getPaymentDetails, getUserDetail, getEmergencyNumber, getSchedule, getNotification
+    updateVehicle, getHistory, getPaymentDetails, getUserDetail, getEmergencyNumber, getSchedule, getNotification, getBookingReq
 };
 
 

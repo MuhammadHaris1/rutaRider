@@ -7,6 +7,7 @@ import { HeaderCustom } from '../Constants/Header'
 import { styles } from '../ScheduleBooking/scheduleStyling'
 import moment from 'moment'
 import { getNotification } from '../../../../Redux/Actions/userAction'
+
 const Notification = (props) => {
     const { notification, fetching, userDetails, getNotification } = props
     const renderItem = (item, index) => {
@@ -42,6 +43,7 @@ const Notification = (props) => {
     const onRefresh = () => {
         getNotification(userDetails.data.id)
     }
+    console.log("notification notification notification", notification)
 
     return(
         <View>

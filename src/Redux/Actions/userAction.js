@@ -549,3 +549,99 @@ export function getNotification(id) {
     })
   }
 }
+
+
+
+export function getBookingReq(id) {
+  return function(dispatch) {
+    dispatch({type:'GET_BOOKING_REQ_PROCESSING'})
+    var data = new FormData();
+    data.append('action', 'getbooking_request');
+    data.append('rider_id', id);
+    // data.append('role_id', '3');
+
+    axios.post(`https://hnh6.xyz/route/api/bookingFromSchedule.php`, data)
+    .then((res) => {
+      if(res.data.status) {
+        dispatch({type:'GET_BOOKING_REQ_PROCESSED', payload: res.data.data})
+      }else {
+        dispatch({type:'GET_BOOKING_REQ_PROCESSED', payload: null})
+        dispatch({ type: "CLEAR_PROCESSING" });
+        console.log("res.data", res.data)
+      }
+    })
+    .catch((err) => {
+      dispatch({ type: "CLEAR_PROCESSING" });
+      console.log(err)
+    })
+  }
+}
+
+
+export function acceptBooking (riderId, roleId, bookingScheduleId) {
+  return function (dispatch) {
+    var data = new FormData();
+    data.append('action', 'accept_booking');
+    data.append('rider_id', riderId);
+    // data.append('role_id', roleId);
+    data.append('booking_shedule_id', bookingScheduleId);
+
+    console.log(" acceptBooking acceptBooking ", data)
+    var config = {
+      method: 'post',
+      url: 'https://hnh6.xyz/route/api/bookingFromSchedule.php',
+      data : data
+    };
+    
+    return new Promise((resolve, reject) => {
+      axios(config)
+      .then(function (response) {
+        if(response.data.status) {
+          resolve({status: true, message: response.data.message})
+        }else {
+          reject({status: false, message: response.data.message})
+        }
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        reject({status: false, message: "Booking not accepted"})
+        console.log(error);
+      });
+    })
+  }
+}
+
+
+export function rejectBooking (riderId, roleId, bookingScheduleId) {
+  return function (dispatch) {
+    var data = new FormData();
+    data.append('action', 'reject_booking');
+    data.append('rider_id', riderId);
+    // data.append('role_id', roleId);
+    data.append('booking_shedule_id', bookingScheduleId);
+
+    console.log(" reject_booking reject_booking ", data)
+    var config = {
+      method: 'post',
+      url: 'https://hnh6.xyz/route/api/bookingFromSchedule.php',
+      data : data
+    };
+    
+    return new Promise((resolve, reject) => {
+      axios(config)
+      .then(function (response) {
+        if(response.data.status) {
+          resolve({status: true, message: response.data.message})
+        }else {
+          reject({status: false, message: response.data.message})
+        }
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        reject({status: false, message: "Booking not rejected"})
+        console.log(error);
+      });
+    })
+  }
+}
+

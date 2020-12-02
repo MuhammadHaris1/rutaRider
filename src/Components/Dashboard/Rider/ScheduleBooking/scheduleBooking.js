@@ -1,13 +1,14 @@
 import React from 'react'
-import { View, Text, ScrollView, ImageBackground } from 'react-native'
+import { View, Text, ScrollView, ImageBackground, RefreshControl } from 'react-native'
 import { connect } from 'react-redux';
 import { HeaderCustom } from '../Constants/Header';
 import { styles } from './scheduleStyling';
 import LinearGradient from 'react-native-linear-gradient';
 import { Accordion } from 'native-base';
+import { getSchedule } from '../../../../Redux/Actions/userAction';
 
 const ScheduleBooking = (props) => {
-    const { schedule } = props
+    const { schedule, fetching, getSchedule, userDetails } = props
     const scheduleBookings = [
         {
             from: 'Karachi',
@@ -42,6 +43,10 @@ const ScheduleBooking = (props) => {
             price: '1450'
         },
     ]
+
+    const onRefresh = () => {
+        getSchedule(userDetails.data.id)
+    }
     let arrow = "<----->"
     return(
         <View>
@@ -51,7 +56,7 @@ const ScheduleBooking = (props) => {
                         <HeaderCustom  add logo navigation={props.navigation}/>
                     </View>
                     
-                    <ScrollView>
+                    <ScrollView refreshControl={<RefreshControl colors={["#3A91FA"]} refreshing={fetching} onRefresh={onRefresh} />}>
                      {schedule ?
                         <View>
                             {schedule.map((val, ind) => {
@@ -107,6 +112,14 @@ const ScheduleBooking = (props) => {
                                                 Available Seats 
                                             </Text>
                                             <Text style={styles.whiteNormalTxt}>
+                                                {val.seat_available}
+                                            </Text>
+                                        </View>
+                                        <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
+                                            <Text style={styles.whiteNormalTxt}>
+                                                Total Seats 
+                                            </Text>
+                                            <Text style={styles.whiteNormalTxt}>
                                                 {val.seat}
                                             </Text>
                                         </View>
@@ -149,7 +162,7 @@ const mapStateToProps = state => {
   };
   
   const mapDispatchToProps = {
-
+    getSchedule
   };
 
 

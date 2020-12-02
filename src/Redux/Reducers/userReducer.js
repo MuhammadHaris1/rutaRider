@@ -6,7 +6,8 @@ export default function reducer(
     paymentDetail: null,
     emergencyNumber: null,
     schedule: null,
-    notification: null
+    notification: null,
+    requests: null
   },
   action
 ) {
@@ -182,6 +183,18 @@ export default function reducer(
         fetching: false,
         fetched: true,
         notification: action.payload,
+      };
+    }
+
+    case 'GET_BOOKING_REQ_PROCESSING': {
+      return { ...state, fetching: true };
+    }
+    case 'GET_BOOKING_REQ_PROCESSED': {
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        requests: action.payload,
       };
     }
   }

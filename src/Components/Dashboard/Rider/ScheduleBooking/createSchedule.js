@@ -34,7 +34,7 @@ const CreateSchedule = (props) => {
   
     const handleConfirm = (e) => {
       var time = moment(e).format('HH:mm')
-      var date = moment(e).format('MM/DD/YYYY')
+      var date = moment(e).format('YYYY-MM-DD')
       if(mode == "time") {
         setTime(time)
       }else{
@@ -121,7 +121,7 @@ const CreateSchedule = (props) => {
             formData.append("timing", time);
             formData.append("price", price);
             formData.append("seat", seat);
-            formData.append("date", '2020-11-26');
+            formData.append("date", date);
            createSchedule(formData)
            .then((res) => {
                Alert.alert("Alert", res.message)
