@@ -5,10 +5,11 @@ import { HeaderCustom } from '../Constants/Header';
 import { styles } from './scheduleStyling';
 import LinearGradient from 'react-native-linear-gradient';
 import { Accordion } from 'native-base';
-import { getSchedule } from '../../../../Redux/Actions/userAction';
+import { getSchedule, getScheduleDetail } from '../../../../Redux/Actions/userAction';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const ScheduleBooking = (props) => {
-    const { schedule, fetching, getSchedule, userDetails } = props
+    const { schedule, fetching, getSchedule, userDetails, getScheduleDetail } = props
     const scheduleBookings = [
         {
             from: 'Karachi',
@@ -65,9 +66,6 @@ const ScheduleBooking = (props) => {
                                         <LinearGradient style={[styles.round, {width:'100%'}]}
                                         colors={['#3895FC', '#16C7FE', "#01E5FE"]} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }}>
                                             <View style={[styles.itemContainer, styles.round]}>
-                                                {/* <Text style={styles.whiteNormalTxt}>
-                                                    {val.pickup_name} - {val.destination_name}
-                                                </Text> */}
                                                 <Accordion 
                                                 expandedIcon
                                                 style={{borderWidth: 0}}
@@ -77,60 +75,65 @@ const ScheduleBooking = (props) => {
                                                         <Text
                                                         numberOfLines={1}
                                                         style={{...styles.whiteBoldTxt, width: '70%'}}>
-                                                             {val.pickup_name} - {val.destination_name}
+                                                             {val.pickup_name} ---- {val.destination_name}
                                                         </Text>
                                                     )
                                                 }}
                                                 dataArray={[val]} renderContent={(e) => {
                                                     return(
                                                         <Text style={styles.whiteNormalTxt}>
-                                                            {val.pickup_name} - {val.destination_name}
+                                                            {val.pickup_name} ----- {val.destination_name}
                                                         </Text>
                                                     )
                                                 }} expanded={ind}/>
                                             </View>
                                         </LinearGradient>
 
-                                        <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
-                                            <Text style={styles.whiteNormalTxt}>
-                                            Timing 
-                                            </Text>
-                                            <Text style={styles.whiteNormalTxt}>
-                                                {val.timing}
-                                            </Text>
-                                        </View>
-                                        <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
-                                            <Text style={styles.whiteNormalTxt}>
-                                            Date 
-                                            </Text>
-                                            <Text style={styles.whiteNormalTxt}>
-                                                {val.date}
-                                            </Text>
-                                        </View>
-                                        <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
-                                            <Text style={styles.whiteNormalTxt}>
-                                                Available Seats 
-                                            </Text>
-                                            <Text style={styles.whiteNormalTxt}>
-                                                {val.seat_available}
-                                            </Text>
-                                        </View>
-                                        <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
-                                            <Text style={styles.whiteNormalTxt}>
-                                                Total Seats 
-                                            </Text>
-                                            <Text style={styles.whiteNormalTxt}>
-                                                {val.seat}
-                                            </Text>
-                                        </View>
-                                        <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
-                                            <Text style={styles.whiteNormalTxt}>
-                                            Price 
-                                            </Text>
-                                            <Text style={styles.whiteNormalTxt}>
-                                                Rs: {val.price}
-                                            </Text>
-                                        </View>
+                                        <TouchableOpacity onPress={() => {
+                                            getScheduleDetail(userDetails.data.id, val.schedule_id)
+                                            // props.navigation.navigate("ViewScheduleDetails")
+                                        }}>
+                                            <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
+                                                <Text style={styles.whiteNormalTxt}>
+                                                Timing 
+                                                </Text>
+                                                <Text style={styles.whiteNormalTxt}>
+                                                    {val.timing}
+                                                </Text>
+                                            </View>
+                                            <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
+                                                <Text style={styles.whiteNormalTxt}>
+                                                Date 
+                                                </Text>
+                                                <Text style={styles.whiteNormalTxt}>
+                                                    {val.date}
+                                                </Text>
+                                            </View>
+                                            <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
+                                                <Text style={styles.whiteNormalTxt}>
+                                                    Available Seats 
+                                                </Text>
+                                                <Text style={styles.whiteNormalTxt}>
+                                                    {val.seat_available}
+                                                </Text>
+                                            </View>
+                                            <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
+                                                <Text style={styles.whiteNormalTxt}>
+                                                    Total Seats 
+                                                </Text>
+                                                <Text style={styles.whiteNormalTxt}>
+                                                    {val.seat}
+                                                </Text>
+                                            </View>
+                                            <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
+                                                <Text style={styles.whiteNormalTxt}>
+                                                    Price 
+                                                </Text>
+                                                <Text style={styles.whiteNormalTxt}>
+                                                    Rs: {val.price}
+                                                </Text>
+                                            </View>
+                                        </TouchableOpacity>
                                     </View>
                                 )
                             })}
@@ -162,7 +165,7 @@ const mapStateToProps = state => {
   };
   
   const mapDispatchToProps = {
-    getSchedule
+    getSchedule, getScheduleDetail
   };
 
 

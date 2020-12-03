@@ -645,3 +645,38 @@ export function rejectBooking (riderId, roleId, bookingScheduleId) {
   }
 }
 
+
+export function getScheduleDetail (riderId, sId) {
+  return function (dispatch) {
+    dispatch({type: "FETCHING_SCHEDULE_DETAIL_PROCESSING"})
+      var data = new FormData();
+      data.append('action', 'getbooking_userdetails');
+      data.append('rider_id', riderId);
+      data.append('schedule_id', sId);
+
+      var config = {
+        method: 'post',
+        url: 'https://hnh6.xyz/route/api/bookingFromSchedule.php',
+        data : data
+      };
+
+      axios(config)
+      .then(function (response) {
+        if(response.data.status) {
+          NavigtionService.navigate('ViewScheduleDetails')
+          dispatch({type: "FETCHING_SCHEDULE_DETAIL_PROCESSED", payload: response.data })
+
+        }else {
+          Alert.alert("Alert", response.data.message)
+          dispatch({ type: "CLEAR_PROCESSING" });
+        }
+      })
+      .catch(function (error) {
+        Alert.alert("Alert", "Something went wrong")
+        dispatch({ type: "CLEAR_PROCESSING" });
+        console.log(error);
+      });
+
+  }
+}
+

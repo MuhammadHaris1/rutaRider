@@ -7,7 +7,8 @@ export default function reducer(
     emergencyNumber: null,
     schedule: null,
     notification: null,
-    requests: null
+    requests: null,
+    schduleDetail: null
   },
   action
 ) {
@@ -195,6 +196,18 @@ export default function reducer(
         fetching: false,
         fetched: true,
         requests: action.payload,
+      };
+    }
+
+    case 'FETCHING_SCHEDULE_DETAIL_PROCESSING': {
+      return { ...state, fetching: true };
+    }
+    case 'FETCHING_SCHEDULE_DETAIL_PROCESSED': {
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        schduleDetail: action.payload,
       };
     }
   }

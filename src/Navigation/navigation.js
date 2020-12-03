@@ -28,6 +28,8 @@ import CreateSchedule from "../Components/Dashboard/Rider/ScheduleBooking/create
 import EditProfile from "../Components/Dashboard/Rider/Profile/editProfile";
 import Notification from "../Components/Dashboard/Rider/Notification/notification";
 import RideReq from "../Components/Dashboard/Rider/RideRequest/RideReq";
+import ViewScheduleDetails from "../Components/Dashboard/Rider/ScheduleBooking/viewScheduleDetails";
+
 const AuthStack = createStackNavigator({
 
     Welcome: {
@@ -310,6 +312,14 @@ const DriverStack = createStackNavigator({
    
     RideReq: {
         screen: RideReq,
+        navigationOptions: () => ({
+            headerBackTitle: null,
+            header: null,
+        }),
+    },
+   
+    ViewScheduleDetails: {
+        screen: ViewScheduleDetails,
         navigationOptions: () => ({
             headerBackTitle: null,
             header: null,
