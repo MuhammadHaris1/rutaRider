@@ -667,6 +667,8 @@ export function getScheduleDetail (riderId, sId) {
           dispatch({type: "FETCHING_SCHEDULE_DETAIL_PROCESSED", payload: response.data })
 
         }else {
+          
+          console.log("response.data", response.data, data)
           Alert.alert("Alert", response.data.message)
           dispatch({ type: "CLEAR_PROCESSING" });
         }
