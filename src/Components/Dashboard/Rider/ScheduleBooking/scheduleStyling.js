@@ -48,5 +48,25 @@ export const styles = StyleSheet.create({
         marginTop:20, 
         backgroundColor:'#3A91FA',
         width:'90%'
-    }
+    },
+    yellowTxt: {
+        color:'#fcd303',
+        fontWeight: 'bold', 
+        letterSpacing: 2
+    },
+    redTxt: {
+        color:'#fc0f03',
+        fontWeight: 'bold', 
+        letterSpacing: 2
+    },
+    blueTxt: {
+        color:'#3A91FA',
+        fontWeight: 'bold', 
+        letterSpacing: 2
+    },
+    greenTxt: {
+        color:'#129406',
+        fontWeight: 'bold', 
+        letterSpacing: 2
+    },
 })

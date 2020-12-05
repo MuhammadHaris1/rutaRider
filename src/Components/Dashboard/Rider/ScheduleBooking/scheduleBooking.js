@@ -141,7 +141,7 @@ const ScheduleBooking = (props) => {
                         
                     : 
                     
-                    <View style={{justifyContent: 'center', alignContent:'center', top: '60%'}}>
+                    <View style={{justifyContent: 'center', alignContent:'center', marginTop: '60%'}}>
                         <Text style={{color:"#fff", alignSelf:'center', fontSize: 20}}>
                             You have't create any Schedule!
                         </Text>

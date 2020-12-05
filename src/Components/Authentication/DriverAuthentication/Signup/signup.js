@@ -33,6 +33,7 @@ class DriverSignup extends React.Component {
             fileName: "",
             fileUri: "",
             profilePic: false,
+            userName:''
         }
     }
 
@@ -67,7 +68,7 @@ class DriverSignup extends React.Component {
 
 
     signup = ( ) => {
-        const {fname, lname, email, phone, password, model, licenseNumber, nicNumber, fileName, fileUri} = this.state
+        const {fname, lname, email, phone, password, model, licenseNumber, nicNumber, fileName, fileUri, userName} = this.state
 
 
 
@@ -88,6 +89,8 @@ class DriverSignup extends React.Component {
                 data.append('email', email);
                 data.append('ph_number', phone);
                 data.append('password', password);
+                data.append('username', userName);
+
                 // data.append('model', model);
                 // data.append('license', licenseNumber);
                 // data.append('vehicle_no', nicNumber);
@@ -144,6 +147,12 @@ class DriverSignup extends React.Component {
 
 
                         <View style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center', width: '100%' , marginTop: 25}}>
+
+                            <View> 
+                                <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA' }}>
+                                    <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => this.setState({ userName: e })} placeholder='User Name' />
+                                </Item>
+                            </View>
 
                             <View> 
                                 <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA' }}>

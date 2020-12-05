@@ -682,3 +682,88 @@ export function getScheduleDetail (riderId, sId) {
   }
 }
 
+
+
+export function startSchduleRideReminder (sId) {
+  return function (dispatch) {
+    dispatch({type: "RENDER_LOADER"})
+      var data = new FormData();
+      data.append('action', 'rideStart_reminder');
+      // data.append('rider_id', riderId);
+      data.append('schedule_id', sId);
+
+      var config = {
+        method: 'post',
+        url: 'https://hnh6.xyz/route/api/start_schedule_ride.php',
+        data : data
+      };
+
+      new Promise((resolve, reject) => {
+        axios(config)
+        .then(function (response) {
+          if(response.data.status) {
+            resolve({status: response.data.status})
+          dispatch({type: "FETCHING_SCHEDULE_DETAIL_PROCESSED", payload: response.data })
+            dispatch({type: "CLEAR_PROCESSING"})
+          }else {
+            reject({status: response.data.status})
+            console.log("response.data", response.data, data)
+            Alert.alert("Alert", response.data.message)
+            dispatch({ type: "CLEAR_PROCESSING" });
+          }
+        })
+        .catch(function (error) {
+          reject({status: false})
+          Alert.alert("Alert", "Something went wrong")
+          dispatch({ type: "CLEAR_PROCESSING" });
+          console.log(error);
+        });
+
+      })
+  }
+}
+
+
+
+
+export function startSchduleRide (sId) {
+  return function (dispatch) {
+    dispatch({type: "RENDER_LOADER"})
+      var data = new FormData();
+      data.append('action', 'rideStart');
+      // data.append('rider_id', riderId);
+      data.append('schedule_id', sId);
+
+      var config = {
+        method: 'post',
+        url: 'https://hnh6.xyz/route/api/start_schedule_ride.php',
+        data : data
+      };
+
+      new Promise((resolve, reject) => {
+        axios(config)
+        .then(function (response) {
+          if(response.data.status) {
+            resolve({status: response.data.status})
+          dispatch({type: "FETCHING_SCHEDULE_DETAIL_PROCESSED", payload: response.data })
+            dispatch({type: "CLEAR_PROCESSING"})
+          }else {
+            reject({status: response.data.status})
+            console.log("response.data", response.data, data)
+            Alert.alert("Alert", response.data.message)
+            dispatch({ type: "CLEAR_PROCESSING" });
+          }
+        })
+        .catch(function (error) {
+          reject({status: false})
+          Alert.alert("Alert", "Something went wrong")
+          dispatch({ type: "CLEAR_PROCESSING" });
+          console.log(error);
+        });
+
+      })
+  }
+}
+
+
+
