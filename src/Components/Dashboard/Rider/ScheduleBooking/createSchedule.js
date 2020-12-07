@@ -239,66 +239,93 @@ const CreateSchedule = (props) => {
                 style={{...styles.container, marginTop: heightPercentageToDP(60)}}>
 
                     <ScrollView>
-                    <View style={styles.container}>
-                    <View style={[styles.row, styles.spaceBtw, styles.itemContainer, {width:'90%', alignSelf:'center'}]}>
-                        <Item fixedLabel style={{width:'45%'}}>
-                            <Input onFocus={() => {
-                                setVisible(true);
-                                setType('from');
-                            }}  
-                            style={styles.whiteNormalTxt}
-                            value={fromAddress} placeholder="From" placeholderTextColor="#fff"/>
-                        </Item>
-                        <Item fixedLabel style={{width:'45%'}}>
-                            <Input onFocus={() => {
-                                setVisible(true);
-                                setType('to');
-                            }} 
-                            style={styles.whiteNormalTxt}
-                            value={toAddress} 
-                            placeholder="To" placeholderTextColor="#fff" />
-                        </Item>
-                    </View>
-                    <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
-                        <Item onPress={() => {
-                            setMode('time')
-                            showDatePicker()
-                        }} fixedLabel style={{width:'90%', alignSelf:'center'}}>
-                            <Input  value={time} disabled style={styles.whiteNormalTxt} placeholder="Timing" placeholderTextColor="#fff" />
-                        </Item>
-                    </View>
-                    <View style={[styles.row, styles.spaceBtw, styles.itemContainer, {width:'90%', alignSelf:'center'}]}>
-                        <Item fixedLabel style={{width:'45%'}}>
-                            <Input 
-                            onChangeText={(e) => setPrice(e)}
-                            keyboardType="phone-pad"
-                            style={styles.whiteNormalTxt} placeholder="Price" 
-                            placeholderTextColor="#fff"/>
-                        </Item>
-                        <Item fixedLabel style={{width:'45%'}}>
-                            <Input 
-                             onChangeText={(e) => setSeat(e)}
-                             keyboardType="number-pad"
-                             style={styles.whiteNormalTxt} placeholder="Seat" placeholderTextColor="#fff" />
-                        </Item>
-                    </View>
-                    <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
-                        <Item onPress={() => {
-                            setMode('date')
-                            showDatePicker()
-                        }} fixedLabel style={{width:'90%', alignSelf:'center'}}>
-                            <Input disabled value={date} style={styles.whiteNormalTxt} placeholder="Date" placeholderTextColor="#fff" />
-                        </Item>
-                    </View>
+                    <View style={[styles.container, styles.row]}>
+                        <View style={{width: '70%'}}>
+                            {/* <View style={[styles.row, styles.spaceBtw, styles.itemContainer, {width:'90%', alignSelf:'center'}]}>
+                                <Item fixedLabel style={{width:'45%'}}>
+                                    <Input onFocus={() => {
+                                        setVisible(true);
+                                        setType('from');
+                                    }}  
+                                    style={styles.whiteNormalTxt}
+                                    value={fromAddress} placeholder="From" placeholderTextColor="#fff"/>
+                                </Item>
+                                <Item fixedLabel style={{width:'45%'}}>
+                                    <Input onFocus={() => {
+                                        setVisible(true);
+                                        setType('to');
+                                    }} 
+                                    style={styles.whiteNormalTxt}
+                                    value={toAddress} 
+                                    placeholder="To" placeholderTextColor="#fff" />
+                                </Item>
+                            </View> */}
+                            <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
+                                <Item fixedLabel style={{width:'90%', alignSelf:'center'}}>
+                                        <Input onFocus={() => {
+                                            setVisible(true);
+                                            setType('from');
+                                        }}  
+                                        style={styles.whiteNormalTxt}
+                                        value={fromAddress} placeholder="From" placeholderTextColor="#fff"/>
+                                </Item>
+                            </View>
 
-                    <View style={styles.itemContainer}>
+                            <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
+                                <Item fixedLabel style={{width:'90%', alignSelf:'center'}}>
+                                    <Input onFocus={() => {
+                                        setVisible(true);
+                                        setType('to');
+                                    }} 
+                                    style={styles.whiteNormalTxt}
+                                    value={toAddress} 
+                                    placeholder="To" placeholderTextColor="#fff" />
+                                </Item>
+                            </View>
+
+                            <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
+                                <Item onPress={() => {
+                                    setMode('time')
+                                    showDatePicker()
+                                }} fixedLabel style={{width:'90%', alignSelf:'center'}}>
+                                    <Input  value={time} disabled style={styles.whiteNormalTxt} placeholder="Timing" placeholderTextColor="#fff" />
+                                </Item>
+                            </View>
+                            <View style={[styles.row, styles.spaceBtw, styles.itemContainer, {width:'90%', alignSelf:'center'}]}>
+                                <Item fixedLabel style={{width:'45%'}}>
+                                    <Input 
+                                    onChangeText={(e) => setPrice(e)}
+                                    keyboardType="phone-pad"
+                                    style={styles.whiteNormalTxt} placeholder="Price" 
+                                    placeholderTextColor="#fff"/>
+                                </Item>
+                                <Item fixedLabel style={{width:'45%'}}>
+                                    <Input 
+                                    onChangeText={(e) => setSeat(e)}
+                                    keyboardType="number-pad"
+                                    style={styles.whiteNormalTxt} placeholder="Seat" placeholderTextColor="#fff" />
+                                </Item>
+                            </View>
+                            <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
+                                <Item onPress={() => {
+                                    setMode('date')
+                                    showDatePicker()
+                                }} fixedLabel style={{width:'90%', alignSelf:'center'}}>
+                                    <Input disabled value={date} style={styles.whiteNormalTxt} placeholder="Date" placeholderTextColor="#fff" />
+                                </Item>
+                            </View>
+
+                        </View>
+
+                    <View style={{...styles.itemContainer, width:'30%', justifyContent:'center'}}>
                         {!props.fetching ?
-                            <LinearGradient style={{ borderRadius: 100, justifyContent:'center', width:'60%', alignSelf:'center', marginVertical: 20}} colors={['#91D9F1', '#7AB1E0']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+                            <LinearGradient style={{ borderRadius: 100, justifyContent:'center', width:'100%', alignSelf:'center', marginVertical: 20}} colors={['#91D9F1', '#7AB1E0']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
                             <Button onPress={() => {
                                 onSubmit()
                             }} transparent style={[{backgroundColor:'transparent',}]} full rounded>
                                 <Text style={{color:'#fff', alignSelf:'center'}}>
-                                    Create Schedule
+                                    {/* Create Schedule */}
+                                    Go
                                 </Text>
                             </Button>
                             </LinearGradient>

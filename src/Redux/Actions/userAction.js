@@ -15,7 +15,7 @@ export function login(data, fetchProfileData) {
     // formData.append("email", email),
     // formData.append("password", password),
     // console.log(`https://churppy.com/api/v1/login?email=${email}&password=${password}`)noso
-    axios.post(`${API_ENDPOINT}user.php?action=login`, data)
+    axios.post(`${API_ENDPOINT}user.php?action=riderLogin`, data)
       .then(async (response) => {
         dispatch({ type: "LOGIN_PROCESSED", payload: response.data });
         if (response.data.status === true) {
@@ -731,6 +731,46 @@ export function startSchduleRide (sId) {
     dispatch({type: "RENDER_LOADER"})
       var data = new FormData();
       data.append('action', 'rideStart');
+      // data.append('rider_id', riderId);
+      data.append('schedule_id', sId);
+
+      var config = {
+        method: 'post',
+        url: 'https://hnh6.xyz/route/api/start_schedule_ride.php',
+        data : data
+      };
+
+      new Promise((resolve, reject) => {
+        axios(config)
+        .then(function (response) {
+          if(response.data.status) {
+            resolve({status: response.data.status})
+          dispatch({type: "FETCHING_SCHEDULE_DETAIL_PROCESSED", payload: response.data })
+            dispatch({type: "CLEAR_PROCESSING"})
+          }else {
+            reject({status: response.data.status})
+            console.log("response.data", response.data, data)
+            Alert.alert("Alert", response.data.message)
+            dispatch({ type: "CLEAR_PROCESSING" });
+          }
+        })
+        .catch(function (error) {
+          reject({status: false})
+          Alert.alert("Alert", "Something went wrong")
+          dispatch({ type: "CLEAR_PROCESSING" });
+          console.log(error);
+        });
+
+      })
+  }
+}
+
+
+export function completeSchduleRide (sId) {
+  return function (dispatch) {
+    dispatch({type: "RENDER_LOADER"})
+      var data = new FormData();
+      data.append('action', 'rideComplete');
       // data.append('rider_id', riderId);
       data.append('schedule_id', sId);
 

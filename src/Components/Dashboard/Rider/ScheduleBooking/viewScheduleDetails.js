@@ -4,13 +4,13 @@ import { connect } from 'react-redux'
 import { HeaderCustom } from '../Constants/Header'
 import { styles } from './scheduleStyling'
 const welcome2 = require('../../../../../assets/welcome2.png')
-import { getScheduleDetail, startSchduleRide, startSchduleRideReminder } from '../../../../Redux/Actions/userAction'
+import { getScheduleDetail, startSchduleRide, startSchduleRideReminder, completeSchduleRide } from '../../../../Redux/Actions/userAction'
 import { Button } from 'native-base'
 import moment from 'moment'
 import CountDown from 'react-native-countdown-component';
 
 const ViewScheduleDetail = (props) => {
-    const { schduleDetail, userDetails, startSchduleRide, startSchduleRideReminder } = props
+    const { schduleDetail, userDetails, startSchduleRide, startSchduleRideReminder, completeSchduleRide } = props
 
     const onRefresh = () => {
         getScheduleDetail(userDetails.data.id, schduleDetaile.schedule_data.id)
@@ -146,11 +146,11 @@ const ViewScheduleDetail = (props) => {
                                         </View>}
 
 
-                                        {schduleDetail.user_data && schduleDetail.schedule_data.ride_status == 2 && duration < 0 &&
+                                        {schduleDetail.user_data && schduleDetail.schedule_data.ride_status == 2 && 
                                         <View style={styles.itemContainer}>
                                             {!props.fetching ? 
                                                 <Button onPress={() => {
-                                                    startSchduleRide(schduleDetail.schedule_data.id)
+                                                    completeSchduleRide(schduleDetail.schedule_data.id)
                                                 }} style={styles.btnStyle} full rounded>
                                                     <Text style={{color:'#fff'}}>
                                                         Complete Ride
@@ -188,7 +188,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    getScheduleDetail, startSchduleRide, startSchduleRideReminder
+    getScheduleDetail, startSchduleRide, startSchduleRideReminder, completeSchduleRide
 };
 
 

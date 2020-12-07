@@ -29,7 +29,7 @@ export const SearchLocation = (props) => {
                         query={{
                             key: GOOGLE_PLACES_API_KEY,
                             language: 'en', // language of the results
-                            // components: 'country:pk',
+                            components: 'country:pk',
                         }}
                         placeholder="Enter Location Name"
                         autoFocus
