@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, ScrollView, ImageBackground, Image, TouchableOpacity, Dimensions, Modal, FlatList, BackHandler, Alert, Platform, RefreshControl, } from 'react-native'
 import { connect } from 'react-redux';
-import { getPaymentDetails, updateVehicle, getHistory, getUserDetail, getEmergencyNumber, getSchedule, getNotification, getBookingReq } from '../../.././../Redux/Actions/userAction'
+import { getPaymentDetails, updateVehicle, getHistory, getUserDetail, getEmergencyNumber, getSchedule, getNotification, getBookingReq, getReviewStatus } from '../../.././../Redux/Actions/userAction'
 import { Item, Input, Label, Button } from 'native-base';
 import { Avatar, Header, } from 'react-native-elements'
 import FooterComponent from '../../Rider/Footer/footer'
@@ -12,7 +12,7 @@ const experience = require('../../../../../assets/experience.png')
 const Trips = require('../../../../../assets/Trips.png')
 const Profilestar = require('../../../../../assets/Profilestar.png')
 const km = require('../../../../../assets/km.png')
-
+import RenderReviewModal from '../Modals/reviewmodal'
 import Pusher from 'pusher-js/react-native'
 import pusherConfig from '../../../../Constant/pusher.json'
 
@@ -78,13 +78,14 @@ class Profile extends React.Component {
 
 
     componentDidMount = () => {
-        const { userDetails, getHistory, getPaymentDetails, getEmergencyNumber, getSchedule, getNotification, getBookingReq } = this.props        
+        const { userDetails, getHistory, getPaymentDetails, getEmergencyNumber, getSchedule, getNotification, getBookingReq, getReviewStatus } = this.props        
         getHistory(userDetails.data.id)
         getEmergencyNumber()
         getPaymentDetails(userDetails.data.id)
         getSchedule(userDetails.data.id)
         getNotification(userDetails.data.id)
         getBookingReq(userDetails.data.id)
+        getReviewStatus(userDetails.data.id)
         if (userDetails.data.vehicle.id != null) {
             this.setState({ selectedImage: this.state.carImages[0], addVehicle: false })
         } else {
@@ -458,10 +459,10 @@ class Profile extends React.Component {
     }
 
     render() {
-        const { userDetails, paymentDetail, } = this.props
+        const { userDetails, paymentDetail, reviewStastus } = this.props
         const {addPayment} = this.state
         var rating = Number(userDetails.data.rating)
-        console.log('ADDPAYMENT', addPayment)
+        console.log('reviewStastus reviewStastus', reviewStastus)
         return (
             <View style={{ flex: 1 }}>
                 <ImageBackground source={profileBack} style={{ height: "100%", width: '102%', flex: 1, right: 5 }}>
@@ -471,7 +472,7 @@ class Profile extends React.Component {
                             {this.renderModal()}
                             {this.renderAddVehicle()}
                             <RenderAddPayment addPayment={addPayment} />
-
+                            {reviewStastus && !reviewStastus.status && reviewStastus.dismiss == "0" && <RenderReviewModal reviewModal={reviewStastus.status == false ? true : false} data={reviewStastus.data} />}
                             <Header
                                 containerStyle={{ backgroundColor: 'transparent', borderBottomWidth: 0 }}
                                 rightComponent={
@@ -613,12 +614,13 @@ const mapStateToProps = state => {
     return {
         userDetails: state.user.userDetails,
         fetching: state.user.fetching,
-        paymentDetail: state.user.paymentDetail
+        paymentDetail: state.user.paymentDetail,
+        reviewStastus: state.user.reviewStastus
     };
 };
 
 const mapDispatchToProps = {
-    updateVehicle, getHistory, getPaymentDetails, getUserDetail, getEmergencyNumber, getSchedule, getNotification, getBookingReq
+    updateVehicle, getHistory, getPaymentDetails, getUserDetail, getEmergencyNumber, getSchedule, getNotification, getBookingReq, getReviewStatus
 };
 
 

@@ -807,3 +807,99 @@ export function completeSchduleRide (sId) {
 
 
 
+export function getReviewStatus(id) {
+  return function(dispatch) {
+    console.log(" GET_REVIEW_STATUS res.data FUNC CALLED")
+    var data = new FormData();
+    data.append('action', 'getScheduleRating_ToUser'); 
+    data.append('rider_id', id); 
+    dispatch({type: "GET_REVIEW_STATUS_PROCESSING"})
+      axios.post(`https://hnh6.xyz/route/api/schedule_rating.php`, data)
+      .then((res) => {
+        console.log("GET_REVIEW_STATUS res.data", res, data)
+        if(res.data.status) {
+          dispatch({ type: "GET_REVIEW_STATUS_PROCESSED", payload: res.data });
+        }else {
+          dispatch({ type: "GET_REVIEW_STATUS_PROCESSED", payload: res.data });
+        }
+      })
+      .catch((err) => {
+        console.log(" GET_REVIEW_STATUS res.data ERR", err)
+        dispatch({ type: "CLEAR_PROCESSING" });
+        console.log(err)
+      })
+  }
+}
+
+
+export function submitScheduleReview(sId, userId, rating, comment) {
+  return function(dispatch) {
+    dispatch({type: "SUBMIT_SCHEDULE_REVIEW_PROCESSING"})
+    var data = new FormData();
+    data.append('action', 'AddScheduleRating_ToUser');
+    data.append('schedule_id', sId);
+    data.append('rider_id', userId);
+    data.append('rating', rating);
+    data.append('comment', comment);
+
+    console.log("submitScheduleReview data", data)
+
+    return new Promise((resolve, reject) => {
+      axios.post(`https://hnh6.xyz/route/api/schedule_rating.php`, data)
+      .then((res) => {
+        console.log("SUBMIT_SCHEDULE_REVIEW res.data", res.data)
+        if(res.data.status) {
+          resolve({status: res.data.status, message: res.data.message})
+          dispatch({ type: "SUBMIT_SCHEDULE_REVIEW_PROCESSED", payload: res.data.data });
+        }else {
+          reject({status: res.data.status, message: res.data.message})
+          dispatch({ type: "CLEAR_PROCESSING" });
+        }
+      })
+      .catch((err) => {
+        reject({status: false, message: "Something went wrong"})
+        dispatch({ type: "CLEAR_PROCESSING" });
+        console.log(err)
+      })
+    })
+    
+  }
+}
+
+
+
+
+export function dismissSchedule(sId, userId) {
+  return function(dispatch) {
+    dispatch({type: "DISMISS_SCHEDULE_PROCESSING"})
+    var data = new FormData();
+    data.append('action', 'ScheduleRating_Dismiss_ToUser');
+    data.append('schedule_id', sId);
+    console.log("dismissSchedule data", data)
+
+    return new Promise((resolve, reject) => {
+      axios.post(`https://hnh6.xyz/route/api/schedule_rating.php`, data)
+      .then((res) => {
+        console.log("DISMISS_SCHEDULE res.data", res.data)
+        if(res.data.status) {
+          resolve({status: res.data.status, message: res.data.message})
+          dispatch({ type: "DISMISS_SCHEDULE_PROCESSED", payload: res.data.data });
+        }else {
+          reject({status: res.data.status, message: res.data.message})
+          dispatch({ type: "CLEAR_PROCESSING" });
+        }
+      })
+      .catch((err) => {
+        reject({status: false, message: "Something went wrong"})
+        dispatch({ type: "CLEAR_PROCESSING" });
+        console.log(err)
+      })
+    })
+    
+  }
+}
+
+
+
+
+

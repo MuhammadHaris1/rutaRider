@@ -8,7 +8,8 @@ export default function reducer(
     schedule: null,
     notification: null,
     requests: null,
-    schduleDetail: null
+    schduleDetail: null,
+    reviewStastus: null
   },
   action
 ) {
@@ -210,6 +211,19 @@ export default function reducer(
         schduleDetail: action.payload,
       };
     }
+
+    case 'GET_REVIEW_STATUS_PROCESSING': {
+      return { ...state, fetching: true };
+    }
+    case 'GET_REVIEW_STATUS_PROCESSED': {
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        reviewStastus: action.payload,
+      };
+    }
+
   }
   return state;
 }
