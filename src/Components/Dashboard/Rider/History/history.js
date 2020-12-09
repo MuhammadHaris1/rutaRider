@@ -54,30 +54,29 @@ class History extends React.Component {
                     
                 {history ?
                     <View>
-                            {history.previousRides.map((val, index) => {
+                            {history.data.map((val, index) => {
                                     return(
                                         <View style={{backgroundColor:'#fff', margin: 10}}>
-                                            <View style={{flexDirection:'row', justifyContent:'space-between', width:'95%', alignSelf:'center', padding: 5}}>
+                                            <View style={{flexDirection:'row', justifyContent:'space-between', width:'90%', alignSelf:'center', padding: 5}}>
                                                 <Text>
-                                                    {val.completed_at}
+                                                    {val.completed_date}
                                                 </Text>
                                                 <Text>
-                                                    {val.amount}
+                                                    ${val.price}
                                                 </Text>
                                             </View>
-                                            <View style={{flexDirection:'row', justifyContent:'space-between', width:'95%', alignSelf:'center', padding: 5}}>
+                                            <View style={{flexDirection:'row', justifyContent:'space-between', width:'90%', alignSelf:'center', padding: 5}}>
                                                 <Text>
-                                                    {val.vehicle}
                                                 </Text>
                                                 <Text>
-                                                    {val.user_name}
+                                                    {this.props.userDetails.data.first_name} {this.props.userDetails.data.last_name}
                                                 </Text>
                                             </View>
                                             <MapView
                                                 style={{height: 150, width:'100%'}} 
                                                 initialRegion={{
-                                                    latitude: Number(val.user_drop_latitude),
-                                                    longitude: Number(val.user_drop_longitude),
+                                                    latitude: Number(val.dl_latitude),
+                                                    longitude: Number(val.dl_longitude),
                                                     latitudeDelta: 0.0122,
                                                     longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.0122
                                                     }}
@@ -85,8 +84,8 @@ class History extends React.Component {
                                                 scrollEnabled={false}
                                                 >
                                                     <MapView.Marker  title={'Start'} key={`coordinate_${index}`} coordinate={{
-                                                    latitude: Number(val.user_drop_latitude),
-                                                    longitude: Number(val.user_drop_longitude),
+                                                    latitude: Number(val.dl_latitude),
+                                                    longitude: Number(val.dl_longitude),
                                                     latitudeDelta: 0.0122,
                                                     longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.0122
                                                     }} />

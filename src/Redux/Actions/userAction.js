@@ -221,18 +221,42 @@ export function compeleteRide(data){
 
 export  function getHistory(id) {
   return function(dispatch){
-    var data = new FormData();
-    data.append('action', 'previousBookings');
-    data.append('user_id', id);
+    const formData = new FormData();
+    formData.append('action', 'RiderHistory');
+    formData.append('rider_id', id);
     dispatch({ type: "GET_HISTORY_PROCESSING" });
-    axios.post(`${API_ENDPOINT}previousBooking.php`, data)
+    axios.post(`${API_ENDPOINT}previousBooking.php`, formData)
     .then((resposne) => {
-      console.log("HISTORY GET ", resposne.data)
-      if(resposne.data.status){
-        dispatch({ type: "GET_HISTORY_PROCESSED", payload: resposne.data});
-      }else {
-        dispatch({ type: "ERROR", payload: 'An unexpected error occured!' }); dispatch({ type: "CLEAR_PROCESSING" });
-      }
+      console.log("HISTORY GET ", resposne.data, formData)
+      if (resposne.data.status) {
+        var obj = {
+          status: resposne.data.status,
+          data: [...resposne.data.previousRides, ...resposne.data.previousSchedule]
+        }
+
+        console.log("HISTORY GET ", resposne.data, "obj", obj)
+
+        dispatch({ type: "GET_HISTORY_PROCESSED", payload: obj  });
+
+      // var arr = []
+
+      // if(resposne.data.previousRides && resposne.data.previousSchedule) {
+      //   arr = [...resposne.data.previousRides, ...resposne.data.previousSchedule]
+      // }else {
+      //   if(resposne.data.previousRides) {
+      //     arr = [...resposne.data.previousRides]
+      //   }
+      //   if(resposne.data.previousSchedule) {
+      //     arr = [...resposne.data.previousRides]
+      //   }
+      // }
+
+    }else {
+      Alert.alert("Alert", "History not found")
+      console.log("HISTORY GET ", resposne.data, "False", )
+      dispatch({ type: "ERROR", payload: 'An unexpected error occured!' }); dispatch({ type: "CLEAR_PROCESSING" });
+
+    }
     })
     .catch((err) => {
       dispatch({ type: "ERROR", payload: 'An unexpected error occured!' }); dispatch({ type: "CLEAR_PROCESSING" });

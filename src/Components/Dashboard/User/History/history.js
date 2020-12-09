@@ -127,7 +127,7 @@ class History extends React.Component {
                                                     {val.date}
                                                 </Text>
                                                 <Text>
-                                                    {val.price}
+                                                    ${val.price}
                                                 </Text>
                                             </View>
                                             <View style={{flexDirection:'row', justifyContent:'space-between', width:'90%', alignSelf:'center', padding: 5}}>

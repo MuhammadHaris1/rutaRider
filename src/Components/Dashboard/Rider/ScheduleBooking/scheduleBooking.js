@@ -130,7 +130,7 @@ const ScheduleBooking = (props) => {
                                                     Price 
                                                 </Text>
                                                 <Text style={styles.whiteNormalTxt}>
-                                                    Rs: {val.price}
+                                                    ${val.price}
                                                 </Text>
                                             </View>
                                         </TouchableOpacity>
