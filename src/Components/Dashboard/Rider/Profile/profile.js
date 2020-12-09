@@ -461,7 +461,7 @@ class Profile extends React.Component {
     render() {
         const { userDetails, paymentDetail, reviewStastus } = this.props
         const {addPayment} = this.state
-        var rating = Number(userDetails.data.rating)
+        var rating = Number(userDetails.data.rider_schedule_rating)
         console.log('reviewStastus reviewStastus', reviewStastus)
         return (
             <View style={{ flex: 1 }}>
@@ -546,7 +546,7 @@ class Profile extends React.Component {
                                     <View style={{ height: 2, backgroundColor: '#3A91FA', width: '80%', alignSelf: 'center', marginVertical: hp(2) }} />
 
                                     <View style={{ marginVertical: hp(1) }}>
-                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{userDetails.data.trips}</Text>
+                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{Number(userDetails.data.trips) + Number(userDetails.data.schedule_count)}</Text>
                                         <Text style={{ color: '#fff', textAlign: 'center' }}>Trips</Text>
                                     </View>
                                 </View>
