@@ -81,23 +81,19 @@ class DriverSignup extends React.Component {
             }
         
         if( fname && lname && email && phone && password ){
-                // data.append("file_upload", file)
-                data.append('action', 'user_registration');
-                data.append('role', 'rider');
-                data.append('first_name', fname);
-                data.append('last_name', lname);
-                data.append('email', email);
-                data.append('ph_number', phone);
-                data.append('password', password);
-                data.append('username', userName);
-
-                // data.append('model', model);
-                // data.append('license', licenseNumber);
-                // data.append('vehicle_no', nicNumber);
-                // data.append('vehicle_paper', file);
-
-                this.props.signup(data)
-                // console.log("SIGNUP DATA", data)
+                if(/\d/.test(fname)|| /\d/.test(lname)) {
+                    Alert.alert("Alert", "Name cannot have numbers")
+                }else{
+                    data.append('action', 'user_registration');
+                    data.append('role', 'rider');
+                    data.append('first_name', fname);
+                    data.append('last_name', lname);
+                    data.append('email', email);
+                    data.append('ph_number', phone);
+                    data.append('password', password);
+                    data.append('username', userName);
+                    this.props.signup(data)
+                }
         }else {
             Alert.alert("Alert", "All fields are required")
         }

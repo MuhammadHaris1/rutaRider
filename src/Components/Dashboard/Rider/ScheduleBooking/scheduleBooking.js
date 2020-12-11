@@ -60,83 +60,81 @@ const ScheduleBooking = (props) => {
                     <ScrollView refreshControl={<RefreshControl colors={["#3A91FA"]} refreshing={fetching} onRefresh={onRefresh} />}>
                      {schedule ?
                         <View>
-                            {schedule.map((val, ind) => {
-                                return(
-                                    <View key={ind} style={[styles.scheduleCard]}>
-                                        <LinearGradient style={[styles.round, {width:'100%'}]}
+                            {schedule.map((val, ind) => (
+                                <View key={ind} style={[styles.scheduleCard]}>
+                                    <LinearGradient style={[styles.round, { width: '100%' }]}
                                         colors={['#3895FC', '#16C7FE', "#01E5FE"]} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }}>
-                                            <View style={[styles.itemContainer, styles.round]}>
-                                                <Accordion 
+                                        <View style={[styles.itemContainer, styles.round]}>
+                                            <Accordion
                                                 expandedIcon
-                                                style={{borderWidth: 0}}
-                                                headerStyle={{backgroundColor:'transparent'}}
+                                                style={{ borderWidth: 0 }}
+                                                headerStyle={{ backgroundColor: 'transparent' }}
                                                 renderHeader={(e) => {
-                                                    return(
+                                                    return (
                                                         <Text
-                                                        numberOfLines={1}
-                                                        style={{...styles.whiteBoldTxt, width: '70%'}}>
-                                                             {val.pickup_name} ---- {val.destination_name}
+                                                            numberOfLines={1}
+                                                            style={{ ...styles.whiteBoldTxt, width: '70%' }}>
+                                                            {val.pickup_name} ---- {val.destination_name}
                                                         </Text>
-                                                    )
-                                                }}
+                                                    );
+                                                } }
                                                 dataArray={[val]} renderContent={(e) => {
-                                                    return(
+                                                    return (
                                                         <Text style={styles.whiteNormalTxt}>
                                                             {val.pickup_name} ----- {val.destination_name}
                                                         </Text>
-                                                    )
-                                                }} expanded={ind}/>
-                                            </View>
-                                        </LinearGradient>
+                                                    );
+                                                } } expanded={ind} />
+                                        </View>
+                                    </LinearGradient>
 
-                                        <TouchableOpacity onPress={() => {
-                                            getScheduleDetail(userDetails.data.id, val.schedule_id)
-                                            // props.navigation.navigate("ViewScheduleDetails")
-                                        }}>
-                                            <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
-                                                <Text style={styles.whiteNormalTxt}>
-                                                Timing 
-                                                </Text>
-                                                <Text style={styles.whiteNormalTxt}>
-                                                    {val.timing}
-                                                </Text>
-                                            </View>
-                                            <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
-                                                <Text style={styles.whiteNormalTxt}>
-                                                Date 
-                                                </Text>
-                                                <Text style={styles.whiteNormalTxt}>
-                                                    {val.date}
-                                                </Text>
-                                            </View>
-                                            <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
-                                                <Text style={styles.whiteNormalTxt}>
-                                                    Available Seats 
-                                                </Text>
-                                                <Text style={styles.whiteNormalTxt}>
-                                                    {val.seat_available}
-                                                </Text>
-                                            </View>
-                                            <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
-                                                <Text style={styles.whiteNormalTxt}>
-                                                    Total Seats 
-                                                </Text>
-                                                <Text style={styles.whiteNormalTxt}>
-                                                    {val.seat}
-                                                </Text>
-                                            </View>
-                                            <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
-                                                <Text style={styles.whiteNormalTxt}>
-                                                    Price 
-                                                </Text>
-                                                <Text style={styles.whiteNormalTxt}>
+                                    <TouchableOpacity onPress={() => {
+                                        getScheduleDetail(userDetails.data.id, val.schedule_id);
+                                        // props.navigation.navigate("ViewScheduleDetails")
+                                    } }>
+                                        <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
+                                            <Text style={styles.whiteNormalTxt}>
+                                                Timing
+                                            </Text>
+                                            <Text style={styles.whiteNormalTxt}>
+                                                {val.timing}
+                                            </Text>
+                                        </View>
+                                        <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
+                                            <Text style={styles.whiteNormalTxt}>
+                                                            Date
+                                            </Text>
+                                            <Text style={styles.whiteNormalTxt}>
+                                                {val.date}
+                                            </Text>
+                                        </View>
+                                        <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
+                                            <Text style={styles.whiteNormalTxt}>
+                                                                                       Available Seats
+                                            </Text>
+                                            <Text style={styles.whiteNormalTxt}>
+                                                {val.seat_available}
+                                            </Text>
+                                        </View>
+                                        <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
+                                            <Text style={styles.whiteNormalTxt}>
+                                                Total Seats
+                                            </Text>
+                                            <Text style={styles.whiteNormalTxt}>
+                                                {val.seat}
+                                            </Text>
+                                        </View>
+                                        <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
+                                            <Text style={styles.whiteNormalTxt}>
+                                                                           Price
+                                            </Text>
+                                            <Text style={styles.whiteNormalTxt}>
                                                     ${val.price}
-                                                </Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </View>
-                                )
-                            })}
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
                         </View> 
                         
                     : 

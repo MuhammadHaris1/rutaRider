@@ -41,20 +41,20 @@ class DriverLogin extends React.Component {
         const { fetchProfileData } = this.props.screenProps
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-        if(reg.test(email) === false){
-            if(Platform.OS === 'ios'){
-                Alert.alert("Alert", 'Fix the email format')
-            }else {
-                ToastAndroid.show('Fix the email format', ToastAndroid.LONG)
-            }
-        }else {
+        // if(reg.test(email) === false){
+        //     if(Platform.OS === 'ios'){
+        //         Alert.alert("Alert", 'Fix the email format')
+        //     }else {
+        //         ToastAndroid.show('Fix the email format', ToastAndroid.LONG)
+        //     }
+        // }else {
             var data = new FormData();
             data.append('email', email);
             data.append('password', password);
             data.append('token', token)
             // this.props.screenProps.fetchProfileData(convertVal)
             login(data, fetchProfileData)
-        }
+        // }
     }
 
 

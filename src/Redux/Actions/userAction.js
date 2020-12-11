@@ -466,7 +466,7 @@ export function createSchedule(data) {
 export function getSchedule(id) {
   return function(dispatch) {
     const scheduleData = new FormData()
-    scheduleData.append("action", "getSchedule")
+    scheduleData.append("action", "rider_getSchedule")
     scheduleData.append("rider_id",id)
     dispatch({type:'GET_SCHEDULE_PROCESSING'})
     axios.post(`https://hnh6.xyz/route/api/schedule.php`, scheduleData)
@@ -475,6 +475,7 @@ export function getSchedule(id) {
         console.log("res.data GET_SCHEDULE", res.data, scheduleData)
         dispatch({type:'GET_SCHEDULE_PROCESSED', payload: res.data.data})
       }else {
+        dispatch({type:'GET_SCHEDULE_PROCESSED', payload: null})
         dispatch({ type: "CLEAR_PROCESSING" });
         console.log('GET_SCHEDULE err', res.data, scheduleData)
       }

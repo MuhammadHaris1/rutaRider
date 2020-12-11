@@ -43,7 +43,7 @@ const EditProfile = (props) => {
         <View style={{flex:1}}>
             <ImageBackground style={{height:'100%', width:'100%'}} source={require('../../../../../assets/welcome2.png')}>
                 <View style={styles.container}>
-                    <HeaderCustom headerTxt="Edit Profile" />
+                    <HeaderCustom headerTxt="Edit Profile" navigation={props.navigation}/>
                     <ScrollView>  
 
                         <View style={{alignSelf:'center', borderRadius: 100, paddingVertical: 10 }}>

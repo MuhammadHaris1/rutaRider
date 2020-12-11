@@ -24,6 +24,7 @@ import {Picker} from '@react-native-community/picker';
 import ImagePicker from 'react-native-image-crop-picker';
 
 import RenderAddPayment from '../Modals/addPaymentModal';
+import { styles } from '../ScheduleBooking/scheduleStyling';
 
 
 const options = {
@@ -57,7 +58,8 @@ class Profile extends React.Component {
             refreshing: false,
             brand: 'Zotye',
             addPayment: false,
-            imageArr: []
+            imageArr: [],
+            totalSeats: ''
         }
 
         this.pusher = new Pusher(pusherConfig.key, pusherConfig);
@@ -147,7 +149,7 @@ class Profile extends React.Component {
     }
 
     addAndEditVehicle = () => {
-        const { model, licenseNumber, nicNumber, fileName, fileUri , colour, name, brand, imageArr} = this.state
+        const { model, licenseNumber, nicNumber, fileName, fileUri , colour, name, brand, imageArr, totalSeats} = this.state
         const { userDetails, updateVehicle } = this.props
 
         userDetails.data.vehicle = { ...userDetails.data.vehicle, model, license: licenseNumber , colour, name}
@@ -169,6 +171,8 @@ class Profile extends React.Component {
         formData.append('name', name);
         formData.append('brand', brand);
         formData.append('colour', colour);
+        formData.append('seats', totalSeats);
+
         for (let index = 0; index < imageArr.length; index++) {
             formData.append('vehicleDocuments', imageArr[index])
         }
@@ -176,7 +180,7 @@ class Profile extends React.Component {
         // console.log('Model', extractModal)
 
 
-        if (model && licenseNumber && nicNumber && imageArr.length >= 1 && name && colour && brand) {
+        if (model && licenseNumber && nicNumber && imageArr.length >= 1 && name && colour && brand && totalSeats) {
             if(Number(extractModal) >= 2010) {
                 console.log('FORMDATA', formData)
                 updateVehicle(userDetails, userDetails.data.id, formData)
@@ -393,6 +397,12 @@ class Profile extends React.Component {
                                     </Item>
                                 </View>
 
+                                <View>
+                                    <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
+                                        <Input keyboardType="number-pad" style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ totalSeats: e })} placeholder='Total Seats in Car' />
+                                    </Item>
+                                </View>
+
 
                                 <TouchableOpacity onPress={this.openGallery}>
                                     <Item onPress={this.openGallery} rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
@@ -411,7 +421,14 @@ class Profile extends React.Component {
                                         console.log("item.uri => ", item)
                                         return(
                                             <View style={{padding:20}}>
-                                                <Image source={{uri: item.uri}} style={{height: 200, width: 240, borderRadius: 10}} />
+                                                <TouchableOpacity onPress={() => {
+                                                    imageArr.splice(index, 1)
+                                                    this.setState({imageArr})
+                                                    console.log("func Called")
+                                                }}>
+                                                    <Image source={require('../../../../../assets/close.png')} style={{...styles.imgIcon}} />
+                                                </TouchableOpacity>
+                                                <Image source={{uri: item.uri}} style={{height: 200, width: 240, borderRadius: 10, overflow:'visible'}} />
                                             </View>
                                         )
                                     }}
@@ -546,7 +563,7 @@ class Profile extends React.Component {
                                     <View style={{ height: 2, backgroundColor: '#3A91FA', width: '80%', alignSelf: 'center', marginVertical: hp(2) }} />
 
                                     <View style={{ marginVertical: hp(1) }}>
-                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{Number(userDetails.data.trips) + Number(userDetails.data.schedule_count)}</Text>
+                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{Number(userDetails.data.trips) + Number(userDetails.data.user_schedule_count)}</Text>
                                         <Text style={{ color: '#fff', textAlign: 'center' }}>Trips</Text>
                                     </View>
                                 </View>

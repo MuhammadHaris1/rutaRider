@@ -36,7 +36,7 @@ export const HeaderCustom = (props) => {
                         </TouchableOpacity>}
                 {props.add &&
                         <TouchableOpacity onPress={() => props.navigation.navigate('CreateSchedule')}>
-                            <Image source={add} style={styles.imgIcon} />
+                            <Image source={add} style={[styles.imgIcon, {height:30, width: 30}]} />
                         </TouchableOpacity>}
                 </View>
             }

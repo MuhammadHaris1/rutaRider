@@ -9,7 +9,7 @@ import { Button } from 'native-base'
 import moment from 'moment'
 import CountDown from 'react-native-countdown-component';
 
-const phone = require('../../../../../assets/phone.png')
+const phoneImg = require('../../../../../assets/phone.png')
 const whatsapp = require('../../../../../assets/whatsapp.png')
 const ViewScheduleDetail = (props) => {
     const { schduleDetail, userDetails, startSchduleRide, startSchduleRideReminder, completeSchduleRide } = props
@@ -58,18 +58,20 @@ const ViewScheduleDetail = (props) => {
                                     </View>
                                     <View>
                                     {schduleDetail.user_data.map((value, index) => {
+                                        var phone =  value.ph_number.slice(1, value.ph_number.length);
+                                        var converted = `+92${phone}`
                                         return(
                                             <View key={index} style={[styles.itemContainer ,styles.row, styles.spaceBtw, {borderWidth:1, borderColor:'#fff'}]}>
                                                 <Text style={styles.whiteNormalTxt}>{value.first_name} {value.last_name}</Text>
                                                 <Text style={styles.whiteNormalTxt}>{value.seat}</Text>
                                                 <View style={[styles.row, styles.spaceBtw]}>
                                                     <TouchableOpacity onPress={() => {
-                                                        Linking.openURL(`tel:${value.ph_number}`)
+                                                        Linking.openURL(`tel:${converted}`)
                                                     }} style={{marginHorizontal: 2 ,height: 30, width: 30, borderRadius: 100, backgroundColor: '#3A91FA', alignItems: 'center' }}>
-                                                        <Image source={phone} style={{ height: 15, width: 15, top: 5 }} />
+                                                        <Image source={phoneImg} style={{ height: 15, width: 15, top: 5 }} />
                                                     </TouchableOpacity>
                                                     <TouchableOpacity onPress={() => {
-                                                        Linking.openURL(`whatsapp://send?text=hello&phone=${value.ph_number}`)
+                                                        Linking.openURL(`whatsapp://send?text=hello&phone=${converted}`)
                                                     }} style={{ height: 30, width: 30,borderRadius: 100, backgroundColor: '#3A91FA', alignItems: 'center' }}>
                                                         <Image source={whatsapp} style={{ height: 20, width: 20, top: 5 }} />
                                                     </TouchableOpacity>

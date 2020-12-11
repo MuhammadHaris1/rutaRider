@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, ScrollView, Image, ImageBackground, TouchableOpacity, Alert, Linking } from 'react-native'
 import { connect } from 'react-redux';
-import {Input, Item, Button} from 'native-base'
+import {Input, Item, Button, Spinner} from 'native-base'
 const emergencyBack = require('../../../../../assets/emergencyBack.png')
 const Logo = require('../../../../../assets/Logo.png')
 const emeergecy = require('../../../../../assets/emeergecy.png')
