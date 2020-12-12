@@ -333,7 +333,14 @@ const DriverStack = createStackNavigator({
 
 
 const SwitchNavigator = createSwitchNavigator({
-    Splash: Splash,
+    Splash: {
+        screen: Splash,
+        // navigationOptions = {
+        //     state: {
+        //         x
+        //     }
+        // }
+    },
 
     Authentication: {
         screen: AuthStack

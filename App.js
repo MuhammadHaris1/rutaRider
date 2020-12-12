@@ -20,30 +20,49 @@ import Navigator from './src/Navigation/navigation'
 import { Provider } from 'react-redux';
 import store from './src/Redux/Store/store'
 import NavigtionService from './src/Navigation/NavigationService';
+import messaging from '@react-native-firebase/messaging';
 
-import Pusher from 'pusher-js/react-native';
-import pusherConfig from './src/Constant/pusher.json'
+import { Spinner } from 'native-base';
 export default class App extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
       profileData: '',
+      loading: true,
     }
-
-        // if(this.state.profileData.data){
-          // this.pusher = new Pusher(pusherConfig.key, pusherConfig);
-          // console.log("puseher APP>JS", this.state.profileData)
-          // this.userChannel = this.pusher.subscribe('30')
-          // this.userChannel.bind('new-booking', (e) => {
-          //         console.log("NEW BOOKING APP>JS", e)
-          //         // this.handleRideRequest(e)
-          // })
-          // this.userChannel.bind('ride-accepted', (e) => {
-          //     console.log("NEW ride-accepted'", e)
-          // })
-        // }
+   
   }
 
+  componentDidMount () {
+    console.log(" this.props.navigation.state Notification APP.JS")
+    messaging()
+    .getInitialNotification()
+    .then(remoteMessage => {
+      if(remoteMessage) {
+        NavigtionService.navigate("Splash", {notification: true})
+        console.log(
+          'this.props.navigation.state Notification caused app to open from quit state:',
+          remoteMessage,
+          );
+        }
+      });
+
+      messaging().onNotificationOpenedApp(remoteMessage => {
+        if(remoteMessage) {
+          NavigtionService.navigate("Splash", {notification: true})
+          console.log(
+            ' Notification caused app to open from background state:',
+            remoteMessage.notification,
+          );
+        }
+      });
+
+        // Check whether an initial notification is available
+          
+        // setTimeout(() => {
+          this.setState({ loading: false });
+        // }, 9000)
+      }
 
 
   fetchProfileData = (data) => {
@@ -56,14 +75,21 @@ export default class App extends React.Component {
 
   render() {
     console.disableYellowBox = true
+    if (this.state.loading) {
+      return <Spinner />
+    }
     return (
       <View style={{ flex:1 }}>
         <Provider store={store}>
-          <Navigator 
-          screenProps={{ fetchProfileData: this.fetchProfileData, profileData: this.state.profileData }}
-          ref={(navigatorRef) => {
-            NavigtionService.setTopLevelNavigator(navigatorRef);
-            }} />
+            {this.state.loading ? 
+              <Spinner /> 
+            : 
+              <Navigator 
+                screenProps={{ fetchProfileData: this.fetchProfileData, profileData: this.state.profileData }}
+                ref={(navigatorRef) => {
+                  NavigtionService.setTopLevelNavigator(navigatorRef);
+                  }} />
+            }
           </Provider>
       </View>
     );

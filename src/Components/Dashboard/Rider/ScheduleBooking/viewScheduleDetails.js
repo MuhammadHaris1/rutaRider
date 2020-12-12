@@ -1,31 +1,33 @@
 import React from 'react'
-import { View, Image,Text, RefreshControl, ScrollView, ImageBackground, ActivityIndicator, Linking, TouchableOpacity} from 'react-native'
+import { View, Image,Text, RefreshControl, ScrollView, ImageBackground, ActivityIndicator, Linking, TouchableOpacity, Alert} from 'react-native'
 import { connect } from 'react-redux'
 import { HeaderCustom } from '../Constants/Header'
 import { styles } from './scheduleStyling'
 const welcome2 = require('../../../../../assets/welcome2.png')
-import { getScheduleDetail, startSchduleRide, startSchduleRideReminder, completeSchduleRide } from '../../../../Redux/Actions/userAction'
+import { getScheduleDetail, startSchduleRide, startSchduleRideReminder, completeSchduleRide, deleteSchdule } from '../../../../Redux/Actions/userAction'
 import { Button } from 'native-base'
 import moment from 'moment'
 import CountDown from 'react-native-countdown-component';
 
 const phoneImg = require('../../../../../assets/phone.png')
 const whatsapp = require('../../../../../assets/whatsapp.png')
-const ViewScheduleDetail = (props) => {
-    const { schduleDetail, userDetails, startSchduleRide, startSchduleRideReminder, completeSchduleRide } = props
 
+const ViewScheduleDetail = (props) => {
+    const { schduleDetail, userDetails, startSchduleRide, startSchduleRideReminder, completeSchduleRide, deleteSchdule } = props
+    
     const onRefresh = () => {
         getScheduleDetail(userDetails.data.id, schduleDetaile.schedule_data.id)
     }
     var startTime = schduleDetail ? new Date().getTime() : null
-    var endTime = schduleDetail ? schduleDetail.schedule_data.ride_start_after_time : null
-
+    var endTime = schduleDetail ? "13:00" : null
+    console.log("schduleDetail schduleDetail", schduleDetail)
+    
     if(schduleDetail && (schduleDetail.schedule_data.ride_status == 1 && startTime )) {
-            var startTimeConverted =  moment(startTime).format("LTS")
-            var endTimeConverted = moment(endTime, "hh:mm:ss").format("LTS")
-            
-            var sTime = moment(startTimeConverted, "hh:mm:ss");
-            var eTime = moment(endTimeConverted, "hh:mm:ss");
+        var startTimeConverted =  moment(startTime).format("LTS")
+        var endTimeConverted = moment(endTime, "hh:mm:ss").format("LTS")
+        
+        var sTime = moment(startTimeConverted, "hh:mm:ss");
+        var eTime = moment(endTimeConverted, "hh:mm:ss");
         
             // calculate total duration
             var diffr = moment.duration(eTime.diff(sTime));
@@ -146,6 +148,20 @@ const ViewScheduleDetail = (props) => {
                                                 }
                                         </View>}
 
+                                        {!schduleDetail.user_data && 
+                                        <View style={styles.itemContainer}>
+                                            {!props.fetching ? 
+                                                <Button onPress={() => {
+                                                    deleteSchdule(schduleDetail.schedule_data.id, userDetails.data.id)
+                                                }} style={[styles.btnStyle, {backgroundColor:'#fc0f03'}]} full rounded>
+                                                    <Text style={{color:'#fff'}}>
+                                                        Delete
+                                                    </Text>
+                                                </Button> :
+                                                <ActivityIndicator size="large" color="#3A91FA" />
+                                                }
+                                        </View>}
+
                                         {schduleDetail.user_data && schduleDetail.schedule_data.ride_status == 1 && duration < 0 &&
                                         <View style={styles.itemContainer}>
                                             {!props.fetching ? 
@@ -203,7 +219,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    getScheduleDetail, startSchduleRide, startSchduleRideReminder, completeSchduleRide
+    getScheduleDetail, startSchduleRide, startSchduleRideReminder, completeSchduleRide, deleteSchdule
 };
 
 

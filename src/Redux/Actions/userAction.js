@@ -927,4 +927,48 @@ export function dismissSchedule(sId, userId) {
 
 
 
+export function deleteSchdule (sId, riderId) {
+  return function (dispatch) {
+    dispatch({type: "RENDER_LOADER"})
+      var data = new FormData();
+      data.append('action', 'rider_deleteSchedule');
+      data.append('rider_id', riderId);
+      data.append('schedule_id', sId);
+
+      var config = {
+        method: 'post',
+        url: 'https://hnh6.xyz/route/api/schedule.php',
+        data : data
+      };
+
+      new Promise((resolve, reject) => {
+        axios(config)
+        .then(async function (response) {
+          if(response.data.status) {
+            await NavigtionService.navigate("ScheduleBooking")
+            Alert.alert("Alert",  response.data.message)
+            dispatch({type:'GET_SCHEDULE_PROCESSED', payload: response.data.data})
+            resolve({status: response.data.status, message: response.data.message})
+            // dispatch({type: "FETCHING_SCHEDULE_DETAIL_PROCESSED", payload: response.data })
+          }else {
+            Alert.alert("Alert",  response.data.message)
+            reject({status: response.data.status, message: response.data.message})
+            console.log("response.data", response.data, data)
+            dispatch({ type: "CLEAR_PROCESSING" });
+          }
+        })
+        .catch(function (error) {
+          // reject({status: false, message: "Something went wrong"})
+          Alert.alert("Alert", "Something went wrong")
+          dispatch({ type: "CLEAR_PROCESSING" });
+          console.log(error);
+        });
+
+      })
+  }
+}
+
+
+
+
 

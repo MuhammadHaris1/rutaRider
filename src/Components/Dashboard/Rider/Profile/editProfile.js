@@ -3,11 +3,14 @@ import { View, Text, Image, ImageBackground, ActivityIndicator } from 'react-nat
 import { connect } from 'react-redux';
 import { styles } from '../ScheduleBooking/scheduleStyling';
 import {HeaderCustom} from '../../Rider/Constants/Header'
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Button, Input, Item } from 'native-base';
 import { Avatar } from 'react-native-elements';
 import { heightPercentageToDP } from 'react-native-responsive-screen';
 import {updateProfile} from '../../../../Redux/Actions/userAction'
+
+const showPass = require('../../../../../assets/show.png')
+const hidePass = require('../../../../../assets/hide.png')
 
 const EditProfile = (props) => {
     console.log('props.userDetails', props.userDetails)
@@ -17,7 +20,8 @@ const EditProfile = (props) => {
     const [phone, setPhone] = useState(data.ph_number)
     const [email, setEmail] = useState(data.email)
     const [password, setPassword] = useState(data.password)
-
+    const [show, setShow] = useState(true)
+    const [username, setSsername] = useState(data.username)
 
     const onUpdate = () => {
         const { fetchProfileData } = props.screenProps
@@ -82,6 +86,13 @@ const EditProfile = (props) => {
                         <View style={styles.itemContainer, {width:'95%', alignSelf:'center', marginTop: 10}}>
                             <Item regular fixedLabel style={{width:'90%', alignSelf:'center',paddingHorizontal: 10, borderRadius: 10}}>
                                 <Input
+                                value={username}
+                                disabled style={styles.whiteNormalTxt} placeholder="User Name" placeholderTextColor="#fff" />
+                            </Item>
+                        </View>
+                        <View style={styles.itemContainer, {width:'95%', alignSelf:'center', marginTop: 10}}>
+                            <Item regular fixedLabel style={{width:'90%', alignSelf:'center',paddingHorizontal: 10, borderRadius: 10}}>
+                                <Input
                                 value={email}
                                 disabled style={styles.whiteNormalTxt} placeholder="Email Address" placeholderTextColor="#fff" />
                             </Item>
@@ -89,9 +100,13 @@ const EditProfile = (props) => {
                         <View style={styles.itemContainer, {width:'95%', alignSelf:'center', marginTop: 10}}>
                             <Item regular fixedLabel style={{width:'90%', alignSelf:'center',paddingHorizontal: 10, borderRadius: 10}}>
                                 <Input 
-                                secureTextEntry
+                                secureTextEntry={show}
                                 value={password}
-                                disabled style={styles.whiteNormalTxt} placeholder="Password" placeholderTextColor="#fff" />
+                                onChangeText={(e) => setPassword(e)}
+                                style={styles.whiteNormalTxt} placeholder="Password" placeholderTextColor="#fff" />
+                                <TouchableOpacity onPress={() => {setShow(!show)}}>
+                                    <Image source={show ? hidePass : showPass} style={styles.imgIcon} />
+                                </TouchableOpacity>
                             </Item>
                         </View>
 

@@ -6,7 +6,9 @@ const Logo = require('../../assets/Logo.png')
 const loader = require('../../assets/loader.gif')
 import {fetchProfile} from '../Redux/Actions/userAction';
 import { connect } from 'react-redux';
-
+import messaging from '@react-native-firebase/messaging';
+import notification from '../Components/Dashboard/Rider/Notification/notification'
+import NavigationService from '../Navigation/NavigationService'
 
 
 class Splash extends Component {
@@ -16,12 +18,25 @@ class Splash extends Component {
         this.state = {
              
         }
+        // console.log("NOTIFICATIONREMOTE CONSTRUCTOR")
+        // // messaging().onMessage()
+        // messaging().getInitialNotification(notification => {
+        //     console.log(" NOTIFICATIONREMOTE getInitialNotification SPLASH", notification)
+        
+        // })
+        // messaging().onNotificationOpenedApp(notification => {
+        //     console.log(" NOTIFICATIONREMOTE onNotificationOpenedApp SPLASH", notification)
+        // })
+    // NavigationService.navigate("RideReq")
     }
     
 
     componentDidMount = async () => {
+        console.log("splash")
+
         const { fetchProfile } = this.props
-      
+        const {params} = this.props.navigation.state
+       console.log("this.props.navigation.state", params)
         try {
             const value = await AsyncStorage.getItem('User');
             if (value !== null) {
@@ -34,7 +49,17 @@ class Splash extends Component {
                 this.props.screenProps.fetchProfileData(convertVal)
 
                 setTimeout(() => {
-                this.props.navigation.navigate('Main')
+                    if(params) {
+
+                        if(params.notification) {
+                            this.props.navigation.navigate('RideReq')
+                        }else {
+                            this.props.navigation.navigate('Main')
+                        }
+
+                    }else {
+                        this.props.navigation.navigate('Main')
+                    }
                 }, 3000)
            
             }else {
@@ -57,6 +82,11 @@ class Splash extends Component {
 
 
     render() {
+        console.log("this.props.navigation.state Notification SPLASH RENDER",  this.props.navigation.state.params)
+        const {params} = this.props.navigation.state
+        if( params && params.notification) {
+            this.props.navigation.navigate('RideReq')
+        }
         return (
             <View style={{flex: 1}}>
                 <ImageBackground source={splashBack} style={{height:"100%", width:'102%', flex: 1, justifyContent:'center',right:5}}> 

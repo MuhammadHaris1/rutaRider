@@ -130,6 +130,7 @@ class Profile extends React.Component {
         // });
         ImagePicker.openPicker({
             multiple: true,
+            mediaType: "photo"
           }).then(images => {
             // console.log('images =>' , images, images[0].filename);
             for (let index = 0; index < images.length; index++) {
