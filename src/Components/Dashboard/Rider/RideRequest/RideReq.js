@@ -1,5 +1,5 @@
 import { Button } from 'native-base';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, ImageBackground, ScrollView, FlatList, Alert, RefreshControl} from 'react-native'
 import LinearGradient from 'react-native-linear-gradient';
 import { request } from 'react-native-permissions';
@@ -9,6 +9,7 @@ import { HeaderCustom } from '../Constants/Header';
 import { styles } from '../ScheduleBooking/scheduleStyling';
 
 const renderReq = (item, index, acceptBooking, userDetails, getBookingReq, rejectBooking) => {
+
     return(
         <View key={index} style={[styles.scheduleCard]}>
             <LinearGradient style={[styles.round, {width:'100%'}]}
@@ -76,6 +77,12 @@ const {fetching, requests, acceptBooking, userDetails, getBookingReq, rejectBook
     const onRefresh = () => {
         getBookingReq(userDetails.data.id)
     }
+
+
+    // useEffect(() => {
+    //     getBookingReq(userDetails.data.id)
+    // },[])
+
     return(
         <View>
             <ImageBackground style={styles.backroundImage} source={require('../../../../../assets/Splash.png')}>
