@@ -79,7 +79,7 @@ class DrawerMenu extends React.Component {
                         </View>
 
                         <View style={{ alignItems:'center', marginVertical: 10 }}>
-                            {/* < Text style={{fontSize: 23, color:'#fff'}}>{userDetails.data.first_name} {userDetails.data.last_name}</Text> */}
+                            < Text style={{fontSize: 23, color:'#fff'}}>{userDetails.data.first_name} {userDetails.data.last_name}</Text>
                         </View>
                             
                             {this.state.tabArr.map((val, ind) => {
