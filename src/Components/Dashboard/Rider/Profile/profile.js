@@ -59,7 +59,8 @@ class Profile extends React.Component {
             brand: 'Zotye',
             addPayment: false,
             imageArr: [],
-            totalSeats: ''
+            totalSeats: '',
+            experience: ''
         }
 
         this.pusher = new Pusher(pusherConfig.key, pusherConfig);
@@ -150,7 +151,7 @@ class Profile extends React.Component {
     }
 
     addAndEditVehicle = () => {
-        const { model, licenseNumber, nicNumber, fileName, fileUri , colour, name, brand, imageArr, totalSeats} = this.state
+        const { model, licenseNumber, nicNumber, fileName, experience , colour, name, brand, imageArr, totalSeats} = this.state
         const { userDetails, updateVehicle } = this.props
 
         userDetails.data.vehicle = { ...userDetails.data.vehicle, model, license: licenseNumber , colour, name}
@@ -173,6 +174,8 @@ class Profile extends React.Component {
         formData.append('brand', brand);
         formData.append('colour', colour);
         formData.append('seats', totalSeats);
+        formData.append('experience', experience);
+
 
         for (let index = 0; index < imageArr.length; index++) {
             formData.append('vehicleDocuments', imageArr[index])
@@ -404,6 +407,12 @@ class Profile extends React.Component {
                                     </Item>
                                 </View>
 
+                                <View>
+                                    <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
+                                        <Input keyboardType="number-pad" style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ experience: e })} placeholder='Enter Your Experience in Years' />
+                                    </Item>
+                                </View>
+
 
                                 <TouchableOpacity onPress={this.openGallery}>
                                     <Item onPress={this.openGallery} rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
@@ -480,7 +489,7 @@ class Profile extends React.Component {
         const { userDetails, paymentDetail, reviewStastus } = this.props
         const {addPayment} = this.state
         var rating = Number(userDetails.data.rider_schedule_rating)
-        console.log('reviewStastus reviewStastus', reviewStastus)
+        console.log('Number(userDetails.data.trips) + Number(userDetails.data.rider_schedule_count)', Number(userDetails.data.trips) , Number(userDetails.data.rider_schedule_count), userDetails.data)
         return (
             <View style={{ flex: 1 }}>
                 <ImageBackground source={profileBack} style={{ height: "100%", width: '102%', flex: 1, right: 5 }}>
@@ -528,7 +537,7 @@ class Profile extends React.Component {
 
                             <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-around', top: hp(5), padding: 5 }}>
 
-                                <View style={{ width: '20%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 10, }}>
+                                <View style={{ width: '28%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 10, }}>
                                     <View style={{ top: hp(1.5) }}>
                                         <Image source={Profilestar} style={{ height: 35, width: 35, alignSelf: 'center' }} />
                                     </View>
@@ -542,7 +551,7 @@ class Profile extends React.Component {
                                 </View>
 
 
-                                <View style={{ width: '20%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 15, }}>
+                                <View style={{ width: '28%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 15, }}>
                                     <View style={{ top: hp(1.5) }}>
                                         <Image source={experience} style={{ height: 35, width: 35, alignSelf: 'center' }} />
                                     </View>
@@ -550,13 +559,13 @@ class Profile extends React.Component {
                                     <View style={{ height: 2, backgroundColor: '#3A91FA', width: '80%', alignSelf: 'center', marginVertical: hp(2) }} />
 
                                     <View style={{ marginVertical: hp(1) }}>
-                                        <Text style={{ color: '#fff', textAlign: 'center' }}>4 Years</Text>
+                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{userDetails.data.vehicle && userDetails.data.vehicle.experience} Years</Text>
                                         <Text style={{ color: '#fff', textAlign: 'center' }}>Experience</Text>
                                     </View>
                                 </View>
 
 
-                                <View style={{ width: '20%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 15, }}>
+                                <View style={{ width: '28%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 15, }}>
                                     <View style={{ top: hp(1.5) }}>
                                         <Image source={Trips} style={{ height: 35, width: 35, alignSelf: 'center' }} />
                                     </View>
@@ -564,14 +573,14 @@ class Profile extends React.Component {
                                     <View style={{ height: 2, backgroundColor: '#3A91FA', width: '80%', alignSelf: 'center', marginVertical: hp(2) }} />
 
                                     <View style={{ marginVertical: hp(1) }}>
-                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{Number(userDetails.data.trips) + Number(userDetails.data.user_schedule_count)}</Text>
+                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{Number(userDetails.data.trips) + Number(userDetails.data.rider_schedule_count)}</Text>
                                         <Text style={{ color: '#fff', textAlign: 'center' }}>Trips</Text>
                                     </View>
                                 </View>
 
 
 
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate('Payment')} style={{ width: '20%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 15, }}>
+                                {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('Payment')} style={{ width: '20%', backgroundColor: 'rgba(74, 83, 116, 0.9)', borderRadius: 15, }}>
                                     <View style={{ top: hp(1.5) }}>
                                         <Image source={km} style={{ height: 35, width: 35, alignSelf: 'center' }} />
                                     </View>
@@ -585,7 +594,7 @@ class Profile extends React.Component {
                                       }
                                         <Text style={{ color: '#fff', textAlign: 'center' }}>Total Kilometers</Text>
                                     </View>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
 
                             </View>
 
