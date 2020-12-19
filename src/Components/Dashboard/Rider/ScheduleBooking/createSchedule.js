@@ -262,7 +262,12 @@ const CreateSchedule = (props) => {
                             </View> */}
                             <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
                                 <Item fixedLabel style={{width:'90%', alignSelf:'center'}}>
-                                        <Input onFocus={() => {
+                                        <Input 
+                                        onTouchStart={() => {
+                                            setVisible(true);
+                                            setType('from');
+                                        }}
+                                        onFocus={() => {
                                             setVisible(true);
                                             setType('from');
                                         }}  
@@ -273,7 +278,12 @@ const CreateSchedule = (props) => {
 
                             <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
                                 <Item fixedLabel style={{width:'90%', alignSelf:'center'}}>
-                                    <Input onFocus={() => {
+                                    <Input 
+                                    onTouchStart={() => {
+                                        setVisible(true);
+                                        setType('to');
+                                    }}
+                                    onFocus={() => {
                                         setVisible(true);
                                         setType('to');
                                     }} 

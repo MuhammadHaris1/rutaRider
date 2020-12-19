@@ -6,7 +6,7 @@ import { Item, Input, Label, Button, Spinner } from 'native-base';
 const signupBack = require('../../../../../assets/signupBack.png')
 const Logo = require('../../../../../assets/Logo.png')
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
+import { TextInputMask } from 'react-native-masked-text'
 
 
 const options = {
@@ -83,6 +83,9 @@ class DriverSignup extends React.Component {
         if( fname && lname && email && phone && password ){
                 if(/\d/.test(fname)|| /\d/.test(lname)) {
                     Alert.alert("Alert", "Name cannot have numbers")
+                }
+                if (!/^(\d{3})[-](\d{2})[-](\d{4})[-](\d{3})$/.test(phone)) {
+                    Alert.alert("Alert", "Phone number is not in format or complete")
                 }else{
                     data.append('action', 'user_registration');
                     data.append('role', 'rider');
@@ -171,7 +174,21 @@ class DriverSignup extends React.Component {
 
                             <View> 
                                 <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA' }}>
-                                    <Input style={{color:'#fff'}} keyboardType="number-pad" placeholderTextColor="#fff" onChangeText={(e) => this.setState({ phone: e })} placeholder='Cell phone' />
+                                <TextInputMask
+                                    type={'custom'}
+                                    placeholder="000-00-0000-000"
+                                    placeholderTextColor="#fff"
+                                    keyboardType="number-pad"
+                                    options={{
+                                        mask: '999-99-9999-999'
+                                    }}
+                                    value={this.state.phone}
+                                    onChangeText={(e) => {
+                                        console.log("e phone =>", e)
+                                        this.setState({ phone: e })
+                                    }}
+                                    style={{color:'#fff', width:'100%'}}
+                                    />
                                 </Item>
                             </View>
 

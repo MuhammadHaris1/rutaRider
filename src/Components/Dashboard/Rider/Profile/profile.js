@@ -26,6 +26,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import RenderAddPayment from '../Modals/addPaymentModal';
 import { styles } from '../ScheduleBooking/scheduleStyling';
 
+const defaultAvatar = 'https://i2.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1'
 
 const options = {
     title: 'Select Avatar',
@@ -391,13 +392,13 @@ class Profile extends React.Component {
 
                                 <View>
                                     <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input keyboardType="number-pad" style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ licenseNumber: e })} placeholder='License Number' />
+                                        <Input  style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ licenseNumber: e })} placeholder='License Number' />
                                     </Item>
                                 </View>
 
                                 <View>
                                     <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input keyboardType="number-pad" style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ nicNumber: e })} placeholder='Car Number' />
+                                        <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ nicNumber: e })} placeholder='Car Number' />
                                     </Item>
                                 </View>
 
@@ -518,7 +519,7 @@ class Profile extends React.Component {
                                     containerStyle={{ borderWidth: 15, borderColor: '#fff', borderRadius: 100, }}
                                     size="xlarge"
                                     rounded
-                                    source={{ uri: 'https://i2.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1' }}
+                                    source={{ uri: userDetails.data.image ? "https://hnh6.xyz/route/public/profile_pics/"+userDetails.data.image : defaultAvatar  }}
                                 />
 
                                 <TouchableOpacity onPress={() => this.setState({ modalVisible: true, })} style={{ top: 110 }}>

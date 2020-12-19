@@ -8,9 +8,21 @@ import { Button, Input, Item } from 'native-base';
 import { Avatar } from 'react-native-elements';
 import { heightPercentageToDP } from 'react-native-responsive-screen';
 import {updateProfile} from '../../../../Redux/Actions/userAction'
+import ImagePicker from "react-native-image-picker";
+
 
 const showPass = require('../../../../../assets/show.png')
 const hidePass = require('../../../../../assets/hide.png')
+const options = {
+    title: 'Select Avatar',
+    storageOptions: {
+      skipBackup: true,
+      path: 'images',
+    },
+  };
+
+const defaultAvatar = 'https://i2.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1'
+
 
 const EditProfile = (props) => {
     console.log('props.userDetails', props.userDetails)
@@ -23,9 +35,25 @@ const EditProfile = (props) => {
     const [show, setShow] = useState(true)
     const [username, setSsername] = useState(data.username)
 
+
+    const [profilePic, setprofilePic] = useState(data.image ? data.image_path : null)
+    const [fileName, setfileName] = useState('')
+    const [fileUri, setfileUri] = useState(data.image ? data.image_path : null)
+
     const onUpdate = () => {
         const { fetchProfileData } = props.screenProps
+
+        var file = {
+            uri: fileUri,
+            name: fileName,
+            type: 'image/png'
+        }
+
         var formdata = new FormData();
+       
+        if (fileName) {
+            formdata.append("image", file);
+            }
         formdata.append("action", "update_user");
         formdata.append("id", data.id);
         formdata.append("first_name", firstName);
@@ -43,6 +71,30 @@ const EditProfile = (props) => {
 
     }
 
+
+    const openGallery = () => {
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+          
+            if (response.didCancel) {
+              console.log('User cancelled image picker');
+            } else if (response.error) {
+              console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+              console.log('User tapped custom button: ', response.customButton);
+            } else {
+            //   const source = { uri: response.uri };
+              // You can also display the image using data:
+              const source = { uri: 'data:image/jpeg;base64,' + response.data };
+              console.log( "uri: response.uri", source, response)
+          
+              setprofilePic(source)
+              setfileName(response.fileName)
+              setfileUri(response.uri)
+            }
+          });
+    } 
+
     return(
         <View style={{flex:1}}>
             <ImageBackground style={{height:'100%', width:'100%'}} source={require('../../../../../assets/welcome2.png')}>
@@ -52,10 +104,12 @@ const EditProfile = (props) => {
 
                         <View style={{alignSelf:'center', borderRadius: 100, paddingVertical: 10 }}>
                             <Avatar
+                                showAccessory
+                                onAccessoryPress={() => openGallery()}
                                 size="xlarge"
                                 rounded
-                                source={{ uri: 'https://i2.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1' }}
-                            />
+                                source={{ uri: profilePic ? fileUri : defaultAvatar  }}
+                                 />
                         </View>
                             
                               
@@ -78,6 +132,7 @@ const EditProfile = (props) => {
                         <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
                             <Item regular fixedLabel style={{width:'90%', alignSelf:'center',paddingHorizontal: 10, borderRadius: 10}}>
                                 <Input 
+                                keyboardType="number-pad"
                                 onChangeText={(e) => setPhone(e)}
                                 value={phone}
                                 style={styles.whiteNormalTxt} placeholder="Phone Number" placeholderTextColor="#fff" />

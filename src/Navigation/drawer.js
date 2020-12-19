@@ -17,6 +17,7 @@ import { connect } from 'react-redux';
 import { Avatar, Button, Icon } from "react-native-elements"
 import backgound from "../../assets/welcome2.png";
 
+const defaultAvatar = 'https://i2.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1'
 
 class DrawerMenu extends React.Component {
     constructor(props) {
@@ -74,7 +75,7 @@ class DrawerMenu extends React.Component {
                                     size="xlarge" 
                                     rounded
                                     containerStyle={{borderWidth: 15, borderColor:'#fff',}}
-                                    source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTGkKTkKnqZE23RyW0_npSDjVKIVg_uLRmZbw&usqp=CAU'}}
+                                    source={{ uri: userDetails.data.image ? "https://hnh6.xyz/route/public/profile_pics/"+userDetails.data.image : defaultAvatar  }}
                                     />
                         </View>
 
