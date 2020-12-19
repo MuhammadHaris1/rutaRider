@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, Image, ImageBackground, ActivityIndicator } from 'react-native'
+import { View, Text, Image, ImageBackground, ActivityIndicator, Alert } from 'react-native'
 import { connect } from 'react-redux';
 import { styles } from '../ScheduleBooking/scheduleStyling';
 import {HeaderCustom} from '../../Rider/Constants/Header'
@@ -9,7 +9,7 @@ import { Avatar } from 'react-native-elements';
 import { heightPercentageToDP } from 'react-native-responsive-screen';
 import {updateProfile} from '../../../../Redux/Actions/userAction'
 import ImagePicker from "react-native-image-picker";
-
+import { TextInputMask } from 'react-native-masked-text'
 
 const showPass = require('../../../../../assets/show.png')
 const hidePass = require('../../../../../assets/hide.png')
@@ -51,23 +51,27 @@ const EditProfile = (props) => {
 
         var formdata = new FormData();
        
-        if (fileName) {
-            formdata.append("image", file);
-            }
-        formdata.append("action", "update_user");
-        formdata.append("id", data.id);
-        formdata.append("first_name", firstName);
-        formdata.append("last_name", lastName);
-        formdata.append("email", email);
-        formdata.append("ph_number", phone);
-        formdata.append("password", password);
-        props.updateProfile(formdata, fetchProfileData)
-        .then((res) => {
-            props.navigation.goBack()
-        })
-        .catch((err) => {
-            console.log('err', err)
-        })
+        if(/^(\d{3})[-](\d{2})[-](\d{4})[-](\d{3})$/.test(phone)) {
+            if (fileName) {
+                formdata.append("image", file);
+                }
+            formdata.append("action", "update_user");
+            formdata.append("id", data.id);
+            formdata.append("first_name", firstName);
+            formdata.append("last_name", lastName);
+            formdata.append("email", email);
+            formdata.append("ph_number", phone);
+            formdata.append("password", password);
+            props.updateProfile(formdata, fetchProfileData)
+            .then((res) => {
+                props.navigation.goBack()
+            })
+            .catch((err) => {
+                console.log('err', err)
+            })
+        }else {
+            Alert.alert("Alert", "Phone number is not in format or complete")
+        }
 
     }
 
@@ -131,11 +135,18 @@ const EditProfile = (props) => {
                         </View>
                         <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
                             <Item regular fixedLabel style={{width:'90%', alignSelf:'center',paddingHorizontal: 10, borderRadius: 10}}>
-                                <Input 
-                                keyboardType="number-pad"
-                                onChangeText={(e) => setPhone(e)}
-                                value={phone}
-                                style={styles.whiteNormalTxt} placeholder="Phone Number" placeholderTextColor="#fff" />
+                                <TextInputMask
+                                    type={'custom'}
+                                    placeholder="000-00-0000-000"
+                                    placeholderTextColor="#fff"
+                                    keyboardType="number-pad"
+                                    options={{
+                                        mask: '999-99-9999-999'
+                                    }}
+                                    value={phone}
+                                    onChangeText={(e) => setPhone(e)}
+                                    style={[styles.whiteNormalTxt, {width:'100%'}]}
+                                    />
                             </Item>
                         </View>
                         <View style={styles.itemContainer, {width:'95%', alignSelf:'center', marginTop: 10}}>

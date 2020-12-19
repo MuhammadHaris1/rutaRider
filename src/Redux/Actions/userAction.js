@@ -805,12 +805,12 @@ export function completeSchduleRide (sId) {
         data : data
       };
 
-      new Promise((resolve, reject) => {
+       return new Promise((resolve, reject) => {
         axios(config)
         .then(function (response) {
           if(response.data.status) {
             resolve({status: response.data.status})
-          dispatch({type: "FETCHING_SCHEDULE_DETAIL_PROCESSED", payload: response.data })
+            dispatch({type: "FETCHING_SCHEDULE_DETAIL_PROCESSED", payload: response.data })
             dispatch({type: "CLEAR_PROCESSING"})
           }else {
             reject({status: response.data.status})

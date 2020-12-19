@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { HeaderCustom } from '../Constants/Header'
 import { styles } from './scheduleStyling'
 const welcome2 = require('../../../../../assets/welcome2.png')
-import { getScheduleDetail, startSchduleRide, startSchduleRideReminder, completeSchduleRide, deleteSchdule } from '../../../../Redux/Actions/userAction'
+import { getScheduleDetail, startSchduleRide, startSchduleRideReminder, completeSchduleRide, deleteSchdule, getUserDetail, getReviewStatus, getSchedule } from '../../../../Redux/Actions/userAction'
 import { Button } from 'native-base'
 import moment from 'moment'
 import CountDown from 'react-native-countdown-component';
@@ -13,7 +13,7 @@ const phoneImg = require('../../../../../assets/phone.png')
 const whatsapp = require('../../../../../assets/whatsapp.png')
 
 const ViewScheduleDetail = (props) => {
-    const { schduleDetail, userDetails, startSchduleRide, startSchduleRideReminder, completeSchduleRide, deleteSchdule } = props
+    const { schduleDetail, userDetails, startSchduleRide, startSchduleRideReminder, completeSchduleRide, deleteSchdule, getUserDetail, getReviewStatus, getSchedule } = props
     
     const onRefresh = () => {
         getScheduleDetail(userDetails.data.id, schduleDetaile.schedule_data.id)
@@ -181,7 +181,16 @@ const ViewScheduleDetail = (props) => {
                                         <View style={styles.itemContainer}>
                                             {!props.fetching ? 
                                                 <Button onPress={() => {
-                                                    completeSchduleRide(schduleDetail.schedule_data.id)
+                                                    props.completeSchduleRide(schduleDetail.schedule_data.id)
+                                                    .then((res) => {
+                                                        getUserDetail(userDetails.data.id)
+                                                        getReviewStatus(userDetails.data.id)
+                                                        getSchedule(userDetails.data.id)
+                                                        props.navigation.navigate("Main")
+                                                    })
+                                                    .catch((err) => {
+
+                                                    })
                                                 }} style={styles.btnStyle} full rounded>
                                                     <Text style={{color:'#fff'}}>
                                                         Complete Ride
@@ -219,7 +228,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    getScheduleDetail, startSchduleRide, startSchduleRideReminder, completeSchduleRide, deleteSchdule
+    getScheduleDetail, startSchduleRide, startSchduleRideReminder, completeSchduleRide, deleteSchdule, getUserDetail, getReviewStatus, getSchedule
 };
 
 
