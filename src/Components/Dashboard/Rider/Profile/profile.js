@@ -73,10 +73,19 @@ class Profile extends React.Component {
             })
             console.log("NEW BOOKING Profile", e, props.navigation)
             // this.handleRideRequest(e)
-
         })
         this.userChannel.bind('ride-accepted', (e) => {
             console.log("NEW ride-accepted'", e)
+        })
+        
+        this.userChannel.bind('schedule-ride-completed', (e) => {
+            console.log('schedule-ride-completed', e)
+            this.onRefresh()
+        })
+
+        this.userChannel.bind('realtime-update', (e) => {
+            console.log('schedule-ride-completed realtime-update ', e)
+            this.onRefresh()
         })
     }
 
@@ -474,11 +483,18 @@ class Profile extends React.Component {
 
 
     onRefresh = () => {
-        const { userDetails, getHistory, getUserDetail, getPaymentDetails } = this.props
+        const { userDetails, getHistory, getUserDetail, getPaymentDetails, getEmergencyNumber, getSchedule, getNotification, getBookingReq, getReviewStatus  } = this.props
         this.setState({ refreshing: true })
         // getHistory(userDetails.data.id)
         getUserDetail(userDetails.data.id)
+        getHistory(userDetails.data.id)
+        getEmergencyNumber()
         getPaymentDetails(userDetails.data.id)
+        getSchedule(userDetails.data.id)
+        getNotification(userDetails.data.id)
+        getBookingReq(userDetails.data.id)
+        getReviewStatus(userDetails.data.id)
+
         console.log("this.props.fetching", this.props.fetching)
         if (!this.props.fetching) {
             this.setState({ refreshing: false })
