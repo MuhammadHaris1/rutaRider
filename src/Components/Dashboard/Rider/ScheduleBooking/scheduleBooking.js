@@ -74,14 +74,16 @@ const ScheduleBooking = (props) => {
                                                         <Text
                                                             numberOfLines={1}
                                                             style={{ ...styles.whiteBoldTxt, width: '70%' }}>
-                                                            {val.pickup_name} ---- {val.destination_name}
+                                                            {val.pickup_name}
+                                                            {val.destination_name}
                                                         </Text>
                                                     );
                                                 } }
                                                 dataArray={[val]} renderContent={(e) => {
                                                     return (
-                                                        <Text style={styles.whiteNormalTxt}>
-                                                            {val.pickup_name} ----- {val.destination_name}
+                                                        <Text style={[styles.whiteNormalTxt, {borderTopWidth: 2, borderTopColor: '#fff', padding: 5}]}>
+                                                            <Text style={styles.whiteBoldTxt}>From</Text> : {val.pickup_name} {'\n'}
+                                                            <Text style={styles.whiteBoldTxt}>To</Text> : {val.destination_name}
                                                         </Text>
                                                     );
                                                 } } expanded={ind} />

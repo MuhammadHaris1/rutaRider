@@ -227,32 +227,18 @@ export  function getHistory(id) {
     dispatch({ type: "GET_HISTORY_PROCESSING" });
     axios.post(`${API_ENDPOINT}previousBooking.php`, formData)
     .then((resposne) => {
-      console.log("HISTORY GET ", resposne.data, formData)
       if (resposne.data.status) {
         var obj = {
           status: resposne.data.status,
           data: [...resposne.data.previousRides, ...resposne.data.previousSchedule]
         }
-
-        console.log("HISTORY GET ", resposne.data, "obj", obj)
-
+        console.log("HISTORY GET ", resposne.data, formData)
         dispatch({ type: "GET_HISTORY_PROCESSED", payload: obj  });
 
-      // var arr = []
-
-      // if(resposne.data.previousRides && resposne.data.previousSchedule) {
-      //   arr = [...resposne.data.previousRides, ...resposne.data.previousSchedule]
-      // }else {
-      //   if(resposne.data.previousRides) {
-      //     arr = [...resposne.data.previousRides]
-      //   }
-      //   if(resposne.data.previousSchedule) {
-      //     arr = [...resposne.data.previousRides]
-      //   }
-      // }
 
     }else {
       Alert.alert("Alert", "History not found")
+      dispatch({ type: "GET_HISTORY_PROCESSED", payload: null  });
       console.log("HISTORY GET ", resposne.data, "False", )
       dispatch({ type: "ERROR", payload: 'An unexpected error occured!' }); dispatch({ type: "CLEAR_PROCESSING" });
 

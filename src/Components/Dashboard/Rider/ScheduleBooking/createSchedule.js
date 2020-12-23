@@ -303,9 +303,10 @@ const CreateSchedule = (props) => {
                             </View>
                             <View style={[styles.row, styles.spaceBtw, styles.itemContainer, {width:'90%', alignSelf:'center'}]}>
                                 <Item fixedLabel style={{width:'45%'}}>
+                                    <Text style={{fontSize: 17, color:'#fff'}}>$</Text>
                                     <Input 
                                     onChangeText={(e) => setPrice(e)}
-                                    keyboardType="phone-pad"
+                                    keyboardType="number-pad"
                                     style={styles.whiteNormalTxt} placeholder="Price" 
                                     placeholderTextColor="#fff"/>
                                 </Item>

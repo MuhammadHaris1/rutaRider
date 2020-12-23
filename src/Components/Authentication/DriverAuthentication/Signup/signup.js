@@ -176,7 +176,7 @@ class DriverSignup extends React.Component {
                                 <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA' }}>
                                 <TextInputMask
                                     type={'custom'}
-                                    placeholder="000-00-0000-000"
+                                    placeholder="Phone number"
                                     placeholderTextColor="#fff"
                                     keyboardType="number-pad"
                                     options={{
