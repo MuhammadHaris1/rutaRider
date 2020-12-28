@@ -239,8 +239,8 @@ const CreateSchedule = (props) => {
                 style={{...styles.container, marginTop: heightPercentageToDP(60)}}>
 
                     <ScrollView>
-                    <View style={[styles.container, styles.row]}>
-                        <View style={{width: '70%'}}>
+                    <View style={[styles.container]}>
+                        <View style={{width: '95%', alignSelf:'center'}}>
                             {/* <View style={[styles.row, styles.spaceBtw, styles.itemContainer, {width:'90%', alignSelf:'center'}]}>
                                 <Item fixedLabel style={{width:'45%'}}>
                                     <Input onFocus={() => {
@@ -260,8 +260,8 @@ const CreateSchedule = (props) => {
                                     placeholder="To" placeholderTextColor="#fff" />
                                 </Item>
                             </View> */}
-                            <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
-                                <Item fixedLabel style={{width:'90%', alignSelf:'center'}}>
+                            <View style={{width:'90%', flexDirection:'row', justifyContent:'space-between', alignSelf:'center'}}>
+                                <Item fixedLabel style={{width:'48%', alignSelf:'center'}}>
                                         <Input 
                                         onTouchStart={() => {
                                             setVisible(true);
@@ -274,10 +274,10 @@ const CreateSchedule = (props) => {
                                         style={styles.whiteNormalTxt}
                                         value={fromAddress} placeholder="From" placeholderTextColor="#fff"/>
                                 </Item>
-                            </View>
+                            {/* </View> */}
 
-                            <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
-                                <Item fixedLabel style={{width:'90%', alignSelf:'center'}}>
+                            {/* <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}> */}
+                                <Item fixedLabel style={{width:'48%', alignSelf:'center'}}>
                                     <Input 
                                     onTouchStart={() => {
                                         setVisible(true);
@@ -293,16 +293,8 @@ const CreateSchedule = (props) => {
                                 </Item>
                             </View>
 
-                            <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
-                                <Item onPress={() => {
-                                    setMode('time')
-                                    showDatePicker()
-                                }} fixedLabel style={{width:'90%', alignSelf:'center'}}>
-                                    <Input  value={time} disabled style={styles.whiteNormalTxt} placeholder="Timing" placeholderTextColor="#fff" />
-                                </Item>
-                            </View>
-                            <View style={[styles.row, styles.spaceBtw, styles.itemContainer, {width:'90%', alignSelf:'center'}]}>
-                                <Item fixedLabel style={{width:'45%'}}>
+                            <View style={{width:'90%', flexDirection:'row', justifyContent:'space-between', alignSelf:'center'}}>
+                                <Item fixedLabel style={{width:'48%'}}>
                                     <Text style={{fontSize: 17, color:'#fff'}}>$</Text>
                                     <Input 
                                     onChangeText={(e) => setPrice(e)}
@@ -310,39 +302,48 @@ const CreateSchedule = (props) => {
                                     style={styles.whiteNormalTxt} placeholder="Price" 
                                     placeholderTextColor="#fff"/>
                                 </Item>
-                                <Item fixedLabel style={{width:'45%'}}>
+                                <Item fixedLabel style={{width:'48%'}}>
                                     <Input 
                                     onChangeText={(e) => setSeat(e)}
                                     keyboardType="number-pad"
                                     style={styles.whiteNormalTxt} placeholder="Seat" placeholderTextColor="#fff" />
                                 </Item>
                             </View>
-                            <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
+
+                            <View style={{width:'90%', flexDirection:'row', justifyContent:'space-between', alignSelf:'center'}}>
+                                <Item onPress={() => {
+                                    setMode('time')
+                                    showDatePicker()
+                                }} fixedLabel style={{width:'48%', alignSelf:'center'}}>
+                                    <Input  value={time} disabled style={styles.whiteNormalTxt} placeholder="Timing" placeholderTextColor="#fff" />
+                                </Item>
+                            {/* </View> */}
+
+                            {/* <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}> */}
                                 <Item onPress={() => {
                                     setMode('date')
                                     showDatePicker()
-                                }} fixedLabel style={{width:'90%', alignSelf:'center'}}>
+                                }} fixedLabel style={{width:'48%', alignSelf:'center'}}>
                                     <Input disabled value={date} style={styles.whiteNormalTxt} placeholder="Date" placeholderTextColor="#fff" />
                                 </Item>
                             </View>
 
                         </View>
 
-                    <View style={{...styles.itemContainer, width:'30%', justifyContent:'center'}}>
-                        {!props.fetching ?
-                            <LinearGradient style={{ borderRadius: 100, justifyContent:'center', width:'100%', alignSelf:'center', marginVertical: 20}} colors={['#91D9F1', '#7AB1E0']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
-                            <Button onPress={() => {
-                                onSubmit()
-                            }} transparent style={[{backgroundColor:'transparent',}]} full rounded>
-                                <Text style={{color:'#fff', alignSelf:'center'}}>
-                                    {/* Create Schedule */}
-                                    Go
-                                </Text>
-                            </Button>
-                            </LinearGradient>
-                            :
-                            <ActivityIndicator size="large" color="" />
-                            }
+                        <View style={{...styles.itemContainer, width: widthPercentageToDP(90), alignSelf:'center'}}>
+                            {!props.fetching ?
+                                <LinearGradient style={{ borderRadius: 100, justifyContent:'center', width:'100%', alignSelf:'center', marginVertical: 20}} colors={['#91D9F1', '#7AB1E0']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+                                <Button onPress={() => {
+                                    onSubmit()
+                                }} transparent style={[{backgroundColor:'transparent',}]} full rounded>
+                                    <Text style={{color:'#fff', alignSelf:'center'}}>
+                                        Go
+                                    </Text>
+                                </Button>
+                                </LinearGradient>
+                                :
+                                <ActivityIndicator size="large" color="" />
+                                }
                         </View>
                 </View> 
                     </ScrollView>

@@ -21,6 +21,7 @@ import { Provider } from 'react-redux';
 import store from './src/Redux/Store/store'
 import NavigtionService from './src/Navigation/NavigationService';
 import messaging from '@react-native-firebase/messaging';
+import FlashMessage from "react-native-flash-message";
 
 import { Spinner } from 'native-base';
 export default class App extends React.Component {
@@ -35,25 +36,26 @@ export default class App extends React.Component {
 
   componentDidMount () {
     console.log(" this.props.navigation.state Notification APP.JS")
+    
     messaging()
     .getInitialNotification()
     .then(remoteMessage => {
       if(remoteMessage) {
-        NavigtionService.navigate("Splash", {notification: true})
         console.log(
-          'this.props.navigation.state Notification caused app to open from quit state:',
+          'Notification caused app to open from quit state: this.props.navigation.state ',
           remoteMessage,
           );
+        NavigtionService.navigate("Splash", {notification: true})
         }
       });
 
       messaging().onNotificationOpenedApp(remoteMessage => {
         if(remoteMessage) {
-          NavigtionService.navigate("Splash", {notification: true})
           console.log(
             ' Notification caused app to open from background state:',
             remoteMessage.notification,
           );
+          NavigtionService.navigate("Splash", {notification: true})
         }
       });
 
@@ -91,6 +93,7 @@ export default class App extends React.Component {
                   }} />
             }
           </Provider>
+          <FlashMessage position="top" style={{marginTop: 10, backgroundColor:'#3A91FA'}}  />
       </View>
     );
   }

@@ -69,12 +69,12 @@ const ViewScheduleDetail = (props) => {
                                                 <View style={[styles.row, styles.spaceBtw]}>
                                                     <TouchableOpacity onPress={() => {
                                                         Linking.openURL(`tel:${converted}`)
-                                                    }} style={{marginHorizontal: 2 ,height: 30, width: 30, borderRadius: 100, backgroundColor: '#3A91FA', alignItems: 'center' }}>
-                                                        <Image source={phoneImg} style={{ height: 15, width: 15, top: 5 }} />
+                                                    }} style={{ height: 35, width: 35, borderRadius: 100, alignItems: 'center' }}>
+                                                        <Image source={phoneImg} style={{ height: 18, width: 18, top: 5 }} />
                                                     </TouchableOpacity>
                                                     <TouchableOpacity onPress={() => {
                                                         Linking.openURL(`whatsapp://send?text=hello&phone=${converted}`)
-                                                    }} style={{ height: 30, width: 30,borderRadius: 100, backgroundColor: '#3A91FA', alignItems: 'center' }}>
+                                                    }} style={{ height: 35, width: 35, borderRadius: 100, alignItems: 'center' }}>
                                                         <Image source={whatsapp} style={{ height: 20, width: 20, top: 5 }} />
                                                     </TouchableOpacity>
                                                 </View>

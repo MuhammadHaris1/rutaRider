@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, TouchableOpacity, ImageBackground, Image, ScrollView, Alert, Modal} from 'react-native'
+import {View, Text, TouchableOpacity, ImageBackground, Image, ScrollView, Alert, Modal, ToastAndroid} from 'react-native'
 import { connect } from 'react-redux';
 import {signup} from '../../../../Redux/Actions/userAction'
 import { Item, Input, Label, Button, Spinner } from 'native-base';
@@ -79,27 +79,34 @@ class DriverSignup extends React.Component {
                 name: fileName,
                 type: 'image/png'
             }
+            let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+            if(reg.test(email) === false) {
+                ToastAndroid.show("Please fix email format", ToastAndroid.LONG)
+            }else {
+                if( fname && lname && email && phone && password ){
+                    if(/\d/.test(fname)|| /\d/.test(lname)) {
+                        Alert.alert("Alert", "Name cannot have numbers")
+                    }
+                    if (!/^(\d{3})[-](\d{2})[-](\d{4})[-](\d{3})$/.test(phone)) {
+                        Alert.alert("Alert", "Phone number is not in format or complete")
+                    }else{
+                        data.append('action', 'user_registration');
+                        data.append('role', 'rider');
+                        data.append('first_name', fname);
+                        data.append('last_name', lname);
+                        data.append('email', email);
+                        data.append('ph_number', phone);
+                        data.append('password', password);
+                        data.append('username', userName);
+                        this.props.signup(data)
+                    }
+            }else {
+                Alert.alert("Alert", "All fields are required")
+            }
+            }
         
-        if( fname && lname && email && phone && password ){
-                if(/\d/.test(fname)|| /\d/.test(lname)) {
-                    Alert.alert("Alert", "Name cannot have numbers")
-                }
-                if (!/^(\d{3})[-](\d{2})[-](\d{4})[-](\d{3})$/.test(phone)) {
-                    Alert.alert("Alert", "Phone number is not in format or complete")
-                }else{
-                    data.append('action', 'user_registration');
-                    data.append('role', 'rider');
-                    data.append('first_name', fname);
-                    data.append('last_name', lname);
-                    data.append('email', email);
-                    data.append('ph_number', phone);
-                    data.append('password', password);
-                    data.append('username', userName);
-                    this.props.signup(data)
-                }
-        }else {
-            Alert.alert("Alert", "All fields are required")
-        }
+            
 
     }
 

@@ -81,7 +81,7 @@ const ScheduleBooking = (props) => {
                                                 } }
                                                 dataArray={[val]} renderContent={(e) => {
                                                     return (
-                                                        <Text style={[styles.whiteNormalTxt, {borderTopWidth: 2, borderTopColor: '#fff', padding: 5}]}>
+                                                        <Text style={[styles.whiteNormalTxt, {borderTopWidth: 2, borderTopColor: '#fff', paddingVertical: 5}]}>
                                                             <Text style={styles.whiteBoldTxt}>From</Text> : {val.pickup_name} {'\n'}
                                                             <Text style={styles.whiteBoldTxt}>To</Text> : {val.destination_name}
                                                         </Text>

@@ -65,8 +65,8 @@ export function signup(data) {
     axios.post(`${API_ENDPOINT}user.php`, data)
       .then((response) => {
         dispatch({ type: "LOGIN_PROCESSED", payload: response.data });
+        console.log("RESPONSE DATA signup", response.data)
         if (response.data.status) {
-          console.log("RESPONSE DATA SIGNUP", response.data)
           NavigtionService.navigate('DriverLogin')
           Alert.alert("Alert", response.data.message)
         } else {
@@ -74,6 +74,7 @@ export function signup(data) {
         }
       })
       .catch((err) => {
+        console.log("err DATA signup", err)
         Alert.alert("Error", "User Signup failed")
         dispatch({ type: "ERROR", payload: 'An unexpected error occured!' }); dispatch({ type: "CLEAR_PROCESSING" });
       })

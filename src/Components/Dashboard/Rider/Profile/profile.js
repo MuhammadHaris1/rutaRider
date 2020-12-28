@@ -15,16 +15,16 @@ const km = require('../../../../../assets/km.png')
 import RenderReviewModal from '../Modals/reviewmodal'
 import Pusher from 'pusher-js/react-native'
 import pusherConfig from '../../../../Constant/pusher.json'
-
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import {Picker} from '@react-native-community/picker';
 
-
+import messaging from '@react-native-firebase/messaging';
 // import ImagePicker from 'react-native-image-picker'
 import ImagePicker from 'react-native-image-crop-picker';
 
 import RenderAddPayment from '../Modals/addPaymentModal';
 import { styles } from '../ScheduleBooking/scheduleStyling';
+import { showMessage } from 'react-native-flash-message';
 
 const defaultAvatar = 'https://i2.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1'
 
@@ -105,11 +105,28 @@ class Profile extends React.Component {
             this.setState({ selectedImage: this.state.carImages[0], addVehicle: true })
         }
 
+        
+        messaging()
+        .onMessage(async (remoteMessage) => {
+            showMessage({
+                message: remoteMessage.notification.title,
+                description: remoteMessage.notification.body,
+                type: 'none',
+                duration: 3500,
+                onPress: () => {
+                    console.log("Notification caused app onMessage onPress")
+                    this.props.navigation.navigate('RideReq')
+                }
+                });
+            console.log("Notification caused app onMessage", remoteMessage)
+            
+        })
         // if(!userDetails.data.card_details){
         //     this.setState({
         //         addPayment: true
         //     })
         // }
+        
     }
 
 
@@ -531,7 +548,10 @@ class Profile extends React.Component {
                                 <Avatar
                                     accessory={{style:{top: '80%', left: 0}}}
                                     showAccessory
-                                    onAccessoryPress={() => this.props.navigation.navigate('EditProfile')}
+                                    onAccessoryPress={() => {
+                                        
+                                        // this.props.navigation.navigate('EditProfile')
+                                    }}
                                     containerStyle={{ borderWidth: 15, borderColor: '#fff', borderRadius: 100, }}
                                     size="xlarge"
                                     rounded
