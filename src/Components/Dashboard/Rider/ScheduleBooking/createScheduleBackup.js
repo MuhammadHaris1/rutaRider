@@ -1,5 +1,5 @@
 import { Button, Input, Item, Label } from 'native-base'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { View, Text, Image, ImageBackground, ActivityIndicator, Alert } from 'react-native'
 import { HeaderCustom } from '../Constants/Header'
 import { SearchLocation } from '../Constants/locationSearch'
@@ -8,8 +8,10 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment'
 import { connect } from 'react-redux'
 import { createSchedule, getSchedule } from '../../../../Redux/Actions/userAction'
+import { LocalizationContext } from '../../../../Localization/LocalizationContext'
 const CreateSchedule = (props) => {
-
+    const contextType = useContext(LocalizationContext)
+    const { translations } = contextType
     const [type, setType] = useState('')
     const [fromCordinate, setfromCordinate] = useState('')
     const [toCordinate, settoCordinate] = useState('')
@@ -147,7 +149,7 @@ const CreateSchedule = (props) => {
             <ImageBackground style={styles.backroundImage} source={require('../../../../../assets/Splash.png')}>
                 <View style={styles.container}>
                     <View style={{...styles.itemContainer, marginVertical: 10}}>
-                        <HeaderCustom navigation={props.navigation} headerTxt="Create New Schedule" />
+                        <HeaderCustom navigation={props.navigation} headerTxt={"Create New Schedule"} />
                     </View>
 
                     <View style={[styles.row, styles.spaceBtw, styles.itemContainer, {width:'90%', alignSelf:'center'}]}>
@@ -157,7 +159,7 @@ const CreateSchedule = (props) => {
                                 setType('from');
                             }}  
                             style={styles.whiteNormalTxt}
-                            value={fromAddress} placeholder="From" placeholderTextColor="#fff"/>
+                            value={fromAddress} placeholder={translations.FROM} placeholderTextColor="#fff"/>
                         </Item>
                         <Item fixedLabel style={{width:'45%'}}>
                             <Input onFocus={() => {
@@ -166,7 +168,7 @@ const CreateSchedule = (props) => {
                             }} 
                             style={styles.whiteNormalTxt}
                             value={toAddress} 
-                            placeholder="To" placeholderTextColor="#fff" />
+                            placeholder={translations.TO} placeholderTextColor="#fff" />
                         </Item>
                     </View>
                     <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
@@ -174,7 +176,7 @@ const CreateSchedule = (props) => {
                             setMode('time')
                             showDatePicker()
                         }} fixedLabel style={{width:'90%', alignSelf:'center'}}>
-                            <Input  value={time} disabled style={styles.whiteNormalTxt} placeholder="Timing" placeholderTextColor="#fff" />
+                            <Input  value={time} disabled style={styles.whiteNormalTxt} placeholder={translations.TIMING} placeholderTextColor="#fff" />
                         </Item>
                     </View>
                     <View style={[styles.row, styles.spaceBtw, styles.itemContainer, {width:'90%', alignSelf:'center'}]}>
@@ -182,14 +184,14 @@ const CreateSchedule = (props) => {
                             <Input 
                             onChangeText={(e) => setPrice(e)}
                             keyboardType="phone-pad"
-                            style={styles.whiteNormalTxt} placeholder="Price" 
+                            style={styles.whiteNormalTxt} placeholder={translations.PRICE}
                             placeholderTextColor="#fff"/>
                         </Item>
                         <Item fixedLabel style={{width:'45%'}}>
                             <Input 
                              onChangeText={(e) => setSeat(e)}
                              keyboardType="number-pad"
-                             style={styles.whiteNormalTxt} placeholder="Seat" placeholderTextColor="#fff" />
+                             style={styles.whiteNormalTxt} placeholder={translations.SEAT} placeholderTextColor="#fff" />
                         </Item>
                     </View>
                     <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
@@ -197,7 +199,7 @@ const CreateSchedule = (props) => {
                             setMode('date')
                             showDatePicker()
                         }} fixedLabel style={{width:'90%', alignSelf:'center'}}>
-                            <Input disabled value={date} style={styles.whiteNormalTxt} placeholder="Date" placeholderTextColor="#fff" />
+                            <Input disabled value={date} style={styles.whiteNormalTxt} placeholder={translations.DATE} placeholderTextColor="#fff" />
                         </Item>
                     </View>
 
@@ -206,7 +208,7 @@ const CreateSchedule = (props) => {
                             onSubmit()
                         }} style={styles.btnStyle} full rounded>
                             <Text style={{color:'#fff'}}>
-                                Continue
+                            {translations.CONTINUE}
                             </Text>
                         </Button> :
                         <ActivityIndicator size="large" color="#3A91FA" />

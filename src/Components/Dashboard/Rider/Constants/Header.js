@@ -23,7 +23,7 @@ export const HeaderCustom = (props) => {
 
             centerComponent={
             <View>
-                {props.headerTxt && <Text style={{ fontSize: 20, color: '#fff' }}>{props.headerTxt}</Text>}
+                {props.headerTxt && <Text style={{ fontSize: 20, color: '#fff', textTransform: "capitalize" }}>{props.headerTxt}</Text>}
                 {props.logo &&  <Image source={Logo} style={{width: wp(20), height:hp(14), top:(5)}} />}
             </View>
             }   

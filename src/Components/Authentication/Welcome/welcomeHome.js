@@ -9,6 +9,7 @@ const { width, height } = Dimensions.get("window")
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { LocalizationContext } from '../../../Localization/LocalizationContext';
 
 class WelcomeHome extends React.Component {
     constructor(props){
@@ -74,8 +75,9 @@ class WelcomeHome extends React.Component {
 
 
 
-
+    static contextType = LocalizationContext
     render() {
+        const { translations, setAppLanguage } = this.context
         const { items } = this.state
         const { type } = this.props.navigation.state.params
         // console.log("type === Driver",type === "Driver")
@@ -106,13 +108,13 @@ class WelcomeHome extends React.Component {
                         </View>
 
                         <Text style={{fontSize:45, color:'#fff', letterSpacing:10, textAlign:'center', width:'100%',}}>
-                                WELCOME
+                                {translations.WELCOME}
                         </Text>
 
                     <View >
                         <Button onPress={() => {type === "User" ? this.props.navigation.navigate('UserLogin', {type: type}) : this.props.navigation.navigate('DriverLogin', {type: type})}} style={{width:'40%', alignSelf:'center', marginTop:10, backgroundColor:'#3A91FA'}} full rounded>
                             <Text style={{color:'#fff'}}>
-                                Login
+                                {translations.LOGIN}
                             </Text>
                         </Button>
                     </View>
@@ -120,7 +122,7 @@ class WelcomeHome extends React.Component {
                     <View>
                         <Button onPress={() => {type === "Driver" ? this.props.navigation.navigate('DriverSignup', {type: type}) : this.props.navigation.navigate('DriverLogin', {type: type})}} style={{width:'60%', alignSelf:'center', marginTop:20, backgroundColor:'#3A91FA'}} full rounded>
                             <Text style={{color:'#fff'}}>
-                                Create Account
+                            {translations.CREATE_ACCOUNT}
                             </Text>
                         </Button>
                     </View>

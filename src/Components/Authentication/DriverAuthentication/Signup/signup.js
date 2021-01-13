@@ -17,6 +17,7 @@ const options = {
     },
 };
 import ImagePicker from 'react-native-image-picker'
+import { LocalizationContext } from '../../../../Localization/LocalizationContext';
 
 class DriverSignup extends React.Component {
     constructor(props){
@@ -112,8 +113,9 @@ class DriverSignup extends React.Component {
 
 
 
-
+    static contextType = LocalizationContext
     render() {
+        const { translations } = this.context
         // const { type } = this.props.navigation.state.params
         const { fetching } = this.props
         return (
@@ -137,7 +139,7 @@ class DriverSignup extends React.Component {
                                 this.props.navigation.navigate('DriverLogin')
                                 }} style={{width:'70%', marginTop:20}} transparent full rounded>
                                     <Text style={{color:'#fff'}}>
-                                        SIGN IN
+                                        {translations.SIGN_IN}
                                     </Text>
                                 </Button>
                             </View>
@@ -145,7 +147,7 @@ class DriverSignup extends React.Component {
                             <View>
                                 <Button style={{width:'80%', marginTop:20, backgroundColor:'#3A91FA', borderRadius:10}} full >
                                     <Text style={{color:'#fff'}}>
-                                        SIGN UP
+                                    {translations.SIGN_UP}
                                     </Text>
                                 </Button>
                             </View>
@@ -156,25 +158,25 @@ class DriverSignup extends React.Component {
 
                             <View> 
                                 <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA' }}>
-                                    <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => this.setState({ userName: e })} placeholder='User Name' />
+                                    <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => this.setState({ userName: e })} placeholder={translations.USER_NAME} />
                                 </Item>
                             </View>
 
                             <View> 
                                 <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA' }}>
-                                    <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => this.setState({ fname: e })} placeholder='First Name' />
+                                    <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => this.setState({ fname: e })} placeholder={translations.FIRST_NAME} />
                                 </Item>
                             </View>
 
                             <View> 
                                 <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA' }}>
-                                    <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => this.setState({ lname: e })} placeholder='Last Name' />
+                                    <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => this.setState({ lname: e })} placeholder={translations.LAST_NAME} />
                                 </Item>
                             </View>
 
                             <View> 
                                 <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA' }}>
-                                    <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => this.setState({ email: e })} placeholder='Email' />
+                                    <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => this.setState({ email: e })} placeholder={translations.EMAIL} />
                                 </Item>
                             </View>
 
@@ -183,7 +185,7 @@ class DriverSignup extends React.Component {
                                 <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA' }}>
                                 <TextInputMask
                                     type={'custom'}
-                                    placeholder="Phone number"
+                                    placeholder={translations.PHONE_NUMBER}
                                     placeholderTextColor="#fff"
                                     keyboardType="number-pad"
                                     options={{
@@ -201,7 +203,7 @@ class DriverSignup extends React.Component {
 
                             <View style={{}}> 
                                 <Item rounded  regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA' }}>
-                                    <Input secureTextEntry style={{color:'#fff'}} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ password: e })} placeholder='Password' />
+                                    <Input secureTextEntry style={{color:'#fff'}} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ password: e })} placeholder={translations.PASSWORD} />
                                 </Item>
                             </View>
 
@@ -242,7 +244,7 @@ class DriverSignup extends React.Component {
                                 
                                 }} style={{width:'50%', alignSelf:'center', marginTop:20, backgroundColor:'#3A91FA'}} full rounded>
                                 <Text style={{color:'#fff'}}>
-                                    Create account
+                                {translations.CREATE_ACCOUNT}
                                 </Text>
                             </Button>}
                         </View>

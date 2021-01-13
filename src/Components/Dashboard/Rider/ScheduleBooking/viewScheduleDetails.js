@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { View, Image,Text, RefreshControl, ScrollView, ImageBackground, ActivityIndicator, Linking, TouchableOpacity, Alert} from 'react-native'
 import { connect } from 'react-redux'
 import { HeaderCustom } from '../Constants/Header'
@@ -8,13 +8,15 @@ import { getScheduleDetail, startSchduleRide, startSchduleRideReminder, complete
 import { Button } from 'native-base'
 import moment from 'moment'
 import CountDown from 'react-native-countdown-component';
+import { LocalizationContext } from '../../../../Localization/LocalizationContext'
 
 const phoneImg = require('../../../../../assets/phone.png')
 const whatsapp = require('../../../../../assets/whatsapp.png')
 
 const ViewScheduleDetail = (props) => {
     const { schduleDetail, userDetails, startSchduleRide, startSchduleRideReminder, completeSchduleRide, deleteSchdule, getUserDetail, getReviewStatus, getSchedule } = props
-    
+    const contextType = useContext(LocalizationContext)
+    const { translations } = contextType
     const onRefresh = () => {
         getScheduleDetail(userDetails.data.id, schduleDetaile.schedule_data.id)
     }
@@ -86,38 +88,38 @@ const ViewScheduleDetail = (props) => {
                                 :
                                 <View style={{borderWidth: 1, borderColor: '#fff', ...styles.itemContainer}}>
                                     <Text style={[styles.whiteNormalTxt, {textAlign: 'center'}]}>
-                                        No any user booked you!
+                                        {translations.NO_ANY_USER_BOOKED_YOU}
                                     </Text>
                                 </View>
                                 }
                                 
                                 <View style={styles.itemContainer}>
                                     <View style={[styles.itemContainer, styles.row, styles.spaceBtw]}>
-                                        <Text style={styles.whiteNormalTxt}>Total Seats</Text>
+                                        <Text style={styles.whiteNormalTxt}>{translations.TOTAL_SEATS}</Text>
                                         <Text style={styles.whiteNormalTxt}>{schduleDetail.schedule_data.seat}</Text>
                                     </View>
                                     <View style={[styles.itemContainer, styles.row, styles.spaceBtw]}>
-                                        <Text style={styles.whiteNormalTxt}>Remaining Seats</Text>
+                                        <Text style={styles.whiteNormalTxt}>{translations.REMAINING_SEATS}</Text>
                                         <Text style={styles.whiteNormalTxt}>{schduleDetail.schedule_data.seat_available}</Text>
                                     </View>
                                     <View style={[styles.itemContainer, styles.row, styles.spaceBtw]}>
-                                        <Text style={styles.whiteNormalTxt}>Price per seat</Text>
+                                        <Text style={styles.whiteNormalTxt}>{translations.PRICE_PER_SEAT}</Text>
                                         <Text style={styles.whiteNormalTxt}>${schduleDetail.schedule_data.price}</Text>
                                     </View>
                                     <View style={[styles.itemContainer, styles.row, styles.spaceBtw]}>
-                                        <Text style={styles.whiteNormalTxt}>Departure date</Text>
+                                        <Text style={styles.whiteNormalTxt}>{translations.DEPARTURE_DATE}</Text>
                                         <Text style={styles.whiteNormalTxt}>{schduleDetail.schedule_data.schedule_date}</Text>
                                     </View>
                                     <View style={[styles.itemContainer, styles.row, styles.spaceBtw]}>
-                                        <Text style={styles.whiteNormalTxt}>Departure time</Text>
+                                        <Text style={styles.whiteNormalTxt}>{translations.DEPARTURE_TIME}</Text>
                                         <Text style={styles.whiteNormalTxt}>{schduleDetail.schedule_data.timing}</Text>
                                     </View>
                                     <View style={[styles.itemContainer, styles.row, styles.spaceBtw]}>
                                         <Text style={styles.whiteNormalTxt}>Status</Text>
-                                        {schduleDetail.schedule_data.ride_status == 0 && <Text style={styles.redTxt}>Pending</Text>}
-                                        {schduleDetail.schedule_data.ride_status == 1 && <Text style={styles.yellowTxt}>In Process</Text>}
-                                        {schduleDetail.schedule_data.ride_status == 2 && <Text style={styles.blueTxt}>Started</Text>}
-                                        {schduleDetail.schedule_data.ride_status == 3 && <Text style={styles.greenTxt}>Compeletd</Text>}
+                                        {schduleDetail.schedule_data.ride_status == 0 && <Text style={styles.redTxt}>{translations.PENDING}</Text>}
+                                        {schduleDetail.schedule_data.ride_status == 1 && <Text style={styles.yellowTxt}>{translations.IN_PROCESS}</Text>}
+                                        {schduleDetail.schedule_data.ride_status == 2 && <Text style={styles.blueTxt}>{translations.STARTED}</Text>}
+                                        {schduleDetail.schedule_data.ride_status == 3 && <Text style={styles.greenTxt}>{translations.COMPLETED}</Text>}
                     
                                     </View>
 
@@ -141,7 +143,7 @@ const ViewScheduleDetail = (props) => {
                                                     startSchduleRideReminder(schduleDetail.schedule_data.id)
                                                 }} style={styles.btnStyle} full rounded>
                                                     <Text style={{color:'#fff'}}>
-                                                        30 min reminder
+                                                        30 {translations.MIN_REMINDER}
                                                     </Text>
                                                 </Button> :
                                                 <ActivityIndicator size="large" color="#3A91FA" />
@@ -155,7 +157,7 @@ const ViewScheduleDetail = (props) => {
                                                     deleteSchdule(schduleDetail.schedule_data.id, userDetails.data.id)
                                                 }} style={[styles.btnStyle, {backgroundColor:'#fc0f03'}]} full rounded>
                                                     <Text style={{color:'#fff'}}>
-                                                        Delete
+                                                        {translations.DELETE}
                                                     </Text>
                                                 </Button> :
                                                 <ActivityIndicator size="large" color="#3A91FA" />
@@ -169,7 +171,7 @@ const ViewScheduleDetail = (props) => {
                                                     startSchduleRide(schduleDetail.schedule_data.id)
                                                 }} style={styles.btnStyle} full rounded>
                                                     <Text style={{color:'#fff'}}>
-                                                        Start Ride
+                                                        {translations.START_RIDE}
                                                     </Text>
                                                 </Button> :
                                                 <ActivityIndicator size="large" color="#3A91FA" />
@@ -193,7 +195,7 @@ const ViewScheduleDetail = (props) => {
                                                     })
                                                 }} style={styles.btnStyle} full rounded>
                                                     <Text style={{color:'#fff'}}>
-                                                        Complete Ride
+                                                        {translations.COMPLETE_RIDE}
                                                     </Text>
                                                 </Button> :
                                                 <ActivityIndicator size="large" color="#3A91FA" />

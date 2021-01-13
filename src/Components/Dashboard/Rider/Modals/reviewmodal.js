@@ -1,17 +1,19 @@
 import { Input, Item } from 'native-base'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { View, TouchableOpacity, Text, StyleSheet, ScrollView, Modal,BackHandler, ActivityIndicator, Image, Alert } from 'react-native'
 import { AirbnbRating } from 'react-native-elements'
 import { connect } from 'react-redux'
 import { styles } from '../ScheduleBooking/scheduleStyling';
 import { getReviewStatus, submitScheduleReview, dismissSchedule } from "../../../../Redux/Actions/userAction"
+import { LocalizationContext } from '../../../../Localization/LocalizationContext'
 
 const RenderReviewModal = (props) => {
     
     const { fetching, userDetails, getReviewStatus, submitScheduleReview, dismissSchedule} = props
     const [ratingDescription, setRatingDescription] = useState('')
     const [ratingCount, setRatingCount] = useState(0)
-        
+        const contextType = useContext(LocalizationContext)
+        const { translations } = contextType
 
         return (
             <View style={inPageStyles.mainContainer}>
@@ -28,7 +30,7 @@ const RenderReviewModal = (props) => {
 
                             <View style={[inPageStyles.heading, inPageStyles.itemContainer]}>
                                 <Text style={inPageStyles.heading}>
-                                    Review Rating
+                                    {translations.REVIEW_RATING}
                                 </Text>
                             </View>
                             
@@ -55,7 +57,7 @@ const RenderReviewModal = (props) => {
                                 <View style={styles.itemContainer}>
                                     <View style={[styles.row, styles.spaceBtw, {width:'100%'}]}>
                                         <Text style={[styles.whiteBoldTxt]}>
-                                            Total Seats:
+                                            {translations.TOTAL_SEATS}:
                                         </Text>
                                         <Text style={[styles.whiteNormalTxt]}>
                                             {props.data.seat}
@@ -64,7 +66,7 @@ const RenderReviewModal = (props) => {
                                     </View>
                                     <View style={[styles.row, styles.spaceBtw, {width:'100%'}]}>
                                         <Text style={[styles.whiteBoldTxt]}>
-                                            Booked Seats:
+                                            {translations.BOOKED_SEATS}:
                                         </Text>
                                         <Text style={[styles.whiteNormalTxt]}>
                                             {props.data.seat - props.data.seat_available}
@@ -72,7 +74,7 @@ const RenderReviewModal = (props) => {
                                     </View>
                                     <View style={[styles.row, styles.spaceBtw, {width:'100%'}]}>
                                         <Text style={[styles.whiteBoldTxt]}>
-                                            Pickup:
+                                            {translations.PICKUP}:
                                         </Text>
                                         <Text style={[styles.whiteNormalTxt, {width:'60%', textAlign:'right'}]}>
                                             {props.data.pickup_location_name}
@@ -80,7 +82,7 @@ const RenderReviewModal = (props) => {
                                     </View>
                                     <View style={[styles.row, styles.spaceBtw, {width:'100%'}]}>
                                         <Text style={[styles.whiteBoldTxt]}>
-                                            Destination:
+                                            {translations.DESTINATION}:
                                         </Text>
                                         <Text style={[styles.whiteNormalTxt, {width:'60%', textAlign:'right'}]}>
                                             {props.data.destination_location_name}
@@ -88,7 +90,7 @@ const RenderReviewModal = (props) => {
                                     </View>
                                     <View style={[styles.row, styles.spaceBtw, {width:'100%'}]}>
                                         <Text style={[styles.whiteBoldTxt]}>
-                                            Date:
+                                            {translations.DATE}:
                                         </Text>
                                         <Text style={[styles.whiteNormalTxt]}>
                                             {props.data.schedule_date}
@@ -116,7 +118,7 @@ const RenderReviewModal = (props) => {
                                             }
                                         }} placeholder='Enter Your Review' />
                                     </Item>
-                                    <Text style={{color:'red', textAlign:'right'}}>Max 30 letter, {30 - ratingDescription.length} Remaining 
+                                    <Text style={{color:'red', textAlign:'right'}}>{translations.MAX_30_LETTERS}, {30 - ratingDescription.length} {translations.REMAINING} 
                                     </Text>
                                 </View>
 
@@ -136,7 +138,7 @@ const RenderReviewModal = (props) => {
                                         })
                                     }}
                                     style={{backgroundColor:'#3A91FA', width:'60%', alignSelf:'center', flexDirection:'row',  justifyContent:'space-around', padding: 10, borderRadius: 20, marginTop: 20}}>
-                                        <Text style={{color:'#fff' ,}}>Send feedback</Text>
+                                        <Text style={{color:'#fff' ,}}>{translations.SEND_FEEDBACK}</Text>
                                 </TouchableOpacity> 
                                     :
                                 <ActivityIndicator color="#3A91FA" />}

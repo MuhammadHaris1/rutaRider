@@ -44,6 +44,7 @@ import { connect } from 'react-redux';
 import { acceptRide, startRide, compeleteRide, getHistory, getUserDetail, setRideDataToAsync, sendLiveLocation, updateRide, getPaymentDetails, giveRating} from '../../.././../Redux/Actions/userAction'
 import RenderParcelRequest from '../Modals/renderParcelRide';
 import downloadfile from '../Constants/downloadfile';
+import { LocalizationContext } from '../../../../Localization/LocalizationContext';
 class Map extends Component {
     constructor(props) {
         super(props);
@@ -434,9 +435,10 @@ class Map extends Component {
         
     }
 
-
-
+    static contextType = LocalizationContext
+    
     renderRideReq = () => {
+        const { translations } = this.context
         const { rideReq, rideReqDetails, coordinates, agreement } = this.state
         const { acceptRide } = this.props
         console.log("coordinates coordinates", coordinates)
@@ -473,7 +475,7 @@ class Map extends Component {
 
                                 <View style={{flexDirection:'row', justifyContent:'space-around', width:"100%", padding: 5, marginTop: 10,}}>
                                     <Text style={{color:'#fff', width:'15%'}}>
-                                        From :
+                                        {translations.FROM} :
                                     </Text>
 
                                     <Text style={{color:'#fff', width:'75%', textAlign:'right'}}>
@@ -484,7 +486,7 @@ class Map extends Component {
                                
                                 <View style={{flexDirection:'row', justifyContent:'space-around', backgroundColor:'transparent', width:"100%", padding: 5, marginTop: 10}}>
                                     <Text style={{color:'#fff', width:'15%'}}>
-                                        To :
+                                        {translations.TO} :
                                     </Text>
 
                                     <Text style={{color:'#fff', width:'75%', textAlign:'right'}}>
@@ -656,7 +658,7 @@ class Map extends Component {
                                     }
                                     
                                 }} style={{backgroundColor:'#3A91FA', width:'60%', alignSelf:'center', flexDirection:'row',  justifyContent:'space-around', padding: 10, borderRadius: 20, marginTop: 20}}>
-                                    <Text style={{color:'#fff' ,}}>ACCEPT</Text>
+                                    <Text style={{color:'#fff' ,}}>{translations.ACCEPT}</Text>
                                 </TouchableOpacity>
 
                                 </ScrollView>
@@ -871,6 +873,7 @@ class Map extends Component {
 
 
     renderRating = () => {
+        const { translations } = this.context
         const { ratingRender, ratingCount, ratingDescription } = this.state
         const {fetching, giveRating, activeRideData , userDetails,  } = this.props
         return(
@@ -903,7 +906,7 @@ class Map extends Component {
                                                 }
                                             }} placeholder='Enter Your Review' />
                                         </Item>
-                                        <Text style={{color:'red', textAlign:'right'}}>Max 30 letter, {30 - this.state.ratingDescription.length} Remaining 
+                                        <Text style={{color:'red', textAlign:'right'}}>{translations.MAX_30_LETTERS}, {30 - this.state.ratingDescription.length} {translations.REMAINING} 
                                         </Text>
                                     </View>
 
@@ -926,7 +929,7 @@ class Map extends Component {
                                         })
                                     }}
                                     style={{backgroundColor:'#3A91FA', width:'60%', alignSelf:'center', flexDirection:'row',  justifyContent:'space-around', padding: 10, borderRadius: 20, marginTop: 20}}>
-                                        <Text style={{color:'#fff' ,}}>Send feedback</Text>
+                                        <Text style={{color:'#fff' ,}}>{translations.SEND_FEEDBACK}</Text>
                                     </TouchableOpacity> 
                                     :
                                     <ActivityIndicator color="#3A91FA" />
@@ -945,6 +948,7 @@ class Map extends Component {
 
  
     render() {
+        const { translations } = this.context
         console.log("coordinates", this.state.coordinates)
         const { activeRideData } = this.props
         let marker = null;

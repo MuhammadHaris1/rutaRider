@@ -1,15 +1,17 @@
 import { Button } from 'native-base';
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { View, Text, ImageBackground, ScrollView, FlatList, Alert, RefreshControl} from 'react-native'
 import LinearGradient from 'react-native-linear-gradient';
 import { request } from 'react-native-permissions';
 import { connect } from 'react-redux';
+import { LocalizationContext } from '../../../../Localization/LocalizationContext';
 import { acceptBooking, getBookingReq, rejectBooking } from '../../../../Redux/Actions/userAction';
 import { HeaderCustom } from '../Constants/Header';
 import { styles } from '../ScheduleBooking/scheduleStyling';
 
 const renderReq = (item, index, acceptBooking, userDetails, getBookingReq, rejectBooking) => {
-
+    const contextType = useContext(LocalizationContext)
+    const { translations } = contextType
     return(
         <View key={index} style={[styles.scheduleCard]}>
             <LinearGradient style={[styles.round, {width:'100%'}]}
@@ -25,7 +27,7 @@ const renderReq = (item, index, acceptBooking, userDetails, getBookingReq, rejec
                 </View>
                 <View style={[styles.row, styles.spaceBtw]}>
                     <Text style={styles.whiteBoldTxt}>
-                        Seats:
+                        {translations.SEAT}:
                     </Text>
                     <Text style={styles.whiteBoldTxt}>
                         {item.seat}
@@ -44,7 +46,7 @@ const renderReq = (item, index, acceptBooking, userDetails, getBookingReq, rejec
                         }} style={{width:'45%', alignSelf:'center',backgroundColor:'#fff',
                         borderRadius: 10, borderColor:'#3A91FA', borderWidth: 4}} full>
                             <Text style={{color:'#3A91FA', textAlign:'center'}}>
-                                Accept
+                                {translations.ACCEPT}
                             </Text>
                         </Button>
 
@@ -60,7 +62,7 @@ const renderReq = (item, index, acceptBooking, userDetails, getBookingReq, rejec
                         }} style={{width:'45%', alignSelf:'center', backgroundColor:'#fff',
                         borderRadius: 10}} full>
                             <Text style={{color:'#3A91FA', textAlign:'center'}}>
-                                Reject
+                                {translations.REJECT}
                             </Text>
                         </Button>
                 </View>
@@ -73,7 +75,8 @@ const renderReq = (item, index, acceptBooking, userDetails, getBookingReq, rejec
 const RideReq = (props) => {
 const {fetching, requests, acceptBooking, userDetails, getBookingReq, rejectBooking} = props
     console.log("requests requests", requests)
-
+    const contextType = useContext(LocalizationContext)
+    const { translations } = contextType
     const onRefresh = () => {
         getBookingReq(userDetails.data.id)
     }
@@ -88,7 +91,7 @@ const {fetching, requests, acceptBooking, userDetails, getBookingReq, rejectBook
             <ImageBackground style={styles.backroundImage} source={require('../../../../../assets/Splash.png')}>
                 <View style={styles.container}>
                     <View style={{...styles.itemContainer, marginVertical: 10}}>
-                        <HeaderCustom navigation={props.navigation} headerTxt="Ride Requests" />
+                        <HeaderCustom navigation={props.navigation} headerTxt={translations.RIDE_REQUESTS} />
                     </View>
 
                     {requests ?
@@ -107,7 +110,7 @@ const {fetching, requests, acceptBooking, userDetails, getBookingReq, rejectBook
                     <ScrollView refreshControl={<RefreshControl colors={["#3A91FA"]} refreshing={fetching} onRefresh={onRefresh} />} >
                         <View style={{justifyContent: 'center', alignContent:'center', marginTop: '50%'}}>
                             <Text style={{color:"#fff", alignSelf:'center', fontSize: 20}}>
-                                You Have't any Request!
+                                {translations.YOU_HAVE_NOT_ANY_REQUEST}
                             </Text>
                         </View>
                     </ScrollView>

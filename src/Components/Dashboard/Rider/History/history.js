@@ -8,6 +8,7 @@ const back = require('../../../../../assets/back.png')
 const sidebar = require('../../../../../assets/sidebar.png')
 import MapView  from 'react-native-maps';
 import {getUserDetail, getHistory, getPaymentDetails} from '../../../../Redux/Actions/userAction'
+import { LocalizationContext } from '../../../../Localization/LocalizationContext';
 
 class History extends React.Component {
     constructor (props) {
@@ -29,8 +30,9 @@ class History extends React.Component {
         }
 
     }
-
+    static contextType = LocalizationContext
     render() {
+        const { translations } = this.context
         const { history } = this.props
         return (
             <View style={{flex: 1}}>
@@ -43,7 +45,7 @@ class History extends React.Component {
                         leftComponent={<TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                             <Image source={back} style={{height: 20, width: 20}} />
                         </TouchableOpacity>}
-                        centerComponent={<Text style={{fontSize: 20, color:'#fff'}}>History</Text>}
+                        centerComponent={<Text style={{fontSize: 20, color:'#fff'}}>{translations.HISTORY}</Text>}
                         rightComponent={
                             <TouchableOpacity onPress={() => this.props.navigation.toggleDrawer()}>
                             <Image source={sidebar} style={{height: 20, width: 20}} />
@@ -100,7 +102,7 @@ class History extends React.Component {
                     <View style={{justifyContent: 'center', alignContent:'center', top: '60%'}}>
 
                         <Text style={{color:"#fff", alignSelf:'center', fontSize: 20}}>
-                            You Have't Compelete any Ride!
+                            {translations.YOU_HAVE_NOT_COMPLETED_ANY_RIDE}
                         </Text>
 
                     </View>

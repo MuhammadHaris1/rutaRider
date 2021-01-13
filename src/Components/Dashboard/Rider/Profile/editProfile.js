@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { View, Text, Image, ImageBackground, ActivityIndicator, Alert } from 'react-native'
 import { connect } from 'react-redux';
 import { styles } from '../ScheduleBooking/scheduleStyling';
@@ -10,6 +10,7 @@ import { heightPercentageToDP } from 'react-native-responsive-screen';
 import {updateProfile} from '../../../../Redux/Actions/userAction'
 import ImagePicker from "react-native-image-picker";
 import { TextInputMask } from 'react-native-masked-text'
+import { LocalizationContext } from '../../../../Localization/LocalizationContext';
 
 const showPass = require('../../../../../assets/show.png')
 const hidePass = require('../../../../../assets/hide.png')
@@ -34,7 +35,8 @@ const EditProfile = (props) => {
     const [password, setPassword] = useState(data.password)
     const [show, setShow] = useState(true)
     const [username, setSsername] = useState(data.username)
-
+    const contextType = useContext(LocalizationContext)
+    const { translations } = contextType
 
     const [profilePic, setprofilePic] = useState(data.image ? data.image_path : null)
     const [fileName, setfileName] = useState('')
@@ -103,7 +105,7 @@ const EditProfile = (props) => {
         <View style={{flex:1}}>
             <ImageBackground style={{height:'100%', width:'100%'}} source={require('../../../../../assets/welcome2.png')}>
                 <View style={styles.container}>
-                    <HeaderCustom headerTxt="Edit Profile" navigation={props.navigation}/>
+                    <HeaderCustom headerTxt={translations.EDIT_PROFILE} navigation={props.navigation}/>
                     <ScrollView>  
 
                         <View style={{alignSelf:'center', borderRadius: 100, paddingVertical: 10 }}>
@@ -123,14 +125,14 @@ const EditProfile = (props) => {
                                     onChangeText={(e) => setFn(e)}
                                     value={firstName}
                                     style={styles.whiteNormalTxt}
-                                    placeholder="First Name" placeholderTextColor="#fff"/>
+                                    placeholder={translations.FIRST_NAME} placeholderTextColor="#fff"/>
                             </Item>
                             <Item fixedLabel regular style={{width:'45%', paddingHorizontal: 10, borderRadius: 10}}>
                                 <Input 
                                 onChangeText={(e) => setln(e)}
                                 value={lastName}
                                 style={styles.whiteNormalTxt}
-                                placeholder="Last Name" placeholderTextColor="#fff" />
+                                placeholder={translations.LAST_NAME} placeholderTextColor="#fff" />
                             </Item>
                         </View>
                         <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}>
@@ -153,14 +155,14 @@ const EditProfile = (props) => {
                             <Item regular fixedLabel style={{width:'90%', alignSelf:'center',paddingHorizontal: 10, borderRadius: 10}}>
                                 <Input
                                 value={username}
-                                disabled style={styles.whiteNormalTxt} placeholder="User Name" placeholderTextColor="#fff" />
+                                disabled style={styles.whiteNormalTxt} placeholder={translations.USER_NAME} placeholderTextColor="#fff" />
                             </Item>
                         </View>
                         <View style={styles.itemContainer, {width:'95%', alignSelf:'center', marginTop: 10}}>
                             <Item regular fixedLabel style={{width:'90%', alignSelf:'center',paddingHorizontal: 10, borderRadius: 10}}>
                                 <Input
                                 value={email}
-                                disabled style={styles.whiteNormalTxt} placeholder="Email Address" placeholderTextColor="#fff" />
+                                disabled style={styles.whiteNormalTxt} placeholder={translations.EMAIL} placeholderTextColor="#fff" />
                             </Item>
                         </View>
                         <View style={styles.itemContainer, {width:'95%', alignSelf:'center', marginTop: 10}}>
@@ -169,7 +171,7 @@ const EditProfile = (props) => {
                                 secureTextEntry={show}
                                 value={password}
                                 onChangeText={(e) => setPassword(e)}
-                                style={styles.whiteNormalTxt} placeholder="Password" placeholderTextColor="#fff" />
+                                style={styles.whiteNormalTxt} placeholder={translations.PASSWORD} placeholderTextColor="#fff" />
                                 <TouchableOpacity onPress={() => {setShow(!show)}}>
                                     <Image source={show ? hidePass : showPass} style={styles.imgIcon} />
                                 </TouchableOpacity>
@@ -182,7 +184,7 @@ const EditProfile = (props) => {
                             onUpdate()
                         }} style={styles.btnStyle} full rounded>
                             <Text style={{color:'#fff'}}>
-                                Update
+                                {translations.UPDATE}
                             </Text>
                         </Button>
                         :

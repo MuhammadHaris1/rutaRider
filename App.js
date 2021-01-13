@@ -23,7 +23,8 @@ import NavigtionService from './src/Navigation/NavigationService';
 import messaging from '@react-native-firebase/messaging';
 import FlashMessage from "react-native-flash-message";
 
-import { Spinner } from 'native-base';
+import { LocalizationProvider } from './src/Localization/LocalizationContext';
+import { Root, Spinner } from 'native-base';
 export default class App extends React.Component {
   constructor (props) {
     super(props);
@@ -83,6 +84,8 @@ export default class App extends React.Component {
     return (
       <View style={{ flex:1 }}>
         <Provider store={store}>
+        <LocalizationProvider>
+            <Root>
             {this.state.loading ? 
               <Spinner /> 
             : 
@@ -92,6 +95,8 @@ export default class App extends React.Component {
                   NavigtionService.setTopLevelNavigator(navigatorRef);
                   }} />
             }
+            </Root>
+          </LocalizationProvider>
           </Provider>
           <FlashMessage position="top" style={{marginTop: 10, backgroundColor:'#3A91FA'}}  />
       </View>

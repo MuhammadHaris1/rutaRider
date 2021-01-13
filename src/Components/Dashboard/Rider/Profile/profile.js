@@ -25,6 +25,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import RenderAddPayment from '../Modals/addPaymentModal';
 import { styles } from '../ScheduleBooking/scheduleStyling';
 import { showMessage } from 'react-native-flash-message';
+import { LocalizationContext } from '../../../../Localization/LocalizationContext';
 
 const defaultAvatar = 'https://i2.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1'
 
@@ -229,8 +230,9 @@ class Profile extends React.Component {
             Alert.alert("Alert", "All fields required")
         }
     }
-
+    static contextType = LocalizationContext
     renderModal = () => {
+        const { translations } = this.context
         const { modalVisible } = this.state
         const {profileData} = this.props.screenProps
         console.log(' this.state.selectedImage', this.props.userDetails)
@@ -281,7 +283,7 @@ class Profile extends React.Component {
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#3A91FA', width: "100%", padding: 5, marginTop: 10 }}>
                                 <Text style={{ color: '#fff' , width:'50%', textAlign:'center'}}>
-                                    Vehicle Name
+                                    {translations.VIHICLE_NAME}
                                     </Text>
 
                                 <Text style={{ color: '#fff' , width:'50%', textAlign:'center'}}>
@@ -291,7 +293,7 @@ class Profile extends React.Component {
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'transparent', width: "100%", padding: 5, marginTop: 10 }}>
                                 <Text style={{ color: '#fff', width:'50%', textAlign:'center' }}>
-                                    Vehicle Colour
+                                    {translations.VIHICLE_COLOUR}
                                     </Text>
 
                                 <Text style={{ color: '#fff', width:'50%', textAlign:'center' }}>
@@ -339,6 +341,7 @@ class Profile extends React.Component {
 
 
     renderAddVehicle = () => {
+        const { translations } = this.context
         const { addVehicle, imageArr } = this.state
         console.log("IMAGEARR", imageArr)
         const year = (new Date()).getFullYear();
@@ -372,13 +375,13 @@ class Profile extends React.Component {
 
                                 <View>
                                     <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ name: e })} placeholder='Vehicle Name' />
+                                        <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ name: e })} placeholder={translations.VEHICLE_NAME} />
                                     </Item>
                                 </View>
 
                                 <View>
                                     <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ colour: e })} placeholder='Vehicle Colour' />
+                                        <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ colour: e })} placeholder={translations.VEHICLE_COLOUR} />
                                     </Item>
                                 </View>
 
@@ -424,26 +427,26 @@ class Profile extends React.Component {
 
                                 <View>
                                     <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ nicNumber: e })} placeholder='Car Number' />
+                                        <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ nicNumber: e })} placeholder={translations.CAR_NUMBER} />
                                     </Item>
                                 </View>
 
                                 <View>
                                     <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input keyboardType="number-pad" style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ totalSeats: e })} placeholder='Total Seats in Car' />
+                                        <Input keyboardType="number-pad" style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ totalSeats: e })} placeholder={translations.TOTAL_SEATS_IN_CAR} />
                                     </Item>
                                 </View>
 
                                 <View>
                                     <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input keyboardType="number-pad" style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ experience: e })} placeholder='Enter Your Experience in Years' />
+                                        <Input keyboardType="number-pad" style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ experience: e })} placeholder={translations.ENTER_YOUR_EXPERIENCE_IN_YEARS} />
                                     </Item>
                                 </View>
 
 
                                 <TouchableOpacity onPress={this.openGallery}>
                                     <Item onPress={this.openGallery} rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input style={{ color: '#fff' }} disabled value={this.state.fileName} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ email: e })} placeholder='Upload Vehicle Papers' />
+                                        <Input style={{ color: '#fff' }} disabled value={this.state.fileName} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ email: e })} placeholder={translations.UPLOAD_YOUR_VEHICLE_PAPERS} />
                                     </Item>
                                 </TouchableOpacity >
 
@@ -478,7 +481,7 @@ class Profile extends React.Component {
                                         this.addAndEditVehicle()
                                     }} style={{ width: '80%', marginVertical: '10%', borderColor: '#3A91FA', backgroundColor:'#3A91FA' }} full rounded>
                                         <Text style={{ color: '#fff' }}>
-                                            SAVE
+                                            {translations.SAVE}
                                     </Text>
                                     </Button>
                                 </View>
@@ -520,6 +523,7 @@ class Profile extends React.Component {
     }
 
     render() {
+        const { translations } = this.context
         const { userDetails, paymentDetail, reviewStastus } = this.props
         const {addPayment} = this.state
         var rating = Number(userDetails.data.rider_schedule_rating)
@@ -583,7 +587,7 @@ class Profile extends React.Component {
 
                                     <View style={{ marginVertical: hp(1) }}>
                                         <Text style={{ color: '#fff', textAlign: 'center' }}>{rating.toFixed(1)}</Text>
-                                        <Text style={{ color: '#fff', textAlign: 'center' }}>Rating</Text>
+                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{translations.RATING}</Text>
                                     </View>
                                 </View>
 
@@ -611,7 +615,7 @@ class Profile extends React.Component {
 
                                     <View style={{ marginVertical: hp(1) }}>
                                         <Text style={{ color: '#fff', textAlign: 'center' }}>{Number(userDetails.data.trips) + Number(userDetails.data.rider_schedule_count)}</Text>
-                                        <Text style={{ color: '#fff', textAlign: 'center' }}>Trips</Text>
+                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{translations.TRIPS}</Text>
                                     </View>
                                 </View>
 
@@ -638,7 +642,7 @@ class Profile extends React.Component {
 
                             <View style={{ marginTop: hp(8) }}>
                                 <Text style={{ color: '#fff', textAlign: 'center', fontSize: 35 }}>{userDetails.data.first_name} {userDetails.data.last_name}</Text>
-                                <Text style={{ color: '#fff', textAlign: 'center' }}>RUTA DRIVER</Text>
+                                <Text style={{ color: '#fff', textAlign: 'center' }}>{translations.RUTA_DRIVER}</Text>
                             </View>
 
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { View, Text, ScrollView, ImageBackground, RefreshControl } from 'react-native'
 import { connect } from 'react-redux';
 import { HeaderCustom } from '../Constants/Header';
@@ -7,8 +7,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Accordion } from 'native-base';
 import { getSchedule, getScheduleDetail } from '../../../../Redux/Actions/userAction';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { LocalizationContext } from '../../../../Localization/LocalizationContext';
 
 const ScheduleBooking = (props) => {
+    const contextType = useContext(LocalizationContext)
+    const { translations } = contextType
     const { schedule, fetching, getSchedule, userDetails, getScheduleDetail } = props
     const scheduleBookings = [
         {
@@ -82,8 +85,8 @@ const ScheduleBooking = (props) => {
                                                 dataArray={[val]} renderContent={(e) => {
                                                     return (
                                                         <Text style={[styles.whiteNormalTxt, {borderTopWidth: 2, borderTopColor: '#fff', paddingVertical: 5}]}>
-                                                            <Text style={styles.whiteBoldTxt}>From</Text> : {val.pickup_name} {'\n'}
-                                                            <Text style={styles.whiteBoldTxt}>To</Text> : {val.destination_name}
+                                                            <Text style={styles.whiteBoldTxt}>{translations.FROM}</Text> : {val.pickup_name} {'\n'}
+                                                            <Text style={styles.whiteBoldTxt}>{translations.TO}</Text> : {val.destination_name}
                                                         </Text>
                                                     );
                                                 } } expanded={ind} />
@@ -96,7 +99,7 @@ const ScheduleBooking = (props) => {
                                     } }>
                                         <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
                                             <Text style={styles.whiteNormalTxt}>
-                                                Timing
+                                                {translations.TIMING}
                                             </Text>
                                             <Text style={styles.whiteNormalTxt}>
                                                 {val.timing}
@@ -104,7 +107,7 @@ const ScheduleBooking = (props) => {
                                         </View>
                                         <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
                                             <Text style={styles.whiteNormalTxt}>
-                                                            Date
+                                                            {translations.DATE}
                                             </Text>
                                             <Text style={styles.whiteNormalTxt}>
                                                 {val.date}
@@ -120,7 +123,7 @@ const ScheduleBooking = (props) => {
                                         </View>
                                         <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
                                             <Text style={styles.whiteNormalTxt}>
-                                                Total Seats
+                                                {translations.TOTAL_SEATS}
                                             </Text>
                                             <Text style={styles.whiteNormalTxt}>
                                                 {val.seat}
@@ -128,7 +131,7 @@ const ScheduleBooking = (props) => {
                                         </View>
                                         <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
                                             <Text style={styles.whiteNormalTxt}>
-                                                                           Price
+                                                                           {translations.PRICE}
                                             </Text>
                                             <Text style={styles.whiteNormalTxt}>
                                                     ${val.price}
@@ -143,7 +146,7 @@ const ScheduleBooking = (props) => {
                     
                     <View style={{justifyContent: 'center', alignContent:'center', marginTop: '60%'}}>
                         <Text style={{color:"#fff", alignSelf:'center', fontSize: 20}}>
-                            You have't create any Schedule!
+                            {translations.YOU_HAVE_NOT_CREATED_ANY_SCHEDULE}
                         </Text>
                     </View>
                     }

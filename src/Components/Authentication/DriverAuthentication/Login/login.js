@@ -8,6 +8,7 @@ const Logo = require('../../../../../assets/Logo.png')
 import axios from 'axios'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import messaging from '@react-native-firebase/messaging';
+import { LocalizationContext } from '../../../../Localization/LocalizationContext';
 
 
 class DriverLogin extends React.Component {
@@ -56,9 +57,10 @@ class DriverLogin extends React.Component {
             login(data, fetchProfileData)
         // }
     }
-
-
+    static contextType = LocalizationContext
+    
     render() {
+        const { translations } = this.context
         // const { type } = this.props.navigation.state.params
         const { fetching } = this.props
 
@@ -76,7 +78,7 @@ class DriverLogin extends React.Component {
                             <View style={{marginLeft:40}}>
                                 <Button style={{width:'80%', marginTop:20, backgroundColor:'#3A91FA', borderRadius:10}} full >
                                     <Text style={{color:'#fff'}}>
-                                        SIGN IN
+                                        {translations.SIGN_IN}
                                     </Text>
                                 </Button>
                             </View>
@@ -88,7 +90,7 @@ class DriverLogin extends React.Component {
                                     
                                     }} style={{width:'70%', marginTop:20}} transparent full rounded>
                                     <Text style={{color:'#fff'}}>
-                                        SIGN UP
+                                    {translations.SIGN_UP}
                                     </Text>
                                 </Button>
                             </View>
@@ -98,14 +100,14 @@ class DriverLogin extends React.Component {
                         <View style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center', width: '100%' , marginTop: 25}}>
                             <View> 
                                 <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA' }}>
-                                    <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => this.setState({ email: e })} placeholder='Email' />
+                                    <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => this.setState({ email: e })} placeholder={translations.EMAIL} />
                                 </Item>
                             </View>
 
 
                             <View style={{paddingVertical:10}}> 
                                 <Item rounded  regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA' }}>
-                                    <Input secureTextEntry style={{color:'#fff'}} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ password: e })} placeholder='Password' />
+                                    <Input secureTextEntry style={{color:'#fff'}} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ password: e })} placeholder={translations.PASSWORD} />
                                 </Item>
                             </View>
                         </View>
@@ -120,16 +122,16 @@ class DriverLogin extends React.Component {
     
                                 }} style={{width:'40%', alignSelf:'center', marginTop:20, backgroundColor:'#3A91FA'}} full rounded>
                                     <Text style={{color:'#fff'}}>
-                                        Login
+                                    {translations.LOGIN}
                                     </Text>
                                 </Button>    
                         }
                         </View>
 
                         <View >
-                            <Button transparent onPress={() => this.props.navigation.navigate('ForgotPassword')} style={{width:'40%', alignSelf:'center', marginTop:2}} full rounded>
+                            <Button transparent onPress={() => this.props.navigation.navigate('ForgotPassword')} style={{width:'60%', alignSelf:'center', marginTop:2}} full rounded>
                                 <Text style={{color:'#fff', textAlign:'center'}}>
-                                    Forgot Password?
+                                {translations.FORGOT_PASSWORD}
                                 </Text>
                             </Button>
                         </View>

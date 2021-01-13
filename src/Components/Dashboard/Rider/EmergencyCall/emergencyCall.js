@@ -8,6 +8,7 @@ const emeergecy = require('../../../../../assets/emeergecy.png')
 import FooterComponent from '../Footer/footer'
 import {Picker} from 'react-native';
 import { widthPercentageToDP } from 'react-native-responsive-screen';
+import { LocalizationContext } from '../../../../Localization/LocalizationContext';
 class Emergency extends React.Component {
     constructor(props) {
         super(props)
@@ -17,8 +18,9 @@ class Emergency extends React.Component {
     }
 
 
-
+    static contextType = LocalizationContext
     render() {
+        const { translations } = this.context
         const { emergencyNumber } = this.props
         return(
             <View style={{flex: 1}}>
@@ -33,12 +35,12 @@ class Emergency extends React.Component {
                         <View style={{alignItems:'center', marginTop: '15%'}}> 
                             <Item  rounded regular style={{ width: '80%', borderColor:'transparent', backgroundColor: 'rgba(18, 70, 94, 0.7)' }}>
                                 <Image source={emeergecy} style={{width:55, height:55}} />
-                                <Input value={this.state.emergencyNumber} disabled keyboardType="number-pad"  style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => this.setState({ emergencyNumber: e })} placeholder='Emergency Numbers' />
+                                <Input value={this.state.emergencyNumber} disabled keyboardType="number-pad"  style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => this.setState({ emergencyNumber: e })} placeholder={translations.EMERGENCY_NUMBERS} />
                             </Item>
                         </View> 
 
                         <View style={{alignItems:'center', paddingVertical: '5%'}}>
-                            <Text style={{color:'#fff', fontSize:20}}>Fire, national police</Text>    
+                            <Text style={{color:'#fff', fontSize:20}}>{translations.FIRE}, {translations.NATIONAL_POLICE}</Text>    
                         </View> 
 
                         <View style={{borderRadius: 30, borderColor: '#3A91FA', borderWidth: 1, marginVertical:'2%',width: widthPercentageToDP(75), alignSelf:'center'}}>
@@ -77,7 +79,7 @@ class Emergency extends React.Component {
                             style={{width:'40%', alignSelf:'center', marginTop:5 ,
                             backgroundColor: 'rgba(45, 48, 67, 0.8)'}} full rounded>
                                 <Text style={{color:'#fff', textAlign:'center'}}>
-                                    Call
+                                    {translations.CALL}
                                 </Text>
                             </Button>
                         </View>

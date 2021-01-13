@@ -10,6 +10,7 @@ const sidebar = require('../../../../../assets/sidebar.png')
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import PaymentDetails from './paymentDetails';
 import {Picker} from '@react-native-community/picker';
+import { LocalizationContext } from '../../../../Localization/LocalizationContext';
 
 class Payment extends React.Component {
     constructor (props) {
@@ -23,8 +24,9 @@ class Payment extends React.Component {
 
     
 
-
+    static contextType = LocalizationContext
     render() {
+        const { translations } = this.context
         const { paymentDetail, userDetails } = this.props
         const {year, month} = this.state
         const years = Array.from(new Array(11),( val, index) => year + index); 
@@ -41,7 +43,7 @@ class Payment extends React.Component {
                         leftComponent={<TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                             <Image source={back} style={{height: 20, width: 20}} />
                         </TouchableOpacity>}
-                        centerComponent={<Text style={{fontSize: 20, color:'#fff'}}>Payment</Text>}
+                        centerComponent={<Text style={{fontSize: 20, color:'#fff'}}>{translations.PAYMENT}</Text>}
                         rightComponent={
                             <TouchableOpacity onPress={() => this.props.navigation.toggleDrawer()}>
                             <Image source={sidebar} style={{height: 20, width: 20}} />
@@ -56,7 +58,7 @@ class Payment extends React.Component {
                 <View style={styles.container}>
                    <View style={styles.itemContainer}>
                        <Item regular style={styles.inputContainer}>
-                           <Input placeholder="Card Number" style={{color:'#fff'}} placeholderTextColor="#fff" />
+                           <Input placeholder={translations.CARD_NUMBER} style={{color:'#fff'}} placeholderTextColor="#fff" />
                        </Item>
                        <View style={styles.grpItem}>
                            <View style={styles.pickerContainer}>
@@ -92,10 +94,10 @@ class Payment extends React.Component {
                             </View>
                        </View>
                        <Item regular style={styles.inputContainer}>
-                            <Input keyboardType="number-pad" placeholder="Enter Your Card Name" style={{color:'#fff'}} placeholderTextColor="#fff" />
+                            <Input keyboardType="number-pad" placeholder={translations.ENTER_YOUR_CARD_NAME} style={{color:'#fff'}} placeholderTextColor="#fff" />
                         </Item>
                         <Item regular style={styles.inputContainer}>
-                            <Input placeholder="CVV" style={{color:'#fff'}} placeholderTextColor="#fff" />
+                            <Input placeholder={translations.CVV} style={{color:'#fff'}} placeholderTextColor="#fff" />
                         </Item>
                    </View>
                 </View>
@@ -149,7 +151,7 @@ class Payment extends React.Component {
                             <Button style={{width:'95%', alignSelf:'center', marginTop:2 ,
                             backgroundColor:'#3A91FA' }} full rounded>
                                 <Text style={{color:'#fff', textAlign:'center'}}>
-                                    Payment
+                                    {translations.PAYMENT}
                                 </Text>
                             </Button>
                         </View>

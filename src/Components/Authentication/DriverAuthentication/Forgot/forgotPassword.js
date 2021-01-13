@@ -1,9 +1,10 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import { View, Text, ScrollView, ImageBackground, Image, Alert, ActivityIndicator } from 'react-native'
 import { Input, Item, Button } from 'native-base'
 import CodeInput from 'react-native-confirmation-code-input';
 import { connect } from 'react-redux';
 import {signup, forgotPassword, changePassword} from '../../../../Redux/Actions/userAction'
+import { LocalizationContext } from '../../../../Localization/LocalizationContext';
 
 const Logo = require('../../../../../assets/Logo.png')
 const welcome = require('../../../../../assets/welcome.png')
@@ -16,7 +17,8 @@ const ForgotPassword = (props) => {
     const [confirmPass, setconfirmPass] = useState('')
     const [userId, setuserId] = useState('')
 
-
+    const contextType = useContext(LocalizationContext)
+    const { translations } = contextType
     const [showModule, setModule] = useState('renderEmail')
 
 
@@ -87,7 +89,7 @@ const ForgotPassword = (props) => {
             <View style={{backgroundColor: 'rgba(43,48,68, 1)', width:'90%', alignSelf:'center', borderRadius:10, padding: 30, marginTop:'10%'}}>
                         <View style={{alignItems:'center'}}> 
                             <Item rounded regular style={{ width: '98%', marginTop: '2%', borderColor:'#3A91FA' }}>
-                                <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => setEmail(e)} placeholder='Enter Your Email' />
+                                <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => setEmail(e)} placeholder={'Enter Your Email'} />
                             </Item>
                         </View>
 
@@ -102,7 +104,7 @@ const ForgotPassword = (props) => {
                             sendOtp()
                             }} style={{width:'50%', alignSelf:'center', marginTop:20, backgroundColor:'#3A91FA'}} full rounded>
                             <Text style={{color:'#fff'}}>
-                                Continue
+                                {translations.CONTINUE}
                             </Text>
                         </Button>}
                     </View>
@@ -134,7 +136,7 @@ const ForgotPassword = (props) => {
                     checkOtp()
                     }} style={{width:'50%', alignSelf:'center', marginTop:20, backgroundColor:'#3A91FA'}} full rounded>
                     <Text style={{color:'#fff'}}>
-                        Continue
+                        {translations.CONTINUE}
                     </Text>
                 </Button>}
             </View>
