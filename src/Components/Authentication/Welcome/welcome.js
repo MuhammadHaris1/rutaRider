@@ -22,7 +22,7 @@ class Welcome extends React.Component {
 
 
     render() {
-        const { translations, setAppLanguage } = this.context
+        const { translations, setAppLanguage, appLanguage } = this.context
         return (
             <View style={{ flex: 1 }}>
                 <ImageBackground source={welcome} style={{ height: "100%", width: '100%', flex: 1, justifyContent: 'center' }}>
@@ -41,7 +41,7 @@ class Welcome extends React.Component {
                                 }}>
                                     {translations.WELCOME}
                                 </Text>
-                                <View style={{ backgroundColor: "#fff", width: '80%', alignSelf: "center" }}>
+                                {/* <View style={{ backgroundColor: "#fff", width: '80%', alignSelf: "center" }}>
                                     <Picker
                                         selectedValue={this.state.lan}
 
@@ -57,12 +57,12 @@ class Welcome extends React.Component {
                                         <Picker.Item label="English" value={"en"} />
                                         <Picker.Item label="Spanish" value={"es"} />
                                     </Picker>
-                                </View>
+                                </View> */}
                                 <View >
                                     <Button onPress={() => this.props.navigation.navigate('WelcomeHome', { type: "Driver" })} style={{ width: '80%', alignSelf: 'center', marginTop: 20, backgroundColor: '#3A91FA' }} full rounded>
                                         <Text style={{ color: '#fff' }}>
                                             {translations.GET_IN}
-                                </Text>
+                                        </Text>
                                     </Button>
                                 </View>
 
@@ -70,17 +70,33 @@ class Welcome extends React.Component {
                                     <Button onPress={() => this.props.navigation.navigate('WelcomeHome', { type: "Driver" })} style={{ width: '80%', alignSelf: 'center', marginTop: 20, backgroundColor: '#3A91FA' }} full rounded>
                                         <Text style={{ color: '#fff' }}>
                                             {translations.CREATE_ACCOUNT}
-                                </Text>
+                                        </Text>
                                     </Button>
                                 </View>
+
+
 
 
                             </View>
 
 
+
+
                         </View>
 
                     </ScrollView>
+                    <View style={{ flexDirection: "row", position: "absolute", bottom: 30, width: "80%", justifyContent: "space-evenly", alignSelf: "center" }}>
+                        <TouchableOpacity onPress={() => {
+                            setAppLanguage("en")
+                        }}>
+                            <Text style={{ color: appLanguage == "en" ? "#fff" : "#bdbdbd", fontSize: 18 }}>English</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            setAppLanguage("es")
+                        }}>
+                            <Text style={{ color: appLanguage == "es" ? "#fff" : "#bdbdbd", fontSize: 18 }}>Espanol</Text>
+                        </TouchableOpacity>
+                    </View>
                 </ImageBackground>
             </View>
         )

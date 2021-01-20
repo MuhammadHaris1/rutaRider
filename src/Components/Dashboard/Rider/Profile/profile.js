@@ -375,13 +375,13 @@ class Profile extends React.Component {
 
                                 <View>
                                     <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ name: e })} placeholder={translations.VEHICLE_NAME} />
+                                        <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ name: e })} placeholder={translations.VIHICLE_NAME} />
                                     </Item>
                                 </View>
 
                                 <View>
                                     <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ colour: e })} placeholder={translations.VEHICLE_COLOUR} />
+                                        <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ colour: e })} placeholder={translations.VIHICLE_COLOUR} />
                                     </Item>
                                 </View>
 

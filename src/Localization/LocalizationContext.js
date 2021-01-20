@@ -25,7 +25,7 @@ export const LocalizationProvider = ({ children }) => {
 
   const initializeAppLanguage = async () => {
     const currentLanguage = await AsyncStorage.getItem(APP_LANGUAGE);
-
+// console.log("currentLanguage", currentLanguage)
     if (!currentLanguage) {
       let localeCode = DEFAULT_LANGUAGE;
       const supportedLocaleCodes = translations.getAvailableLanguages();

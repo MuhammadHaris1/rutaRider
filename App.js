@@ -25,6 +25,7 @@ import FlashMessage from "react-native-flash-message";
 
 import { LocalizationProvider } from './src/Localization/LocalizationContext';
 import { Root, Spinner } from 'native-base';
+import AsyncStorage from '@react-native-community/async-storage';
 export default class App extends React.Component {
   constructor (props) {
     super(props);
@@ -36,6 +37,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount () {
+    // AsyncStorage.clear()
     console.log(" this.props.navigation.state Notification APP.JS")
     
     messaging()

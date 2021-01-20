@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
 import notification from '../Components/Dashboard/Rider/Notification/notification'
 import NavigationService from '../Navigation/NavigationService'
+import { LocalizationContext } from '../Localization/LocalizationContext'
 
 
 class Splash extends Component {
@@ -29,9 +30,12 @@ class Splash extends Component {
         // })
     // NavigationService.navigate("RideReq")
     }
-    
+
+    static contextType = LocalizationContext
 
     componentDidMount = async () => {
+        const {initializeAppLanguage} = this.context
+        initializeAppLanguage()
         console.log("splash")
 
         const { fetchProfile } = this.props
