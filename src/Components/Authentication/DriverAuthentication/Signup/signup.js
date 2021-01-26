@@ -69,6 +69,7 @@ class DriverSignup extends React.Component {
 
 
     signup = ( ) => {
+        const { translations } = this.context
         const {fname, lname, email, phone, password, model, licenseNumber, nicNumber, fileName, fileUri, userName} = this.state
 
 
@@ -83,7 +84,7 @@ class DriverSignup extends React.Component {
             let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
             if(reg.test(email) === false) {
-                ToastAndroid.show("Please fix email format", ToastAndroid.LONG)
+                ToastAndroid.show(translations.PLEASE_FIX_EMAIL_FORMATE, ToastAndroid.LONG)
             }else {
                 if( fname && lname && email && phone && password ){
                     if(/\d/.test(fname)|| /\d/.test(lname)) {
