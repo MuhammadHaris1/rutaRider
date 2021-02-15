@@ -186,7 +186,9 @@ const translations = {
     MESSAGE: "message",
     CONNECTION_INTERRUPT: "Connection interrupt",
     INVALID_EMAIL_PASSWORD: "Invalid Email/Password",
-    USER_SIGNUP_FAILED: "User Signup failed"
+    USER_SIGNUP_FAILED: "User Signup failed",
+    GET_PAYMENT: "Get Payment",
+    CHECK_PAYMENY: "Check Payment"
   },
   ar: {
     LANGUAGE_SETTINGS: 'تغيير اللغة',
@@ -374,7 +376,9 @@ const translations = {
     MESSAGE: "mensaje",
     CONNECTION_INTERRUPT: "Interrupción de la conexión",
     INVALID_EMAIL_PASSWORD: "Correo electrónico / contraseña no válidos",
-    USER_SIGNUP_FAILED: "Error de registro de usuario"
+    USER_SIGNUP_FAILED: "Error de registro de usuario",
+    GET_PAYMENT: "Obtener pago",
+    CHECK_PAYMENY: "Pago con cheque"
   },
 };
 

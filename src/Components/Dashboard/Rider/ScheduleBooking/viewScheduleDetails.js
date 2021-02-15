@@ -76,7 +76,7 @@ const ViewScheduleDetail = (props) => {
         try {
             let response = await Axios.post(`${API_ENDPOINT}transactions.php`, formData)
 
-            console.log("check transaction", response)
+            console.log("check transaction", response.data)
             onRefresh()
             if (response.status == 200) {
                 Alert.alert(translations.MESSAGE, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
@@ -248,7 +248,7 @@ const ViewScheduleDetail = (props) => {
                                                         generateTransaction(schduleDetail.schedule_data.id)
                                                     }} style={styles.btnStyle} full rounded>
                                                     <Text style={{ color: '#fff' }}>
-                                                        Get Payment
+                                                        {translations.GET_PAYMENT}
                                                         {/* {translations.START_RIDE} */}
                                                     </Text>
                                                 </Button> : null}
@@ -260,7 +260,7 @@ const ViewScheduleDetail = (props) => {
                                                         checkTransaction(schduleDetail.schedule_data.id)
                                                     }} style={styles.btnStyle} full rounded>
                                                     <Text style={{ color: '#fff' }}>
-                                                        Check Payment
+                                                        {translations.CHECK_PAYMENY}
                                                         {/* {translations.START_RIDE} */}
                                                     </Text>
                                                 </Button> : null}

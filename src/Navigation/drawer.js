@@ -228,7 +228,7 @@ function DrawerMenu(props) {
                     </View>
 
                     <View style={{ marginLeft: 20 }}>
-                        <Text style={styles.menuItemText}>LOGOUT</Text>
+                        <Text style={styles.menuItemText}>{translations.LOGOUT}</Text>
                     </View>
                 </TouchableOpacity>
             </ImageBackground>

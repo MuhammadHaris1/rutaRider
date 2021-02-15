@@ -608,7 +608,7 @@ class Profile extends React.Component {
                                     showAccessory
                                     onAccessoryPress={() => {
 
-                                        // this.props.navigation.navigate('EditProfile')
+                                        this.props.navigation.navigate('EditProfile')
                                     }}
                                     containerStyle={{ borderWidth: 15, borderColor: '#fff', borderRadius: 100, }}
                                     size="xlarge"
@@ -621,7 +621,7 @@ class Profile extends React.Component {
                                         color: '#fff', textDecorationLine: 'underline',
                                         fontFamily: Platform.OS === "android" ? 'Auckland Free' : null
                                     }}>
-                                        View Vehicle
+                                        {translations.VIEW_VEHICLE}
                                     </Text>
                                 </TouchableOpacity>
                             </View>

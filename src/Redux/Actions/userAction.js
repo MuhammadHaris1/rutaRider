@@ -436,11 +436,11 @@ export function createSchedule(data, translations, appLanguage) {
           if (res.data.status) {
             dispatch({ type: "CLEAR_PROCESSING" });
             dispatch({ type: 'CREATE_SCHEDULE_PROCESSED', payload: res.data })
-            resolve({ status: res.data.status, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage })
+            resolve({ status: res.data.status, message: appLanguage == "en" ? res.data.message : res.data.spanishmessage })
           } else {
             dispatch({ type: "CLEAR_PROCESSING" });
             console.log("res.data", res.data)
-            reject({ status: res.data.status, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage })
+            reject({ status: res.data.status, message: appLanguage == "en" ? res.data.message : res.data.spanishmessage })
           }
         })
         .catch((err) => {
