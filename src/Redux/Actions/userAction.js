@@ -795,6 +795,7 @@ export function completeSchduleRide (sId) {
        return new Promise((resolve, reject) => {
         axios(config)
         .then(function (response) {
+          console.log("ride complete Response", response)
           if(response.data.status) {
             resolve({status: response.data.status})
             dispatch({type: "FETCHING_SCHEDULE_DETAIL_PROCESSED", payload: response.data })
