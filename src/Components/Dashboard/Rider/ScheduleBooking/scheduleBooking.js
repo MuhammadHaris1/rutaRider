@@ -115,7 +115,7 @@ const ScheduleBooking = (props) => {
                                         </View>
                                         <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>
                                             <Text style={styles.whiteNormalTxt}>
-                                                                                       Available Seats
+                                                {translations.AVAILABLE_SEATS}
                                             </Text>
                                             <Text style={styles.whiteNormalTxt}>
                                                 {val.seat_available}

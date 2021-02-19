@@ -34,6 +34,7 @@ class History extends React.Component {
     render() {
         const { translations } = this.context
         const { history } = this.props
+        // console.log(history, "render history")
         return (
             <View style={{flex: 1}}>
             <ImageBackground source={welcome2} style={{height:"100%", width:'102%', flex: 1, justifyContent:'center',right:5}}> 
@@ -77,8 +78,8 @@ class History extends React.Component {
                                             <MapView
                                                 style={{height: 150, width:'100%'}} 
                                                 initialRegion={{
-                                                    latitude: Number(val.dl_latitude),
-                                                    longitude: Number(val.dl_longitude),
+                                                    latitude: Number(val.dl_latitude ? val.dl_latitude : val.user_drop_latitude),
+                                                    longitude: Number(val.dl_longitude ? val.dl_longitude : val.user_drop_longitude),
                                                     latitudeDelta: 0.0122,
                                                     longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.0122
                                                     }}
@@ -86,8 +87,8 @@ class History extends React.Component {
                                                 scrollEnabled={false}
                                                 >
                                                     <MapView.Marker  title={'Start'} key={`coordinate_${index}`} coordinate={{
-                                                    latitude: Number(val.dl_latitude),
-                                                    longitude: Number(val.dl_longitude),
+                                                    latitude: Number(val.dl_latitude ? val.dl_latitude : val.user_drop_latitude),
+                                                    longitude: Number(val.dl_longitude ? val.dl_longitude : val.user_drop_longitude),
                                                     latitudeDelta: 0.0122,
                                                     longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.0122
                                                     }} />

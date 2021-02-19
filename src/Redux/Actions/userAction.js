@@ -574,6 +574,7 @@ export function getBookingReq(id) {
 
     axios.post(`https://hnh6.xyz/route/api/bookingFromSchedule.php`, data)
     .then((res) => {
+      console.log("RAHEEL RESPONSE", res)
       if(res.data.status) {
         dispatch({type:'GET_BOOKING_REQ_PROCESSED', payload: res.data.data})
       }else {

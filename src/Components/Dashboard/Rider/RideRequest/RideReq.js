@@ -33,6 +33,14 @@ const renderReq = (item, index, acceptBooking, userDetails, getBookingReq, rejec
                             {item.seat}
                         </Text>
                     </View>
+                    <View style={[styles.row, styles.spaceBtw]}>
+                        <Text style={styles.whiteBoldTxt}>
+                            Type:
+                    </Text>
+                        <Text style={styles.whiteBoldTxt}>
+                            {item.booking_type}
+                        </Text>
+                    </View>
                     <View style={[styles.row, styles.spaceBtw, { paddingVertical: 10 }]}>
                         <Button transparent onPress={() => {
                             acceptBooking(userDetails.data.id, userDetails.role_id, item.booking_schedule_id)
@@ -111,7 +119,7 @@ const RideReq = (props) => {
                 <View style={[styles.itemContainer, styles.round]}>
                     <View style={[styles.row, styles.spaceBtw]}>
                         <Text style={styles.whiteBoldTxt}>
-                            Name:
+                            {translations.NAME}:
                     </Text>
                         <Text style={styles.whiteBoldTxt}>
                             {item.first_name} {item.last_name}
@@ -125,6 +133,56 @@ const RideReq = (props) => {
                             {item.seat}
                         </Text>
                     </View>
+                    <View style={[styles.row, styles.spaceBtw]}>
+                        <Text style={styles.whiteBoldTxt}>
+                            {translations.TYPE}:
+                    </Text>
+                        <Text style={styles.whiteBoldTxt}>
+                            {item.booking_type}
+                        </Text>
+                    </View>
+                    {item.booking_type == "Parcel" && <>
+                    <View style={[styles.row, styles.spaceBtw]}>
+                        <Text style={styles.whiteBoldTxt}>
+                            {translations.PACKAGE_NAME}:
+                    </Text>
+                        <Text style={styles.whiteBoldTxt}>
+                            {item.obj_name}
+                        </Text>
+                    </View>
+                    <View style={[styles.row, styles.spaceBtw]}>
+                        <Text style={styles.whiteBoldTxt}>
+                            {translations.PACKAGE_VALUE}:
+                    </Text>
+                        <Text style={styles.whiteBoldTxt}>
+                            {item.obj_value}
+                        </Text>
+                    </View>
+                    <View style={[styles.row, styles.spaceBtw]}>
+                        <Text style={styles.whiteBoldTxt}>
+                            {translations.PACKAGE_WEIGHT}:
+                    </Text>
+                        <Text style={styles.whiteBoldTxt}>
+                            {item.obj_weight}
+                        </Text>
+                    </View>
+                    <View style={[styles.row, styles.spaceBtw]}>
+                        <Text style={styles.whiteBoldTxt}>
+                            {translations.RECIPIENT_NAME}:
+                    </Text>
+                        <Text style={styles.whiteBoldTxt}>
+                            {item.recipient_name}
+                        </Text>
+                    </View>
+                    <View style={[styles.row, styles.spaceBtw]}>
+                        <Text style={styles.whiteBoldTxt}>
+                            {translations.RECIPIENT_NUMBER}:
+                    </Text>
+                        <Text style={styles.whiteBoldTxt}>
+                            {item.recipient_number}
+                        </Text>
+                    </View>
+                    </>}
                     <View style={[styles.row, styles.spaceBtw, { paddingVertical: 10 }]}>
                         <Button transparent onPress={() => {
                             acceptBooking(userDetails.data.id, userDetails.role_id, item.booking_schedule_id)

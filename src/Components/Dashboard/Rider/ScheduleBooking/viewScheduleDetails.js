@@ -46,7 +46,7 @@ const ViewScheduleDetail = (props) => {
         <View style={{flex: 1}}>
             <ImageBackground source={welcome2} style={{height:"100%", width:'102%', flex: 1, justifyContent:'center',right:5}}> 
                 <View style={{...styles.itemContainer, marginVertical: 10}}>
-                    <HeaderCustom  headerTxt="Schedule Details" navigation={props.navigation} />
+                    <HeaderCustom  headerTxt={translations.SCHEDULE_DETAIL} navigation={props.navigation} />
                 </View>
 
                 <ScrollView refreshControl={<RefreshControl colors={["#3A91FA"]} refreshing={props.fetching}/>} contentContainerStyle={{paddingBottom: 70}}>
@@ -56,7 +56,7 @@ const ViewScheduleDetail = (props) => {
                                 {schduleDetail.user_data ?
                                 <>
                                     <View style={[styles.itemContainer ,styles.row, styles.spaceBtw]}>
-                                    {["Name", "No of seat", "Phone"].map((val, ind) => {
+                                    {[translations.NAME, translations.NO_OF_SEATS, translations.PHONE].map((val, ind) => {
                                         return <Text key={ind} style={[styles.whiteBoldTxt, {letterSpacing: 0, textAlign:'center'}]}>{val}</Text>
                                     })}
                                     </View>
@@ -115,7 +115,7 @@ const ViewScheduleDetail = (props) => {
                                         <Text style={styles.whiteNormalTxt}>{schduleDetail.schedule_data.timing}</Text>
                                     </View>
                                     <View style={[styles.itemContainer, styles.row, styles.spaceBtw]}>
-                                        <Text style={styles.whiteNormalTxt}>Status</Text>
+                                        <Text style={styles.whiteNormalTxt}>{translations.STATUS}</Text>
                                         {schduleDetail.schedule_data.ride_status == 0 && <Text style={styles.redTxt}>{translations.PENDING}</Text>}
                                         {schduleDetail.schedule_data.ride_status == 1 && <Text style={styles.yellowTxt}>{translations.IN_PROCESS}</Text>}
                                         {schduleDetail.schedule_data.ride_status == 2 && <Text style={styles.blueTxt}>{translations.STARTED}</Text>}

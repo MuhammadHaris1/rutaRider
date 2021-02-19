@@ -157,7 +157,18 @@ const translations = {
     SIGN_IN_TO_START_YOUR_SESSION: "Sign in to start your session",
     PLEASE_FIX_EMAIL_FORMATE: "Please fix email format",
     CALL_THIS_NUMBER: "Call (this number)",
-    A_CALL: "A call"
+    A_CALL: "A call",
+    PACKAGE_DETAILS: "PACKAGE DETAILS",
+    PACKAGE_NAME: "Package Name",
+    PACKAGE_VALUE: "Package Value",
+    PACKAGE_WEIGHT: "Package Weight",
+    RECIPIENT_NAME: "Recipient Name",
+    RECIPIENT_NUMBER: "Recipient Number",
+    NAME: "Name",
+    TYPE: "Type",
+    CURRENT_LOCATION: "Current Location",
+    AVAILABLE_SEATS: "Available Seats",
+    NO_OF_SEATS: "No of seat"
   },
   ar: {
     LANGUAGE_SETTINGS: 'تغيير اللغة',
@@ -316,7 +327,18 @@ const translations = {
     SIGN_IN_TO_START_YOUR_SESSION: "Ingresa tus credenciales para iniciar sesión",
     PLEASE_FIX_EMAIL_FORMATE: "Por favor corrige el formato de correo",
     CALL_THIS_NUMBER: "Llama a (este número)",
-    A_CALL: "Una llamada"
+    A_CALL: "Una llamada",
+    PACKAGE_DETAILS: "DETALLES DEL PAQUETE",
+    PACKAGE_NAME: "Nombre del paquete",
+    PACKAGE_VALUE: "Valor del paquete",
+    PACKAGE_WEIGHT: "peso del paquete",
+    RECIPIENT_NAME: "Nombre de la destinataria",
+    RECIPIENT_NUMBER: "Número de destinatario",
+    NAME: "Nombre",
+    TYPE: "Escribe",
+    CURRENT_LOCATION: "Ubicación actual",
+    AVAILABLE_SEATS: "Asientos disponibles",
+    NO_OF_SEATS: "No de asiento"
   },
 };
 

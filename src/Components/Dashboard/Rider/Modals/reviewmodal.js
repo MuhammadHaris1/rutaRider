@@ -116,7 +116,7 @@ const RenderReviewModal = (props) => {
                                             }else {
                                                 Alert.alert("Alert", "You Reached Review limit")
                                             }
-                                        }} placeholder='Enter Your Review' />
+                                        }} placeholder={translations.ENTER_YOUR_REVIEW} />
                                     </Item>
                                     <Text style={{color:'red', textAlign:'right'}}>{translations.MAX_30_LETTERS}, {30 - ratingDescription.length} {translations.REMAINING} 
                                     </Text>
