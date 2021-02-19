@@ -272,7 +272,7 @@ const translations = {
     NEW: "Nuevo",
     FETCHING_THE_POSITION_FAILED_PLEASE_ENABLE_THE_GPS_MANYALY: "No se pudo obtener la posición, habilita el GPS manualmente.",
     ACTIVE_RIDE: "Viaje activo",
-    RIDE: "Viaje",
+    RIDE: "pasajero",
     TRIPS: "Viajes",
     EDIT_PROFILE: "Editar perfil",
     UPDATE: "Actualizar",
