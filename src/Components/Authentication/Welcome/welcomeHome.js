@@ -77,7 +77,7 @@ class WelcomeHome extends React.Component {
 
     static contextType = LocalizationContext
     render() {
-        const { translations, setAppLanguage } = this.context
+        const { translations, setAppLanguage, appLanguage } = this.context
         const { items } = this.state
         const { type } = this.props.navigation.state.params
         // console.log("type === Driver",type === "Driver")
@@ -107,9 +107,10 @@ class WelcomeHome extends React.Component {
                             {this.pagination()}
                         </View>
 
-                        <Text style={{fontSize:45, color:'#fff', letterSpacing:10, textAlign:'center', width:'100%',}}>
+                        {/* <Text style={{fontSize:45, color:'#fff', letterSpacing:10, textAlign:'center', width:'100%',}}>
                                 {translations.WELCOME}
-                        </Text>
+                        </Text> */}
+                        <Image source={appLanguage == "en" ? require("../../../../assets/welcomeText.png") : require("../../../../assets/Bienvenido.png")} style={{ width: "80%", height: 60, alignSelf: "center" }} />
 
                     <View >
                         <Button onPress={() => {type === "User" ? this.props.navigation.navigate('UserLogin', {type: type}) : this.props.navigation.navigate('DriverLogin', {type: type})}} style={{width:'40%', alignSelf:'center', marginTop:10, backgroundColor:'#3A91FA'}} full rounded>

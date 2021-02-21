@@ -45,7 +45,7 @@ const ForgotPassword = (props) => {
         data.append('email', email);
         data.append('token', code);
         console.log('TOKEN FORMDAYA',data)
-        forgotPassword(data)
+        forgotPassword(data, translations, appLanguage)
         .then((res) => {
             if(res.status){
                 setModule('renderChangePassword')
@@ -66,7 +66,7 @@ const ForgotPassword = (props) => {
             data.append('password', newPass);
             data.append('con_password', confirmPass);
 
-            forgotPassword(data)
+            forgotPassword(data, translations, appLanguage)
             .then((res) => {
                 if(res.status){
                     props.navigation.navigate('DriverLogin')

@@ -36,12 +36,13 @@ class Welcome extends React.Component {
                             </View>
 
                             <View style={{ width: '100%', marginTop: 20 }}>
-                                <Text style={{
+                                {/* <Text style={{
                                     fontFamily: Platform.OS === "android" ? 'AVENGEANCE HEROIC AVENGER BI' : null,
                                     fontSize: 45, color: '#fff', letterSpacing: 10, textAlign: 'center', width: '100%'
                                 }}>
                                     {translations.WELCOME}
-                                </Text>
+                                </Text> */}
+                                <Image source={appLanguage == "en" ? require("../../../../assets/welcomeText.png") : require("../../../../assets/Bienvenido.png")} style={{ width: "80%", height: 60, alignSelf: "center" }} />
                                 {/* <View style={{ backgroundColor: "#fff", width: '80%', alignSelf: "center" }}>
                                     <Picker
                                         selectedValue={this.state.lan}

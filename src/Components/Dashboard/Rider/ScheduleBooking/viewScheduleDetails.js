@@ -79,7 +79,7 @@ const ViewScheduleDetail = (props) => {
             console.log("check transaction", response)
             onRefresh()
             if (response.status == 200) {
-                Alert.alert(translations.MESSAGE, response.data.message)
+                Alert.alert(translations.MESSAGE, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
             }
         } catch (error) {
             console.log(error)

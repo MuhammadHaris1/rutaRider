@@ -11,7 +11,7 @@ import { createSchedule, getSchedule } from '../../../../Redux/Actions/userActio
 import { LocalizationContext } from '../../../../Localization/LocalizationContext'
 const CreateSchedule = (props) => {
     const contextType = useContext(LocalizationContext)
-    const { translations } = contextType
+    const { translations, appLanguage } = contextType
     const [type, setType] = useState('')
     const [fromCordinate, setfromCordinate] = useState('')
     const [toCordinate, settoCordinate] = useState('')
@@ -124,7 +124,7 @@ const CreateSchedule = (props) => {
             formData.append("price", price);
             formData.append("seat", seat);
             formData.append("date", date);
-           createSchedule(formData)
+           createSchedule(formData, translations, appLanguage)
            .then((res) => {
                Alert.alert(translations.ALERT, res.message)
                getSchedule(userDetails.data.id)

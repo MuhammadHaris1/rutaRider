@@ -386,7 +386,7 @@ const CreateSchedule = (props) => {
                                             .then(result => {
                                                 console.log(result)
                                                 if (result.errorCode) {
-                                                    Alert.alert(translations.FAILED, result.message)
+                                                    Alert.alert(translations.FAILED, appLanguage == "en" ? result.message : result.spanishmessage)
                                                 } else {
                                                     onSubmit()
                                                 }

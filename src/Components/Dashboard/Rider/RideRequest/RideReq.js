@@ -11,7 +11,7 @@ import { styles } from '../ScheduleBooking/scheduleStyling';
 
 const renderReq = (item, index, acceptBooking, userDetails, getBookingReq, rejectBooking) => {
     const contextType = useContext(LocalizationContext)
-    const { translations } = contextType
+    const { translations, appLanguage } = contextType
     return (
         <View key={index} style={[styles.scheduleCard]}>
             <LinearGradient style={[styles.round, { width: '100%' }]}
@@ -43,7 +43,7 @@ const renderReq = (item, index, acceptBooking, userDetails, getBookingReq, rejec
                     </View>
                     <View style={[styles.row, styles.spaceBtw, { paddingVertical: 10 }]}>
                         <Button transparent onPress={() => {
-                            acceptBooking(userDetails.data.id, userDetails.role_id, item.booking_schedule_id)
+                            acceptBooking(userDetails.data.id, userDetails.role_id, item.booking_schedule_id, appLanguage)
                                 .then((res) => {
                                     getBookingReq(userDetails.data.id)
                                     Alert.alert(translations.ALERT, res.message)
@@ -61,7 +61,7 @@ const renderReq = (item, index, acceptBooking, userDetails, getBookingReq, rejec
                         </Button>
 
                         <Button transparent onPress={() => {
-                            rejectBooking(userDetails.data.id, userDetails.role_id, item.booking_schedule_id)
+                            rejectBooking(userDetails.data.id, userDetails.role_id, item.booking_schedule_id, appLanguage)
                                 .then((res) => {
                                     getBookingReq(userDetails.data.id)
                                     Alert.alert(translations.ALERT, res.message)
@@ -88,7 +88,7 @@ const RideReq = (props) => {
     const { fetching, requests, acceptBooking, userDetails, getBookingReq, rejectBooking } = props
     console.log("requests requests", requests)
     const contextType = useContext(LocalizationContext)
-    const { translations } = contextType
+    const { translations, appLanguage } = contextType
     const onRefresh = () => {
         getBookingReq(userDetails.data.id)
     }
@@ -185,7 +185,7 @@ const RideReq = (props) => {
                     </>}
                     <View style={[styles.row, styles.spaceBtw, { paddingVertical: 10 }]}>
                         <Button transparent onPress={() => {
-                            acceptBooking(userDetails.data.id, userDetails.role_id, item.booking_schedule_id)
+                            acceptBooking(userDetails.data.id, userDetails.role_id, item.booking_schedule_id, appLanguage)
                                 .then((res) => {
                                     getBookingReq(userDetails.data.id)
                                     Alert.alert(translations.ALERT, res.message)
@@ -203,7 +203,7 @@ const RideReq = (props) => {
                         </Button>
 
                         <Button transparent onPress={() => {
-                            rejectBooking(userDetails.data.id, userDetails.role_id, item.booking_schedule_id)
+                            rejectBooking(userDetails.data.id, userDetails.role_id, item.booking_schedule_id, appLanguage)
                                 .then((res) => {
                                     getBookingReq(userDetails.data.id)
                                     Alert.alert(translations.ALERT, res.message)

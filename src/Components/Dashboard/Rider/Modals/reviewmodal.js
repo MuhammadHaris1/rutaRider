@@ -13,7 +13,7 @@ const RenderReviewModal = (props) => {
     const [ratingDescription, setRatingDescription] = useState('')
     const [ratingCount, setRatingCount] = useState(0)
         const contextType = useContext(LocalizationContext)
-        const { translations } = contextType
+        const { translations, appLanguage } = contextType
 
         return (
             <View style={inPageStyles.mainContainer}>
@@ -35,7 +35,7 @@ const RenderReviewModal = (props) => {
                             </View>
                             
                             <TouchableOpacity onPress={() => {
-                                dismissSchedule(props.data.schedule_id)
+                                dismissSchedule(props.data.schedule_id, appLanguage)
                                 .then((res) => {
                                     Alert.alert(translations.ALERT, res.message)
                                     getReviewStatus(userDetails.data.id)
@@ -127,7 +127,7 @@ const RenderReviewModal = (props) => {
                                 <TouchableOpacity
                                     onPress={() => {
                                         console.log( userDetails.data.id, ratingCount, ratingDescription)
-                                        submitScheduleReview(props.data.schedule_id, userDetails.data.id, ratingCount, ratingDescription)
+                                        submitScheduleReview(props.data.schedule_id, userDetails.data.id, ratingCount, ratingDescription, appLanguage)
                                         .then((res) => {
                                             Alert.alert(translations.ALERT, res.message)
                                             getReviewStatus(userDetails.data.id)

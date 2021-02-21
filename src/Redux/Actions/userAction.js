@@ -39,7 +39,7 @@ export function login(data, fetchProfileData, translations, appLanguage) {
               fetchProfileData(response.data)
               console.log('response.data', response.data)
               NavigtionService.navigate('Main')
-              Alert.alert(translations.ALERT, response.data.message)
+              Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
             } catch (error) {
               console.log('error =>', error)
             }
@@ -48,7 +48,7 @@ export function login(data, fetchProfileData, translations, appLanguage) {
             Alert.alert(translations.ALERT, translations.INVALID_EMAIL_PASSWORD)
           }
         } else {
-          Alert.alert(translations.ALERT, response.data.message)
+          Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
         }
       })
       .catch((err) => {
@@ -76,9 +76,9 @@ export function signup(data, translations, appLanguage) {
         console.log("RESPONSE DATA signup", response.data)
         if (response.data.status) {
           NavigtionService.navigate('DriverLogin')
-          Alert.alert(translations.ALERT, response.data.message)
+          Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
         } else {
-          Alert.alert(translations.ALERT, response.data.message)
+          Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
         }
       })
       .catch((err) => {
@@ -111,9 +111,9 @@ export function updateVehicle(data, userId, formData, translations, appLanguage)
             dispatch({ type: "ADD_VEHICLE_PROCESSED", payload: updatedData });
 
             // NavigtionService.navigate('DriverLogin')
-            Alert.alert(translations.ALERT, response.data.message)
+            Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
           } else {
-            Alert.alert(translations.ALERT, response.data.message)
+            Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
           }
         })
         .catch((err) => {
@@ -156,7 +156,7 @@ export function acceptRide(data, rideReqDetails, oldLocation, translations, appL
                   console.log('error =>', error)
                 }
                 dispatch({ type: "ACTIVE_VEHICLE_PROCESSED", payload: obj });
-                resolve({ status: response.data.status, message: response.data.message, userData: userRes.data.data })
+                resolve({ status: response.data.status, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage, userData: userRes.data.data })
 
               })
               .catch((err) => {
@@ -165,7 +165,7 @@ export function acceptRide(data, rideReqDetails, oldLocation, translations, appL
 
             // Alert.alert("Alert", response.data.message)
           } else {
-            Alert.alert(translations.ALERT, response.data.message)
+            Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
           }
         })
         .catch((err) => {
@@ -194,7 +194,7 @@ export function startRide(data, obj, translations, appLanguage) {
             dispatch({ type: "ACTIVE_VEHICLE_PROCESSED", payload: obj });
             resolve({ status: res.data.status })
           } else {
-            Alert.alert(translations.ALERT, res.data.message)
+            Alert.alert(translations.ALERT, appLanguage == "en" ? res.data.message : res.data.spanishmessage)
           }
         })
     })
@@ -214,7 +214,7 @@ export function compeleteRide(data, translations, appLanguage) {
             resolve({ status: res.data.status })
             Alert.alert(translations.ALERT, translations.RIDE_IS_COMPLETED)
           } else {
-            Alert.alert(translations.ALERT, res.data.message)
+            Alert.alert(translations.ALERT, appLanguage == "en" ? res.data.message : res.data.spanishmessage)
           }
 
         })
@@ -230,20 +230,20 @@ export function getHistory(id) {
     formData.append('rider_id', id);
     dispatch({ type: "GET_HISTORY_PROCESSING" });
     axios.post(`${API_ENDPOINT}previousBooking.php`, formData)
-      .then((resposne) => {
-        if (resposne.data.status) {
+      .then((response) => {
+        if (response.data.status) {
           var obj = {
-            status: resposne.data.status,
-            data: [...resposne.data.previousRides, ...resposne.data.previousSchedule]
+            status: response.data.status,
+            data: [...response.data.previousRides, ...response.data.previousSchedule]
           }
-          console.log("HISTORY GET ", resposne.data, formData)
+          console.log("HISTORY GET ", response.data, formData)
           dispatch({ type: "GET_HISTORY_PROCESSED", payload: obj });
 
 
         } else {
-          Alert.alert("Alert", "History not found")
+          // Alert.alert("Alert", "History not found")
           dispatch({ type: "GET_HISTORY_PROCESSED", payload: null });
-          console.log("HISTORY GET ", resposne.data, "False",)
+          console.log("HISTORY GET ", response.data, "False",)
           dispatch({ type: "ERROR", payload: 'An unexpected error occured!' }); dispatch({ type: "CLEAR_PROCESSING" });
 
         }
@@ -309,15 +309,15 @@ export function forgotPassword(formmdata, translations, appLanguage) {
     dispatch({ type: 'RENDER_LOADER' })
     return new Promise((res, rej) => {
       axios.post(`${API_ENDPOINT}forget_password.php`, formmdata)
-        .then((resposne) => {
-          console.log('RSPONSE', resposne)
-          if (resposne.data.status) {
+        .then((response) => {
+          console.log('RSPONSE', response)
+          if (response.data.status) {
             dispatch({ type: "CLEAR_PROCESSING" });
-            res({ status: resposne.data.status, message: resposne.data.message, userId: resposne.data.userId })
+            res({ status: response.data.status, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage, userId: response.data.userId })
           } else {
             dispatch({ type: "CLEAR_PROCESSING" });
-            Alert.alert(translations.ALERT, resposne.data.message)
-            rej({ status: resposne.data.status, message: resposne.data.message })
+            Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
+            rej({ status: response.data.status, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage })
           }
         })
         .catch((err) => {
@@ -334,13 +334,13 @@ export function changePassword(formmdata) {
     dispatch({ type: 'RENDER_LOADER' })
     return new Promise((res, rej) => {
       axios.post(`${API_ENDPOINT}forget_password.php`, formmdata)
-        .then((resposne) => {
-          if (resposne.data.status) {
+        .then((response) => {
+          if (response.data.status) {
             dispatch({ type: "CLEAR_PROCESSING" });
-            res({ status: resposne.data.status, message: resposne.data.message })
+            res({ status: response.data.status, message: response.data.message })
           } else {
             dispatch({ type: "CLEAR_PROCESSING" });
-            rej({ status: resposne.data.status, message: resposne.data.message })
+            rej({ status: response.data.status, message: response.data.message })
           }
         })
         .catch((err) => {
@@ -383,7 +383,7 @@ export function giveRating(formData, translations, appLanguage) {
             resolve({ status: res.data.status })
           } else {
             dispatch({ type: "ERROR", payload: 'An unexpected error occured!' }); dispatch({ type: "CLEAR_PROCESSING" });
-            Alert.alert(translations.ALERT, res.data.message)
+            Alert.alert(translations.ALERT, appLanguage == "en" ? res.data.message : res.data.spanishmessage)
           }
         })
         .catch((err) => {
@@ -425,7 +425,7 @@ export function getEmergencyNumber() {
 // }
 
 
-export function createSchedule(data) {
+export function createSchedule(data, translations, appLanguage) {
   return function (dispatch) {
     dispatch({ type: 'RENDER_LOADER' })
     dispatch({ type: 'CREATE_SCHEDULE_PROCESSING' })
@@ -436,11 +436,11 @@ export function createSchedule(data) {
           if (res.data.status) {
             dispatch({ type: "CLEAR_PROCESSING" });
             dispatch({ type: 'CREATE_SCHEDULE_PROCESSED', payload: res.data })
-            resolve({ status: res.data.status, message: res.data.message })
+            resolve({ status: res.data.status, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage })
           } else {
             dispatch({ type: "CLEAR_PROCESSING" });
             console.log("res.data", res.data)
-            reject({ status: res.data.status, message: res.data.message })
+            reject({ status: res.data.status, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage })
           }
         })
         .catch((err) => {
@@ -488,7 +488,7 @@ export function updateProfile(data, fetchProfileData, translations, appLanguage)
           // console.log("responde UPDATE PROFILE", response)
           // dispatch({ type: "CLEAR_PROCESSING" });
           if (response.data.status === true) {
-            resolve({ status: response.data.status, message: response.data.message })
+            resolve({ status: response.data.status, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage })
             try {
               await AsyncStorage.setItem('User', JSON.stringify(response.data));
               fetchProfileData(response.data)
@@ -496,10 +496,10 @@ export function updateProfile(data, fetchProfileData, translations, appLanguage)
               console.log('error =>', error)
 
             }
-            Alert.alert(translations.ALERT, response.data.message)
+            Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
           } else {
-            resolve({ status: response.data.status, message: response.data.message })
-            Alert.alert(translations.ALERT, response.data.message)
+            resolve({ status: response.data.status, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage })
+            Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
           }
         })
         .catch((err) => {
@@ -594,7 +594,7 @@ export function getBookingReq(id) {
 }
 
 
-export function acceptBooking(riderId, roleId, bookingScheduleId) {
+export function acceptBooking(riderId, roleId, bookingScheduleId, appLanguage) {
   return function (dispatch) {
     var data = new FormData();
     data.append('action', 'accept_booking');
@@ -613,9 +613,9 @@ export function acceptBooking(riderId, roleId, bookingScheduleId) {
       axios(config)
         .then(function (response) {
           if (response.data.status) {
-            resolve({ status: true, message: response.data.message })
+            resolve({ status: true, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage })
           } else {
-            reject({ status: false, message: response.data.message })
+            reject({ status: false, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage })
           }
           console.log(JSON.stringify(response.data));
         })
@@ -628,7 +628,7 @@ export function acceptBooking(riderId, roleId, bookingScheduleId) {
 }
 
 
-export function rejectBooking(riderId, roleId, bookingScheduleId) {
+export function rejectBooking(riderId, roleId, bookingScheduleId, appLanguage) {
   return function (dispatch) {
     var data = new FormData();
     data.append('action', 'reject_booking');
@@ -647,9 +647,9 @@ export function rejectBooking(riderId, roleId, bookingScheduleId) {
       axios(config)
         .then(function (response) {
           if (response.data.status) {
-            resolve({ status: true, message: response.data.message })
+            resolve({ status: true, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage })
           } else {
-            reject({ status: false, message: response.data.message })
+            reject({ status: false, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage })
           }
           console.log(JSON.stringify(response.data));
         })
@@ -685,7 +685,7 @@ export function getScheduleDetail(riderId, sId, translations, appLanguage) {
         } else {
 
           console.log("response.data", response.data, data)
-          Alert.alert(translations.ALERT, response.data.message)
+          Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
           dispatch({ type: "CLEAR_PROCESSING" });
         }
       })
@@ -724,7 +724,7 @@ export function startSchduleRideReminder(sId, translations, appLanguage) {
           } else {
             reject({ status: response.data.status })
             console.log("response.data", response.data, data)
-            Alert.alert(translations.ALERT, response.data.message)
+            Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
             dispatch({ type: "CLEAR_PROCESSING" });
           }
         })
@@ -766,7 +766,7 @@ export function startSchduleRide(sId, translations, appLanguage) {
           } else {
             reject({ status: response.data.status })
             console.log("response.data", response.data, data)
-            Alert.alert(translations.ALERT, response.data.message)
+            Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
             dispatch({ type: "CLEAR_PROCESSING" });
           }
         })
@@ -807,7 +807,7 @@ export function completeSchduleRide(sId, translations, appLanguage) {
           } else {
             reject({ status: response.data.status })
             console.log("response.data", response.data, data)
-            Alert.alert(translations.ALERT, response.data.message)
+            Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
             dispatch({ type: "CLEAR_PROCESSING" });
           }
         })
@@ -849,7 +849,7 @@ export function getReviewStatus(id) {
 }
 
 
-export function submitScheduleReview(sId, userId, rating, comment) {
+export function submitScheduleReview(sId, userId, rating, comment, appLanguage) {
   return function (dispatch) {
     dispatch({ type: "SUBMIT_SCHEDULE_REVIEW_PROCESSING" })
     var data = new FormData();
@@ -866,10 +866,10 @@ export function submitScheduleReview(sId, userId, rating, comment) {
         .then((res) => {
           console.log("SUBMIT_SCHEDULE_REVIEW res.data", res.data)
           if (res.data.status) {
-            resolve({ status: res.data.status, message: res.data.message })
+            resolve({ status: res.data.status, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage })
             dispatch({ type: "SUBMIT_SCHEDULE_REVIEW_PROCESSED", payload: res.data.data });
           } else {
-            reject({ status: res.data.status, message: res.data.message })
+            reject({ status: res.data.status, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage })
             dispatch({ type: "CLEAR_PROCESSING" });
           }
         })
@@ -886,7 +886,7 @@ export function submitScheduleReview(sId, userId, rating, comment) {
 
 
 
-export function dismissSchedule(sId, userId) {
+export function dismissSchedule(sId, appLanguage) {
   return function (dispatch) {
     dispatch({ type: "DISMISS_SCHEDULE_PROCESSING" })
     var data = new FormData();
@@ -899,10 +899,10 @@ export function dismissSchedule(sId, userId) {
         .then((res) => {
           console.log("DISMISS_SCHEDULE res.data", res.data)
           if (res.data.status) {
-            resolve({ status: res.data.status, message: res.data.message })
+            resolve({ status: res.data.status, message: appLanguage == "en" ? res.data.message : res.data.spanishmessage })
             dispatch({ type: "DISMISS_SCHEDULE_PROCESSED", payload: res.data.data });
           } else {
-            reject({ status: res.data.status, message: res.data.message })
+            reject({ status: res.data.status, message: appLanguage == "en" ? res.data.message : res.data.spanishmessage })
             dispatch({ type: "CLEAR_PROCESSING" });
           }
         })
@@ -938,13 +938,13 @@ export function deleteSchdule(sId, riderId, translations, appLanguage) {
         .then(async function (response) {
           if (response.data.status) {
             await NavigtionService.navigate("ScheduleBooking")
-            Alert.alert(translations.ALERT, response.data.message)
+            Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
             dispatch({ type: 'GET_SCHEDULE_PROCESSED', payload: response.data.data })
-            resolve({ status: response.data.status, message: response.data.message })
+            resolve({ status: response.data.status, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage })
             // dispatch({type: "FETCHING_SCHEDULE_DETAIL_PROCESSED", payload: response.data })
           } else {
-            Alert.alert(translations.ALERT, response.data.message)
-            reject({ status: response.data.status, message: response.data.message })
+            Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
+            reject({ status: response.data.status, message: appLanguage == "en" ? response.data.message : response.data.spanishmessage })
             console.log("response.data", response.data, data)
             dispatch({ type: "CLEAR_PROCESSING" });
           }
