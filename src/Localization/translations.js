@@ -168,7 +168,11 @@ const translations = {
     TYPE: "Type",
     CURRENT_LOCATION: "Current Location",
     AVAILABLE_SEATS: "Available Seats",
-    NO_OF_SEATS: "No of seat"
+    NO_OF_SEATS: "No of seat",
+    UPLOAD_RIDER_PICTURE: "Upload rider picture",
+    MODEL: "Model",
+    REGISTRATION_NUMBER: "Registration Number",
+    SWITCH_LANGUAGE: "Switch Language"
   },
   ar: {
     LANGUAGE_SETTINGS: 'تغيير اللغة',
@@ -338,7 +342,11 @@ const translations = {
     TYPE: "Escribe",
     CURRENT_LOCATION: "Ubicación actual",
     AVAILABLE_SEATS: "Asientos disponibles",
-    NO_OF_SEATS: "No de asiento"
+    NO_OF_SEATS: "No de asiento",
+    UPLOAD_RIDER_PICTURE: "subir foto de piloto",
+    MODEL: "Modelo",
+    REGISTRATION_NUMBER: "Número de registro",
+    SWITCH_LANGUAGE: "Cambiar de idioma"
   },
 };
 

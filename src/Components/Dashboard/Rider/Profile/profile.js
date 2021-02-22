@@ -16,7 +16,7 @@ import RenderReviewModal from '../Modals/reviewmodal'
 import Pusher from 'pusher-js/react-native'
 import pusherConfig from '../../../../Constant/pusher.json'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import {Picker} from '@react-native-community/picker';
+import { Picker } from '@react-native-community/picker';
 
 import messaging from '@react-native-firebase/messaging';
 // import ImagePicker from 'react-native-image-picker'
@@ -56,11 +56,12 @@ class Profile extends React.Component {
             addVehicle: false,
             name: '',
             colour: '',
-            model:'2020',
+            model: '2020',
             refreshing: false,
             brand: 'Zotye',
             addPayment: false,
             imageArr: [],
+            riderImage: null,
             totalSeats: '',
             experience: ''
         }
@@ -78,7 +79,7 @@ class Profile extends React.Component {
         this.userChannel.bind('ride-accepted', (e) => {
             console.log("NEW ride-accepted'", e)
         })
-        
+
         this.userChannel.bind('schedule-ride-completed', (e) => {
             console.log('schedule-ride-completed', e)
             this.onRefresh()
@@ -92,7 +93,7 @@ class Profile extends React.Component {
 
 
     componentDidMount = () => {
-        const { userDetails, getHistory, getPaymentDetails, getEmergencyNumber, getSchedule, getNotification, getBookingReq, getReviewStatus } = this.props        
+        const { userDetails, getHistory, getPaymentDetails, getEmergencyNumber, getSchedule, getNotification, getBookingReq, getReviewStatus } = this.props
         getHistory(userDetails.data.id)
         getEmergencyNumber()
         getPaymentDetails(userDetails.data.id)
@@ -106,34 +107,34 @@ class Profile extends React.Component {
             this.setState({ selectedImage: this.state.carImages[0], addVehicle: true })
         }
 
-        
+
         messaging()
-        .onMessage(async (remoteMessage) => {
-            showMessage({
-                message: remoteMessage.notification.title,
-                description: remoteMessage.notification.body,
-                type: 'none',
-                duration: 3500,
-                onPress: () => {
-                    console.log("Notification caused app onMessage onPress")
-                    this.props.navigation.navigate('RideReq')
-                }
+            .onMessage(async (remoteMessage) => {
+                showMessage({
+                    message: remoteMessage.notification.title,
+                    description: remoteMessage.notification.body,
+                    type: 'none',
+                    duration: 3500,
+                    onPress: () => {
+                        console.log("Notification caused app onMessage onPress")
+                        this.props.navigation.navigate('RideReq')
+                    }
                 });
-            console.log("Notification caused app onMessage", remoteMessage)
-            
-        })
+                console.log("Notification caused app onMessage", remoteMessage)
+
+            })
         // if(!userDetails.data.card_details){
         //     this.setState({
         //         addPayment: true
         //     })
         // }
-        
+
     }
 
 
     openGallery = () => {
-        const {imageArr} = this.state
-        this.setState({imageArr : []})
+        const { imageArr } = this.state
+        this.setState({ imageArr: [] })
         // ImagePicker.showImagePicker(options, (response) => {
         //     console.log('Response = ', response);
 
@@ -160,7 +161,7 @@ class Profile extends React.Component {
         ImagePicker.openPicker({
             multiple: true,
             mediaType: "photo"
-          }).then(images => {
+        }).then(images => {
             // console.log('images =>' , images, images[0].filename);
             for (let index = 0; index < images.length; index++) {
                 var path = images[index].path
@@ -172,17 +173,37 @@ class Profile extends React.Component {
                     type: 'image/png'
                 }
                 imageArr.push(file)
-                this.setState({imageArr})
-                
+                this.setState({ imageArr })
+
             }
-          });
+        });
+    }
+
+
+    riderOpenGallery = () => {
+        const { riderImage } = this.state
+        ImagePicker.openPicker({
+            multiple: false,
+            mediaType: "photo"
+        }).then(images => {
+            
+                var path = images.path
+                let filename = path.substring(path.lastIndexOf('/') + 1, path.length)
+                var file = {
+                    uri: path,
+                    name: filename,
+                    type: 'image/png'
+                }
+                console.log("FILE", file)
+                this.setState({ riderImage: file })
+        });
     }
 
     addAndEditVehicle = () => {
-        const { model, licenseNumber, nicNumber, fileName, experience , colour, name, brand, imageArr, totalSeats} = this.state
+        const { model, licenseNumber, nicNumber, fileName, experience, colour, name, brand, imageArr, totalSeats, riderImage } = this.state
         const { userDetails, updateVehicle } = this.props
 
-        userDetails.data.vehicle = { ...userDetails.data.vehicle, model, license: licenseNumber , colour, name}
+        userDetails.data.vehicle = { ...userDetails.data.vehicle, model, license: licenseNumber, colour, name }
 
         console.log(userDetails)
 
@@ -191,7 +212,7 @@ class Profile extends React.Component {
         //     name: fileName,
         //     type: 'image/png'
         // }
-        var extractModal = model.replace(',','')
+        var extractModal = model.replace(',', '')
 
         const formData = new FormData()
         formData.append('action', 'addVehicle');
@@ -203,6 +224,7 @@ class Profile extends React.Component {
         formData.append('colour', colour);
         formData.append('seats', totalSeats);
         formData.append('experience', experience);
+        formData.append('riderImage', riderImage);
 
 
         for (let index = 0; index < imageArr.length; index++) {
@@ -212,18 +234,18 @@ class Profile extends React.Component {
         // console.log('Model', extractModal)
 
 
-        if (model && licenseNumber && nicNumber && imageArr.length >= 1 && name && colour && brand && totalSeats) {
-            if(Number(extractModal) >= 2010) {
+        if (model && licenseNumber && nicNumber && imageArr.length >= 1 && riderImage && name && colour && brand && totalSeats) {
+            if (Number(extractModal) >= 2010) {
                 console.log('FORMDATA', formData)
                 updateVehicle(userDetails, userDetails.data.id, formData)
-                .then((res) => {
-                    if(res.status) {
-                        this.setState({
-                            addVehicle: false
-                        })
-                    }
-                })
-            }else{
+                    .then((res) => {
+                        if (res.status) {
+                            this.setState({
+                                addVehicle: false
+                            })
+                        }
+                    })
+            } else {
                 Alert.alert("Alert", "Model should be newer from 2010")
             }
         } else {
@@ -234,7 +256,7 @@ class Profile extends React.Component {
     renderModal = () => {
         const { translations } = this.context
         const { modalVisible } = this.state
-        const {profileData} = this.props.screenProps
+        const { profileData } = this.props.screenProps
         console.log(' this.state.selectedImage', this.props.userDetails)
         return (
             <View style={{ flex: 1, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
@@ -253,7 +275,7 @@ class Profile extends React.Component {
                                 </TouchableOpacity>
 
                                 <View>
-                                    <Text style={{ textAlign: 'center', color: '#fff', fontSize: 25 }}>Vehicle View</Text>
+                                    <Text style={{ textAlign: 'center', color: '#fff', fontSize: 25 }}>{translations.VIEW_VEHICLE}</Text>
                                 </View>
                             </View>
 
@@ -282,52 +304,52 @@ class Profile extends React.Component {
                             </View> */}
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#3A91FA', width: "100%", padding: 5, marginTop: 10 }}>
-                                <Text style={{ color: '#fff' , width:'50%', textAlign:'center'}}>
+                                <Text style={{ color: '#fff', width: '50%', textAlign: 'center' }}>
                                     {translations.VIHICLE_NAME}
-                                    </Text>
+                                </Text>
 
-                                <Text style={{ color: '#fff' , width:'50%', textAlign:'center'}}>
-                                      {profileData.data.vehicle.name}
-                                    </Text>
+                                <Text style={{ color: '#fff', width: '50%', textAlign: 'center' }}>
+                                    {profileData.data.vehicle.name}
+                                </Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'transparent', width: "100%", padding: 5, marginTop: 10 }}>
-                                <Text style={{ color: '#fff', width:'50%', textAlign:'center' }}>
+                                <Text style={{ color: '#fff', width: '50%', textAlign: 'center' }}>
                                     {translations.VIHICLE_COLOUR}
-                                    </Text>
+                                </Text>
 
-                                <Text style={{ color: '#fff', width:'50%', textAlign:'center' }}>
+                                <Text style={{ color: '#fff', width: '50%', textAlign: 'center' }}>
                                     {profileData.data.vehicle.colour}
                                 </Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#3A91FA', width: "100%", padding: 5, marginTop: 10 }}>
-                                <Text style={{ color: '#fff', width:'50%', textAlign:'center' }}>
-                                    Model
+                                <Text style={{ color: '#fff', width: '50%', textAlign: 'center' }}>
+                                    {translations.MODEL}
                                     </Text>
 
-                                <Text style={{ color: '#fff', width:'50%', textAlign:'center' }}>
+                                <Text style={{ color: '#fff', width: '50%', textAlign: 'center' }}>
                                     {profileData.data.vehicle.model}
-                                 </Text>
+                                </Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'transparent', width: "100%", padding: 5, marginTop: 10 }}>
-                                <Text style={{ color: '#fff', width:'50%', textAlign:'center' }}>
-                                    Registration Number
+                                <Text style={{ color: '#fff', width: '50%', textAlign: 'center' }}>
+                                    {translations.REGISTRATION_NUMBER}
                                     </Text>
 
-                                <Text style={{ color: '#fff', width:'50%', textAlign:'center' }}>
+                                <Text style={{ color: '#fff', width: '50%', textAlign: 'center' }}>
                                     {profileData.data.vehicle.reg_number}
                                 </Text>
                             </View>
 
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#3A91FA', width: "100%", padding: 5, marginTop: 10 }}>
-                                <Text style={{ color: '#fff', width:'50%', textAlign:'center' }}>
-                                    License Number
+                                <Text style={{ color: '#fff', width: '50%', textAlign: 'center' }}>
+                                   {translations.LISCENSE_NUMBER}
                                     </Text>
 
-                                <Text style={{ color: '#fff', width:'50%', textAlign:'center' }}>
+                                <Text style={{ color: '#fff', width: '50%', textAlign: 'center' }}>
                                     {profileData.data.vehicle.license}
                                 </Text>
                             </View>
@@ -342,11 +364,11 @@ class Profile extends React.Component {
 
     renderAddVehicle = () => {
         const { translations } = this.context
-        const { addVehicle, imageArr } = this.state
+        const { addVehicle, imageArr, riderImage } = this.state
         console.log("IMAGEARR", imageArr)
         const year = (new Date()).getFullYear();
-        const years = Array.from(new Array(11),( val, index) => year - index);
-        var brands = ["Zotye", "Volvo", "Tata","Ssang Young", "Soueast","Skoda","Renault","BMW","Daewoo","Ford","Holden","Honda","Hyundai","Isuzu","Kia","Lexus","Mazda", "Mitsubishi","Nissan","Peugeot","Subaru","Suzuki","Toyota","Volkswagen","other"] 
+        const years = Array.from(new Array(11), (val, index) => year - index);
+        var brands = ["Zotye", "Volvo", "Tata", "Ssang Young", "Soueast", "Skoda", "Renault", "BMW", "Daewoo", "Ford", "Holden", "Honda", "Hyundai", "Isuzu", "Kia", "Lexus", "Mazda", "Mitsubishi", "Nissan", "Peugeot", "Subaru", "Suzuki", "Toyota", "Volkswagen", "other"]
         return (
             <View style={{ flex: 1, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
                 <Modal
@@ -357,137 +379,168 @@ class Profile extends React.Component {
                         BackHandler.exitApp()
                     }}
                 >
-                    <View style={{ backgroundColor: 'rgb(41, 46, 66)', flex: 1, justifyContent: 'center', alignItems: 'center', height:'100%'}}>
+                    <View style={{ backgroundColor: 'rgb(41, 46, 66)', flex: 1, justifyContent: 'center', alignItems: 'center', height: '100%' }}>
 
-                    <ScrollView style={{width:'100%'}}>
+                        <ScrollView style={{ width: '100%' }}>
 
-                    
 
-                        <View style={{  justifyContent: 'center', alignContent: 'center', padding: 15, width: '100%', borderRadius: 10, height: '100%', marginTop:'20%' }}>
 
-                            <View>
-                                <Text style={{ alignSelf: 'center', fontWeight: 'bold', color: '#fff', fontSize: 20 }}>
-                                    Add Vehicle Details
+                            <View style={{ justifyContent: 'center', alignContent: 'center', padding: 15, width: '100%', borderRadius: 10, height: '100%', marginTop: '20%' }}>
+
+                                <View>
+                                    <Text style={{ alignSelf: 'center', fontWeight: 'bold', color: '#fff', fontSize: 20 }}>
+                                        Add Vehicle Details
                                     </Text>
-                            </View>
-
-                            <View style={{ alignItems: 'center', height:'100%' }}>
-
-                                <View>
-                                    <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ name: e })} placeholder={translations.VIHICLE_NAME} />
-                                    </Item>
                                 </View>
 
-                                <View>
-                                    <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ colour: e })} placeholder={translations.VIHICLE_COLOUR} />
-                                    </Item>
-                                </View>
+                                <View style={{ alignItems: 'center', height: '100%' }}>
 
-                                <View style={{borderRadius: 30, borderColor: '#3A91FA', borderWidth: 1, marginTop:'2%',}}>
-                                    <Picker
-                                        selectedValue={this.state.model}
-                                        style={{height: 50, width: wp(75), color:'#fff'}}
-                                        onValueChange={(itemValue, itemIndex) =>
-                                            this.setState({model: itemValue})
-                                        }>
-                                        {years.map((val, ind) => {
-                                            // console.log("STRING", val, typeof val)
-                                            return(
-                                                <Picker.Item color="#000" key={ind} label={val.toString()} value={val.toLocaleString()} />
-                                            )
-                                        })}
+                                    <View>
+                                        <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
+                                            <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ name: e })} placeholder={translations.VIHICLE_NAME} />
+                                        </Item>
+                                    </View>
+
+                                    <View>
+                                        <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
+                                            <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ colour: e })} placeholder={translations.VIHICLE_COLOUR} />
+                                        </Item>
+                                    </View>
+
+                                    <View style={{ borderRadius: 30, borderColor: '#3A91FA', borderWidth: 1, marginTop: '2%', }}>
+                                        <Picker
+                                            selectedValue={this.state.model}
+                                            style={{ height: 50, width: wp(75), color: '#fff' }}
+                                            onValueChange={(itemValue, itemIndex) =>
+                                                this.setState({ model: itemValue })
+                                            }>
+                                            {years.map((val, ind) => {
+                                                // console.log("STRING", val, typeof val)
+                                                return (
+                                                    <Picker.Item color="#000" key={ind} label={val.toString()} value={val.toLocaleString()} />
+                                                )
+                                            })}
                                         </Picker>
 
-                                </View>
+                                    </View>
 
-                                <View style={{borderRadius: 30, borderColor: '#3A91FA', borderWidth: 1, marginTop:'2%',}}>
-                                    <Picker
-                                        selectedValue={this.state.brand}
-                                        style={{height: 50, width: wp(75), color:'#fff'}}
-                                        onValueChange={(itemValue, itemIndex) =>
-                                            this.setState({brand: itemValue})
-                                        }>
-                                        {brands.map((val, ind) => {
-                                            // console.log("STRING", val, typeof val)
-                                            return(
-                                                <Picker.Item color="#000" key={ind} label={val.toString()} value={val.toLocaleString()} />
-                                            )
-                                        })}
+                                    <View style={{ borderRadius: 30, borderColor: '#3A91FA', borderWidth: 1, marginTop: '2%', }}>
+                                        <Picker
+                                            selectedValue={this.state.brand}
+                                            style={{ height: 50, width: wp(75), color: '#fff' }}
+                                            onValueChange={(itemValue, itemIndex) =>
+                                                this.setState({ brand: itemValue })
+                                            }>
+                                            {brands.map((val, ind) => {
+                                                // console.log("STRING", val, typeof val)
+                                                return (
+                                                    <Picker.Item color="#000" key={ind} label={val.toString()} value={val.toLocaleString()} />
+                                                )
+                                            })}
                                         </Picker>
 
+                                    </View>
+
+                                    <View>
+                                        <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
+                                            <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ licenseNumber: e })} placeholder='License Number' />
+                                        </Item>
+                                    </View>
+
+                                    <View>
+                                        <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
+                                            <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ nicNumber: e })} placeholder={translations.CAR_NUMBER} />
+                                        </Item>
+                                    </View>
+
+                                    <View>
+                                        <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
+                                            <Input keyboardType="number-pad" style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ totalSeats: e })} placeholder={translations.TOTAL_SEATS_IN_CAR} />
+                                        </Item>
+                                    </View>
+
+                                    <View>
+                                        <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
+                                            <Input keyboardType="number-pad" style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ experience: e })} placeholder={translations.ENTER_YOUR_EXPERIENCE_IN_YEARS} />
+                                        </Item>
+                                    </View>
+
+
+                                    <TouchableOpacity onPress={this.openGallery}>
+                                        <Item onPress={this.openGallery} rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
+                                            <Input style={{ color: '#fff' }} disabled value={this.state.fileName} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ email: e })} placeholder={translations.UPLOAD_YOUR_VEHICLE_PAPERS} />
+                                        </Item>
+                                    </TouchableOpacity >
+
+                                    {imageArr.length >= 1 &&
+                                        <View style={{ height: 220, width: "98%", alignSelf: 'center', justifyContent: 'flex-start' }}>
+                                            <FlatList
+                                                horizontal
+                                                showsHorizontalScrollIndicator={false}
+                                                data={imageArr}
+                                                extraData={this.state}
+                                                renderItem={({ item, index }) => {
+                                                    console.log("item.uri => ", item)
+                                                    return (
+                                                        <View style={{ padding: 20 }}>
+                                                            <TouchableOpacity onPress={() => {
+                                                                imageArr.splice(index, 1)
+                                                                this.setState({ imageArr })
+                                                                console.log("func Called")
+                                                            }}>
+                                                                <Image source={require('../../../../../assets/close.png')} style={{ ...styles.imgIcon }} />
+                                                            </TouchableOpacity>
+                                                            <Image source={{ uri: item.uri }} style={{ height: 200, width: 240, borderRadius: 10, overflow: 'visible' }} />
+                                                        </View>
+                                                    )
+                                                }}
+                                            />
+                                        </View>
+                                    }
+
+                                    <TouchableOpacity onPress={this.riderOpenGallery}>
+                                        <Item onPress={this.riderOpenGallery} rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
+                                            <Input style={{ color: '#fff' }} disabled value={this.state.fileName} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ email: e })} placeholder={translations.UPLOAD_RIDER_PICTURE} />
+                                        </Item>
+                                    </TouchableOpacity >
+
+                                    {riderImage !== null &&
+                                        <View style={{ height: 220, width: "98%", alignSelf: 'center', justifyContent: 'flex-start' }}>
+                                            <FlatList
+                                                horizontal
+                                                showsHorizontalScrollIndicator={false}
+                                                data={[riderImage]}
+                                                extraData={this.state}
+                                                renderItem={({ item, index }) => {
+                                                    console.log("item.uri => ", item)
+                                                    return (
+                                                        <View style={{ padding: 20 }}>
+                                                            <TouchableOpacity onPress={() => {
+                                                                this.setState({ riderImage: null })
+                                                                console.log("func Called")
+                                                            }}>
+                                                                <Image source={require('../../../../../assets/close.png')} style={{ ...styles.imgIcon }} />
+                                                            </TouchableOpacity>
+                                                            <Image source={{ uri: item.uri }} style={{ height: 200, width: 240, borderRadius: 10, overflow: 'visible' }} />
+                                                        </View>
+                                                    )
+                                                }}
+                                            />
+                                        </View>
+                                    }
+
+                                    <View>
+                                        <Button onPress={() => {
+                                            this.addAndEditVehicle()
+                                        }} style={{ width: '80%', marginVertical: '10%', borderColor: '#3A91FA', backgroundColor: '#3A91FA' }} full rounded>
+                                            <Text style={{ color: '#fff' }}>
+                                                {translations.SAVE}
+                                            </Text>
+                                        </Button>
+                                    </View>
                                 </View>
 
-                                <View>
-                                    <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input  style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ licenseNumber: e })} placeholder='License Number' />
-                                    </Item>
-                                </View>
 
-                                <View>
-                                    <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ nicNumber: e })} placeholder={translations.CAR_NUMBER} />
-                                    </Item>
-                                </View>
-
-                                <View>
-                                    <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input keyboardType="number-pad" style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ totalSeats: e })} placeholder={translations.TOTAL_SEATS_IN_CAR} />
-                                    </Item>
-                                </View>
-
-                                <View>
-                                    <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input keyboardType="number-pad" style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ experience: e })} placeholder={translations.ENTER_YOUR_EXPERIENCE_IN_YEARS} />
-                                    </Item>
-                                </View>
-
-
-                                <TouchableOpacity onPress={this.openGallery}>
-                                    <Item onPress={this.openGallery} rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                        <Input style={{ color: '#fff' }} disabled value={this.state.fileName} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ email: e })} placeholder={translations.UPLOAD_YOUR_VEHICLE_PAPERS} />
-                                    </Item>
-                                </TouchableOpacity >
-
-                                {imageArr.length >= 1 && 
-                                <View style={{height: 220, width: "98%", alignSelf:'center', justifyContent:'flex-start'}}>
-                                    <FlatList 
-                                    horizontal
-                                    showsHorizontalScrollIndicator={false}
-                                    data={imageArr}
-                                    extraData={this.state}
-                                    renderItem={({item, index}) => {
-                                        console.log("item.uri => ", item)
-                                        return(
-                                            <View style={{padding:20}}>
-                                                <TouchableOpacity onPress={() => {
-                                                    imageArr.splice(index, 1)
-                                                    this.setState({imageArr})
-                                                    console.log("func Called")
-                                                }}>
-                                                    <Image source={require('../../../../../assets/close.png')} style={{...styles.imgIcon}} />
-                                                </TouchableOpacity>
-                                                <Image source={{uri: item.uri}} style={{height: 200, width: 240, borderRadius: 10, overflow:'visible'}} />
-                                            </View>
-                                        )
-                                    }}
-                                    />
-                                </View>
-                                }
-
-                                <View>
-                                    <Button  onPress={() => {
-                                        this.addAndEditVehicle()
-                                    }} style={{ width: '80%', marginVertical: '10%', borderColor: '#3A91FA', backgroundColor:'#3A91FA' }} full rounded>
-                                        <Text style={{ color: '#fff' }}>
-                                            {translations.SAVE}
-                                    </Text>
-                                    </Button>
-                                </View>
-                            </View>
-
-                        
 
                             </View>
                         </ScrollView>
@@ -499,11 +552,11 @@ class Profile extends React.Component {
     }
 
 
-    
+
 
 
     onRefresh = () => {
-        const { userDetails, getHistory, getUserDetail, getPaymentDetails, getEmergencyNumber, getSchedule, getNotification, getBookingReq, getReviewStatus  } = this.props
+        const { userDetails, getHistory, getUserDetail, getPaymentDetails, getEmergencyNumber, getSchedule, getNotification, getBookingReq, getReviewStatus } = this.props
         this.setState({ refreshing: true })
         // getHistory(userDetails.data.id)
         getUserDetail(userDetails.data.id)
@@ -525,9 +578,9 @@ class Profile extends React.Component {
     render() {
         const { translations } = this.context
         const { userDetails, paymentDetail, reviewStastus } = this.props
-        const {addPayment} = this.state
+        const { addPayment } = this.state
         var rating = Number(userDetails.data.rider_schedule_rating)
-        console.log('Number(userDetails.data.trips) + Number(userDetails.data.rider_schedule_count)', Number(userDetails.data.trips) , Number(userDetails.data.rider_schedule_count), userDetails.data)
+        console.log('Number(userDetails.data.trips) + Number(userDetails.data.rider_schedule_count)', Number(userDetails.data.trips), Number(userDetails.data.rider_schedule_count), userDetails.data)
         return (
             <View style={{ flex: 1 }}>
                 <ImageBackground source={profileBack} style={{ height: "100%", width: '102%', flex: 1, right: 5 }}>
@@ -550,22 +603,22 @@ class Profile extends React.Component {
                             <View style={{ marginTop: hp(10), flexDirection: 'row', alignSelf: 'center', left: wp(10) }}>
 
                                 <Avatar
-                                    accessory={{style:{top: '80%', left: 0}}}
+                                    accessory={{ style: { top: '80%', left: 0 } }}
                                     showAccessory
                                     onAccessoryPress={() => {
-                                        
+
                                         // this.props.navigation.navigate('EditProfile')
                                     }}
                                     containerStyle={{ borderWidth: 15, borderColor: '#fff', borderRadius: 100, }}
                                     size="xlarge"
                                     rounded
-                                    source={{ uri: userDetails.data.image ? "https://hnh6.xyz/route/public/profile_pics/"+userDetails.data.image : defaultAvatar  }}
+                                    source={{ uri: userDetails.data.image ? "https://hnh6.xyz/route/public/profile_pics/" + userDetails.data.image : defaultAvatar }}
                                 />
 
                                 <TouchableOpacity onPress={() => this.setState({ modalVisible: true, })} style={{ top: 110 }}>
                                     <Text style={{
                                         color: '#fff', textDecorationLine: 'underline',
-                                        fontFamily: Platform.OS === "android" ? 'Auckland Free': null
+                                        fontFamily: Platform.OS === "android" ? 'Auckland Free' : null
                                     }}>
                                         View Vehicle
                                     </Text>
@@ -600,8 +653,8 @@ class Profile extends React.Component {
                                     <View style={{ height: 2, backgroundColor: '#3A91FA', width: '80%', alignSelf: 'center', marginVertical: hp(2) }} />
 
                                     <View style={{ marginVertical: hp(1) }}>
-                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{userDetails.data.vehicle && userDetails.data.vehicle.experience} Years</Text>
-                                        <Text style={{ color: '#fff', textAlign: 'center' }}>Experience</Text>
+                                        <Text style={{ color: '#fff', textAlign: 'center' }}>{userDetails.data.vehicle && userDetails.data.vehicle.experience} {translations.YEARS_OF_EXPERIENCE}</Text>
+                                        {/* <Text style={{ color: '#fff', textAlign: 'center' }}>Experience</Text> */}
                                     </View>
                                 </View>
 

@@ -192,7 +192,7 @@ function DrawerMenu(props) {
                             </View>
 
                             <View style={{ marginLeft: 20 }}>
-                                <Text style={styles.menuItemText}>{"Switch Language"}</Text>
+                                <Text style={styles.menuItemText}>{translations.SWITCH_LANGUAGE}</Text>
                             </View>
                         </TouchableOpacity>
 

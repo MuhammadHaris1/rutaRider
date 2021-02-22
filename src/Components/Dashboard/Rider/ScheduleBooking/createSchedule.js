@@ -15,6 +15,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import { ScrollView } from 'react-native-gesture-handler'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
 import { LocalizationContext } from '../../../../Localization/LocalizationContext'
+import { Keyboard } from 'react-native'
 const GOOGLE_MAPS_APIKEY = 'AIzaSyChHCc-8IkHyZIeHzhGomiY7sBo3fLlzak';
 
 
@@ -33,7 +34,29 @@ const CreateSchedule = (props) => {
     const [date, setDate] = useState('')
     const [price, setPrice] = useState('')
     const [seat, setSeat] = useState('')
+    const [keyboardOpen, setKeyboardOpen] = useState(false)
     // const [mapRef, setMapRef] = useState(null)
+
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+          'keyboardDidShow',
+          () => {
+            setKeyboardOpen(true); // or some other action
+          }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+          'keyboardDidHide',
+          () => {
+            setKeyboardOpen(false); // or some other action
+          }
+        );
+    
+        return () => {
+          keyboardDidHideListener.remove();
+          keyboardDidShowListener.remove();
+        };
+      }, []);
 
     const [focusedlocation, setFocusLocation] = useState({
         latitude: 0,
@@ -80,6 +103,7 @@ const CreateSchedule = (props) => {
     const onClosed = () => {
         setVisible(false)
         setType('')
+        Keyboard.dismiss()
     }
 
 
@@ -124,6 +148,8 @@ const CreateSchedule = (props) => {
             }
         }
 
+
+        Keyboard.dismiss()
     }
 
     const onSubmit = () => {
@@ -192,6 +218,7 @@ const CreateSchedule = (props) => {
                 mode={mode}
                 onConfirm={handleConfirm}
                 // onChange={(e) => console.log("e e e", e)}
+                display={"spinner"}
                 onCancel={hideDatePicker}
             />
 
@@ -241,7 +268,7 @@ const CreateSchedule = (props) => {
 
             {/* <ImageBackground style={styles.backroundImage} source={require('../../../../../assets/welcome2.png')}> */}
             <LinearGradient colors={['#537EA8', '#395468']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
-                style={{ ...styles.container, marginTop: heightPercentageToDP(60) }}>
+                style={{ ...styles.container, marginTop: keyboardOpen ? heightPercentageToDP(45) : heightPercentageToDP(60) }}>
 
                 <ScrollView>
                     <View style={[styles.container]}>
