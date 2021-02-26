@@ -27,7 +27,7 @@ class DriverSignup extends React.Component {
             lname:'',
             email:'',
             password: '',
-            phone:'',
+            phone:'593',
             model:'',
             licenseNumber: '',
             nicNumber: '',
