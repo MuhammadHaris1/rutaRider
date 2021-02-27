@@ -72,14 +72,14 @@ const ViewScheduleDetail = (props) => {
         console.log(id)
         const formData = new FormData();
         formData.append("action", "checkTransaction")
-        formData.append("transaction_id", id)
+        formData.append("schedule_id", id)
         try {
             let response = await Axios.post(`${API_ENDPOINT}transactions.php`, formData)
 
             console.log("check transaction", response)
-            // onRefresh()
+            onRefresh()
             if (response.status == 200) {
-                Alert.alert("message", response.data.transactions[0].transaction.message)
+                Alert.alert("message", response.data.message)
             }
         } catch (error) {
             console.log(error)
@@ -102,7 +102,7 @@ const ViewScheduleDetail = (props) => {
                             {schduleDetail.user_data ?
                                 <>
                                     <View style={[styles.itemContainer, styles.row, styles.spaceBtw]}>
-                                        {[translations.NAME, translations.NO_OF_SEATS, ""].map((val, ind) => {
+                                        {[translations.NAME, translations.NO_OF_SEATS, translations.PHONE].map((val, ind) => {
                                             return <Text key={ind} style={[styles.whiteBoldTxt, { letterSpacing: 0, textAlign: 'center' }]}>{val}</Text>
                                         })}
                                     </View>
@@ -115,7 +115,7 @@ const ViewScheduleDetail = (props) => {
                                                     <Text style={styles.whiteNormalTxt}>{value.first_name} {value.last_name}</Text>
                                                     <Text style={styles.whiteNormalTxt}>{value.seat}</Text>
                                                     <View style={[styles.row, styles.spaceBtw]}>
-                                                        {/* <TouchableOpacity onPress={() => {
+                                                        <TouchableOpacity onPress={() => {
                                                             Linking.openURL(`tel:${converted}`)
                                                         }} style={{ height: 35, width: 35, borderRadius: 100, alignItems: 'center' }}>
                                                             <Image source={phoneImg} style={{ height: 18, width: 18, top: 5 }} />
@@ -124,8 +124,8 @@ const ViewScheduleDetail = (props) => {
                                                             Linking.openURL(`whatsapp://send?text=hello&phone=${converted}`)
                                                         }} style={{ height: 35, width: 35, borderRadius: 100, alignItems: 'center' }}>
                                                             <Image source={whatsapp} style={{ height: 20, width: 20, top: 5 }} />
-                                                        </TouchableOpacity> */}
-                                                        <OptionsMenu
+                                                        </TouchableOpacity>
+                                                        {/* <OptionsMenu
                                                             customButton={myIcon}
                                                             destructiveIndex={1}
                                                             customButtonStyle={{ marginLeft: 30 }}
@@ -142,7 +142,7 @@ const ViewScheduleDetail = (props) => {
                                                                         checkTransaction(value.txn_id)
                                                                     }
                                                                 ]}
-                                                        />
+                                                        /> */}
                                                     </View>
                                                 </View>
                                             )
@@ -232,17 +232,18 @@ const ViewScheduleDetail = (props) => {
                                     <View style={styles.itemContainer}>
                                         {!props.fetching ?
                                             <>
-                                                <Button
-                                                    disabled
+                                                {schduleDetail?.schedule_data?.txn_status !== null && schduleDetail?.schedule_data?.txn_status == 3 && <Button
+                                                    // disabled
                                                     onPress={() => {
                                                         startSchduleRide(schduleDetail.schedule_data.id)
                                                     }} style={styles.btnStyle} full rounded>
                                                     <Text style={{ color: '#fff' }}>
                                                         {translations.START_RIDE}
                                                     </Text>
-                                                </Button>
-                                                <Button
-                                                    disabled={(Array.isArray(filterdUserOfGenratedTransaction) && filterdUserOfGenratedTransaction.length == 0) ? true : false}
+                                                </Button>}
+
+                                                {!schduleDetail?.schedule_data?.txn_id ? <Button
+                                                    // disabled={(Array.isArray(filterdUserOfGenratedTransaction) && filterdUserOfGenratedTransaction.length == 0) ? true : false}
                                                     onPress={() => {
                                                         generateTransaction(schduleDetail.schedule_data.id)
                                                     }} style={styles.btnStyle} full rounded>
@@ -250,7 +251,19 @@ const ViewScheduleDetail = (props) => {
                                                         Get Payment
                                                         {/* {translations.START_RIDE} */}
                                                     </Text>
-                                                </Button>
+                                                </Button> : null}
+
+
+                                                {(schduleDetail?.schedule_data?.txn_id && schduleDetail?.schedule_data?.txn_status !== "3") ? <Button
+                                                    // disabled={(Array.isArray(filterdUserOfGenratedTransaction) && filterdUserOfGenratedTransaction.length == 0) ? true : false}
+                                                    onPress={() => {
+                                                        checkTransaction(schduleDetail.schedule_data.id)
+                                                    }} style={styles.btnStyle} full rounded>
+                                                    <Text style={{ color: '#fff' }}>
+                                                        Check Payment
+                                                        {/* {translations.START_RIDE} */}
+                                                    </Text>
+                                                </Button> : null}
                                             </>
                                             :
                                             <ActivityIndicator size="large" color="#3A91FA" />

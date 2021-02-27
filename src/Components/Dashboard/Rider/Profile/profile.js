@@ -712,7 +712,7 @@ class Profile extends React.Component {
                                 </View> */}
                                 <View style={{ flexDirection: 'row' }}>
                                     <Text style={{ color: '#3A91FA', textAlign: 'center', right: 15, fontSize: 25 }}>C</Text>
-                                    <Text style={{ color: '#fff', textAlign: 'center', top: 5, fontSize: 17 }}>{userDetails.data.ph_number}</Text>
+                                    <Text style={{ color: '#fff', textAlign: 'center', top: 5, fontSize: 17 }}>593-{userDetails.data.ph_number}</Text>
                                 </View>
                             </View>
 

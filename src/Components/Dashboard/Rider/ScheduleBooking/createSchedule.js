@@ -19,6 +19,8 @@ import { Keyboard } from 'react-native'
 const GOOGLE_MAPS_APIKEY = 'AIzaSyChHCc-8IkHyZIeHzhGomiY7sBo3fLlzak';
 
 
+import { getDistance } from 'geolib';
+
 
 const CreateSchedule = (props) => {
     const { filterParam, filterSchedule } = props
@@ -40,23 +42,23 @@ const CreateSchedule = (props) => {
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
-          'keyboardDidShow',
-          () => {
-            setKeyboardOpen(true); // or some other action
-          }
+            'keyboardDidShow',
+            () => {
+                setKeyboardOpen(true); // or some other action
+            }
         );
         const keyboardDidHideListener = Keyboard.addListener(
-          'keyboardDidHide',
-          () => {
-            setKeyboardOpen(false); // or some other action
-          }
+            'keyboardDidHide',
+            () => {
+                setKeyboardOpen(false); // or some other action
+            }
         );
-    
+
         return () => {
-          keyboardDidHideListener.remove();
-          keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+            keyboardDidShowListener.remove();
         };
-      }, []);
+    }, []);
 
     const [focusedlocation, setFocusLocation] = useState({
         latitude: 0,
@@ -154,19 +156,25 @@ const CreateSchedule = (props) => {
 
     const onSubmit = () => {
         const { getSchedule, userDetails, createSchedule } = props
+
+        const distance = getDistance(fromCordinate, toCordinate, 1) / 1000
+
+        console.log(distance, "KM distance")
+
         var formData = new FormData()
         formData.append("action", "addSchedule");
         formData.append("rider_id", userDetails.data.id);
-        formData.append("pickup_longitude", fromCordinate.longitude);
-        formData.append("pickup_latitude", fromCordinate.latitude);
-        formData.append("drop_longitude", toCordinate.longitude);
-        formData.append("drop_latitude", toCordinate.latitude);
+        formData.append("pickup_longitude", fromCordinate?.longitude);
+        formData.append("pickup_latitude", fromCordinate?.latitude);
+        formData.append("drop_longitude", toCordinate?.longitude);
+        formData.append("drop_latitude", toCordinate?.latitude);
         formData.append("pick_location_name", fromAddress);
         formData.append("drop_location_name", toAddress);
         formData.append("timing", time);
         formData.append("price", price);
         formData.append("seat", seat);
         formData.append("date", date);
+        formData.append("txn_km", distance)
         createSchedule(formData)
             .then((res) => {
                 Alert.alert("Alert", res.message)
@@ -366,11 +374,31 @@ const CreateSchedule = (props) => {
                             {!props.fetching ?
                                 <LinearGradient style={{ borderRadius: 100, justifyContent: 'center', width: '100%', alignSelf: 'center', marginVertical: 20 }} colors={['#91D9F1', '#7AB1E0']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
                                     <Button onPress={() => {
-                                        onSubmit()
-                                    }} transparent style={[{ backgroundColor: 'transparent', }]} full rounded>
+                                        const userNumber = props.userDetails.data.ph_number.replace(/\-/g, "")
+                                        console.log(userNumber, props.userDetails.data.ph_number)
+                                        fetch(`https://pay.payphonetodoesposible.com/api/Users/${userNumber}/region/593`, {
+                                            headers: {
+                                                "Authorization": "Bearer hpUc1ofDa6S1FIsiHmqDlRZoJdv5c4RsprtnkP2-_jeKx6U6AAD3KM0pVDaSKuYojiYJ0Kamm3ttltY9FFIs5cN5_7iLtROR2Z4WoELsKiTOsyZ79evQ_O_7EcSjJjucoXj4RdEVYTy3s3nWVaQFCQx1UtYhYVEUszgF4YwUu0_UEcA1jnAUfbeCfWWF-zTxjUGFTjTw0dKgUMO57Dj7Ejwc8oSYyiIERBbzZE3BBGCD8uH2qhgIoeSytEFzzlAONDv9Rmn6IITYyHjvgWm02Bmc55ZV6kkvtATYzSTLv6q_ejVR4LaW4OLSSq7PW-EKvGD_t0LMEYqf0cf8gF8ZrvWRyss",
+                                                "Accept": "application/json"
+                                            }
+                                        })
+                                            .then(res => res.json())
+                                            .then(result => {
+                                                console.log(result)
+                                                if (result.errorCode) {
+                                                    Alert.alert("Failed", result.message)
+                                                } else {
+                                                    onSubmit()
+                                                }
+                                            })
+                                            .catch(err => {
+                                                console.log(err)
+                                            })
+                                    }
+                                    } transparent style={[{ backgroundColor: 'transparent', }]} full rounded >
                                         <Text style={{ color: '#fff', alignSelf: 'center' }}>
-                                        {translations.GO}
-                                    </Text>
+                                            {translations.GO}
+                                        </Text>
                                     </Button>
                                 </LinearGradient>
                                 :

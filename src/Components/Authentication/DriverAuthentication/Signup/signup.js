@@ -93,12 +93,13 @@ class DriverSignup extends React.Component {
                     if (!/^(\d{3})[-](\d{2})[-](\d{4})[-](\d{3})$/.test(phone)) {
                         Alert.alert("Alert", "Phone number is not in format or complete")
                     }else{
+                        let formatedNumber = phone.replace(/\-/g, "")
                         data.append('action', 'user_registration');
                         data.append('role', 'rider');
                         data.append('first_name', fname);
                         data.append('last_name', lname);
                         data.append('email', email);
-                        data.append('ph_number', phone);
+                        data.append('ph_number', formatedNumber.substring(3));
                         data.append('password', password);
                         data.append('username', userName);
                         this.props.signup(data)
