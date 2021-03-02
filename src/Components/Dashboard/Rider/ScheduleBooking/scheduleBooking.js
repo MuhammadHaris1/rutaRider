@@ -11,7 +11,7 @@ import { LocalizationContext } from '../../../../Localization/LocalizationContex
 
 const ScheduleBooking = (props) => {
     const contextType = useContext(LocalizationContext)
-    const { translations } = contextType
+    const { translations, appLanguage } = contextType
     const { schedule, fetching, getSchedule, userDetails, getScheduleDetail } = props
     const scheduleBookings = [
         {
@@ -49,7 +49,7 @@ const ScheduleBooking = (props) => {
     ]
 
     const onRefresh = () => {
-        getSchedule(userDetails.data.id)
+        getSchedule(userDetails.data.id, translations, appLanguage)
     }
     let arrow = "<----->"
     return(
@@ -94,7 +94,7 @@ const ScheduleBooking = (props) => {
                                     </LinearGradient>
 
                                     <TouchableOpacity onPress={() => {
-                                        getScheduleDetail(userDetails.data.id, val.schedule_id);
+                                        getScheduleDetail(userDetails.data.id, val.schedule_id, translations,appLanguage);
                                         // props.navigation.navigate("ViewScheduleDetails")
                                     } }>
                                         <View style={[styles.row, styles.spaceBtw, styles.itemContainer]}>

@@ -72,7 +72,7 @@ const EditProfile = (props) => {
                 console.log('err', err)
             })
         }else {
-            Alert.alert("Alert", "Phone number is not in format or complete")
+            Alert.alert(translations.ALERT, translations.PHONE_NUMBER_NOT_FORMAT)
         }
 
     }

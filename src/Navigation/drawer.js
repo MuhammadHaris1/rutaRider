@@ -148,7 +148,7 @@ function DrawerMenu(props) {
                                 size="xlarge"
                                 rounded
                                 containerStyle={{ borderWidth: 15, borderColor: '#fff', }}
-                                source={{ uri: userDetails.data.image ? "https://hnh6.xyz/route/public/profile_pics/" + userDetails.data.image : defaultAvatar }}
+                                source={{ uri: userDetails.data.image ? "http://144.91.105.44/~ruta/public/profile_pics/" + userDetails.data.image : defaultAvatar }}
                             />
                         </View>
 
@@ -214,11 +214,11 @@ function DrawerMenu(props) {
                                     props.navigation.navigate('DriverLogin')
                                     props.navigation.closeDrawer()
                                 } else {
-                                    Alert.alert("Alert", "Connection interrupt")
+                                    Alert.alert(translations.ALERT, translations.CONNECTION_INTERRUPT)
                                 }
                             })
                             .catch((err) => {
-                                Alert.alert("Alert", "Connection interrupt")
+                                Alert.alert(translations.ALERT, translations.CONNECTION_INTERRUPT)
                             })
 
                     }}

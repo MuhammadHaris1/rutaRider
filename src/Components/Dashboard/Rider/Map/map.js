@@ -438,7 +438,7 @@ class Map extends Component {
     static contextType = LocalizationContext
     
     renderRideReq = () => {
-        const { translations } = this.context
+        const { translations, appLanguage } = this.context
         const { rideReq, rideReqDetails, coordinates, agreement } = this.state
         const { acceptRide } = this.props
         console.log("coordinates coordinates", coordinates)
@@ -456,7 +456,7 @@ class Map extends Component {
                                         size={30}
                                         until={2000}
                                         onFinish={() => {
-                                            Alert.alert("Alert", "Ride Expired")
+                                            Alert.alert(translations.ALERT, translations.RIDE_EXPIRED)
                                             this.setState({rideReq: !rideReq})
                                             this.props.navigation.state.params.reqDetailParam = null
                                         }}
@@ -554,7 +554,7 @@ class Map extends Component {
                                             <View style={{flexDirection:'row', justifyContent:'flex-start', padding: 5, marginTop: 10,}}>
                                                 <CheckBox checked={agreement} onPress={() => this.setState({agreement: !agreement})} />
                                                 <TouchableOpacity onPress={() => {
-                                                    downloadfile('https://hnh6.xyz/route/public/pdf/agreement.pdf')
+                                                    downloadfile('http://144.91.105.44/~ruta/public/pdf/agreement.pdf')
                                                     // Alert.alert("Alert", "agreement")
                                                 }}>
                                                     <Text style={{color:'#3A91FA', paddingVertical: '5%'}}>
@@ -580,7 +580,7 @@ class Map extends Component {
                                             data.append('rider_longitude', this.state.coordinates[0].longitude);
                                             data.append('rider_location_name', 'DHA');
         
-                                            acceptRide(data, rideReqDetails, this.state.coordinates[0])
+                                            acceptRide(data, rideReqDetails, this.state.coordinates[0], translations, appLanguage)
                                             .then(async (res) => {
                                                 if(res.status){
                                                     this.setState(prevState => {
@@ -603,14 +603,14 @@ class Map extends Component {
         
                                                     this.props.navigation.state.params.reqDetailParam = null
                                                 }else {
-                                                    Alert.alert("Alert", res.message)
+                                                    Alert.alert(translations.ALERT, res.message)
                                                     this.props.navigation.state.params.reqDetailParam = null
         
                                                 }
                                             })
         
                                         }else {
-                                            Alert.alert("Alert", "Please first accept our terms")
+                                            Alert.alert(translations.ALERT, translations.PLEASE_ACCEPT_TERM)
                                         }
                                     }else {
 
@@ -622,7 +622,7 @@ class Map extends Component {
                                             data.append('rider_longitude', this.state.coordinates[0].longitude);
                                             data.append('rider_location_name', 'DHA');
         
-                                            acceptRide(data, rideReqDetails, this.state.coordinates[0])
+                                            acceptRide(data, rideReqDetails, this.state.coordinates[0], translations, appLanguage)
                                             .then(async (res) => {
                                                 if(res.status){
                                                     this.setState(prevState => {
@@ -649,7 +649,7 @@ class Map extends Component {
         
                                                     this.props.navigation.state.params.reqDetailParam = null
                                                 }else {
-                                                    Alert.alert("Alert", res.message)
+                                                    Alert.alert(translations.ALERT, res.message)
                                                     this.props.navigation.state.params.reqDetailParam = null
         
                                                 }
@@ -780,6 +780,7 @@ class Map extends Component {
     startRide = async () => {
         const { coordinates } = this.state
         const { activeRideData , userDetails, startRide, updateRide} = this.props
+        const { translations, appLanguage } = this.context
         var activeRide = await AsyncStorage.getItem('activeRide')
 
         // console.log('activeRideData', activeRideData, 'CURRENT LOCATION', coordinates[0])
@@ -795,7 +796,7 @@ class Map extends Component {
         }
         // data.append('name', 'Testing location');
 
-        startRide(data, activeRideData)
+        startRide(data, activeRideData, translations, appLanguage)
         .then(async (res) => {
             if(activeRideData){
                 var obj = {
@@ -833,7 +834,8 @@ class Map extends Component {
 
 
     comeleteRide = () => {
-        const { coordinates } = this.state
+        const { coordinates } = this.state;
+        const { translations, appLanguage } = this.context
         const { activeRideData , userDetails, compeleteRide, getHistory, getUserDetail} = this.props;
         var dis = getDistance(
             {latitude: activeRideData.rideReqDetails.pick_latitude, longitude: activeRideData.rideReqDetails.pick_longitude},
@@ -852,7 +854,7 @@ class Map extends Component {
         data.append('km', Number(disKm));
         console.log('FormData FormData', data)
         
-        compeleteRide(data)
+        compeleteRide(data,translations, appLanguage)
         .then((res) => {
             getHistory(userDetails.data.id)
             getUserDetail(userDetails.data.id)
@@ -873,7 +875,7 @@ class Map extends Component {
 
 
     renderRating = () => {
-        const { translations } = this.context
+        const { translations, appLanguage } = this.context
         const { ratingRender, ratingCount, ratingDescription } = this.state
         const {fetching, giveRating, activeRideData , userDetails,  } = this.props
         return(
@@ -902,7 +904,7 @@ class Map extends Component {
                                                 if(e.length <= 30 ) {
                                                     this.setState({ ratingDescription: e }) 
                                                 }else {
-                                                    Alert.alert("Alert", "You Reached Review limit")
+                                                    Alert.alert(translations.ALERT, translations.YOU_REACHED_REVIEW_LIMIT)
                                                 }
                                             }} placeholder='Enter Your Review' />
                                         </Item>
@@ -920,7 +922,7 @@ class Map extends Component {
                                         data.append('rating', ratingCount);
                                         data.append('review', ratingDescription);
                                         data.append('action', 'addRating');
-                                        giveRating(data)
+                                        giveRating(data, translations, appLanguage)
                                         .then(res => {
                                             this.comeleteRide()
                                         })

@@ -100,9 +100,9 @@ class History extends React.Component {
                     </View>
                     
                 :         
-                    <View style={{justifyContent: 'center', alignContent:'center', top: '60%'}}>
+                    <View style={{justifyContent: 'center', alignContent:'center', top: '50%', flex: 1}}>
 
-                        <Text style={{color:"#fff", alignSelf:'center', fontSize: 20}}>
+                        <Text style={{color:"#fff", alignSelf:'center', fontSize: 20, textAlign: "center", width: "70%"}}>
                             {translations.YOU_HAVE_NOT_COMPLETED_ANY_RIDE}
                         </Text>
 

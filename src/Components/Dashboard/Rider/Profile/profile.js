@@ -202,7 +202,7 @@ class Profile extends React.Component {
     addAndEditVehicle = () => {
         const { model, licenseNumber, nicNumber, fileName, experience, colour, name, brand, imageArr, totalSeats, riderImage } = this.state
         const { userDetails, updateVehicle } = this.props
-
+        const { translations, appLanguage } = this.context
         userDetails.data.vehicle = { ...userDetails.data.vehicle, model, license: licenseNumber, colour, name }
 
         console.log(userDetails)
@@ -237,7 +237,7 @@ class Profile extends React.Component {
         if (model && licenseNumber && nicNumber && imageArr.length >= 1 && riderImage && name && colour && brand && totalSeats) {
             if (Number(extractModal) >= 2010) {
                 console.log('FORMDATA', formData)
-                updateVehicle(userDetails, userDetails.data.id, formData)
+                updateVehicle(userDetails, userDetails.data.id, formData, translations, appLanguage)
                     .then((res) => {
                         if (res.status) {
                             this.setState({
@@ -246,10 +246,10 @@ class Profile extends React.Component {
                         }
                     })
             } else {
-                Alert.alert("Alert", "Model should be newer from 2010")
+                Alert.alert(translations.ALERT, translations.MODEL_SHOULD_BE_NEWER)
             }
         } else {
-            Alert.alert("Alert", "All fields required")
+            Alert.alert(translations.ALERT, translations.ALL_FIELDS_ARE_REQUIRED)
         }
     }
     static contextType = LocalizationContext
@@ -389,7 +389,8 @@ class Profile extends React.Component {
 
                                 <View>
                                     <Text style={{ alignSelf: 'center', fontWeight: 'bold', color: '#fff', fontSize: 20 }}>
-                                        Add Vehicle Details
+                                        {/* {Add Vehicle Details} */}
+                                        {translations.ADD_VEHICLE_DETAIL}
                                     </Text>
                                 </View>
 
@@ -443,7 +444,7 @@ class Profile extends React.Component {
 
                                     <View>
                                         <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
-                                            <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ licenseNumber: e })} placeholder='License Number' />
+                                            <Input style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => this.setState({ licenseNumber: e })} placeholder={translations.LISCENSE_NUMBER} />
                                         </Item>
                                     </View>
 
@@ -612,7 +613,7 @@ class Profile extends React.Component {
                                     containerStyle={{ borderWidth: 15, borderColor: '#fff', borderRadius: 100, }}
                                     size="xlarge"
                                     rounded
-                                    source={{ uri: userDetails.data.image ? "https://hnh6.xyz/route/public/profile_pics/" + userDetails.data.image : defaultAvatar }}
+                                    source={{ uri: userDetails.data.image ? "http://144.91.105.44/~ruta/public/profile_pics/" + userDetails.data.image : defaultAvatar }}
                                 />
 
                                 <TouchableOpacity onPress={() => this.setState({ modalVisible: true, })} style={{ top: 110 }}>

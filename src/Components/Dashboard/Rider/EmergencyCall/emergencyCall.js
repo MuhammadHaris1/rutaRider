@@ -73,7 +73,7 @@ class Emergency extends React.Component {
                                 if(this.state.emergencyNumber != '') {
                                     Linking.openURL(`tel:${this.state.emergencyNumber}`)
                                 }else {
-                                    Alert.alert("Alert", "Please select first any emergency number")
+                                    Alert.alert(translations.ALERT, translations.PLEASE_SELECT_EMERGENCY_NUMBER)
                                 }
                             }}
                             style={{width:'40%', alignSelf:'center', marginTop:5 ,

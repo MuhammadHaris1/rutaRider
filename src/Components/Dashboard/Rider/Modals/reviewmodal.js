@@ -37,11 +37,11 @@ const RenderReviewModal = (props) => {
                             <TouchableOpacity onPress={() => {
                                 dismissSchedule(props.data.schedule_id)
                                 .then((res) => {
-                                    Alert.alert("Alert", res.message)
+                                    Alert.alert(translations.ALERT, res.message)
                                     getReviewStatus(userDetails.data.id)
                                 })
                                 .catch((err) => {
-                                    Alert.alert("Alert", err.message)
+                                    Alert.alert(translations.ALERT, err.message)
                                     getReviewStatus(userDetails.data.id)
                                 })
                             }} style={{width:'35%', alignSelf:'center', left: '100%'}} >
@@ -114,7 +114,7 @@ const RenderReviewModal = (props) => {
                                             if(e.length <= 30 ) {
                                                 setRatingDescription(e)
                                             }else {
-                                                Alert.alert("Alert", "You Reached Review limit")
+                                                Alert.alert(translations.ALERT, translations.YOU_REACHED_REVIEW_LIMIT)
                                             }
                                         }} placeholder={translations.ENTER_YOUR_REVIEW} />
                                     </Item>
@@ -129,11 +129,11 @@ const RenderReviewModal = (props) => {
                                         console.log( userDetails.data.id, ratingCount, ratingDescription)
                                         submitScheduleReview(props.data.schedule_id, userDetails.data.id, ratingCount, ratingDescription)
                                         .then((res) => {
-                                            Alert.alert("Alert", res.message)
+                                            Alert.alert(translations.ALERT, res.message)
                                             getReviewStatus(userDetails.data.id)
                                         })
                                         .catch((err) => {
-                                            Alert.alert("Alert", err.message)
+                                            Alert.alert(translations.ALERT, err.message)
                                             getReviewStatus(userDetails.data.id)
                                         })
                                     }}

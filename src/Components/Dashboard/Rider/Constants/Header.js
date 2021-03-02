@@ -15,7 +15,7 @@ export const HeaderCustom = (props) => {
 
     return (
         <Header
-            containerStyle={{ backgroundColor: 'transparent', borderBottomWidth: 0, width: Dimensions.get('window').width }}
+            containerStyle={[{ backgroundColor: 'transparent', borderBottomWidth: 0, width: Dimensions.get('window').width }, props.containerStyle ? props.containerStyle : {}]}
             leftComponent={
             <TouchableOpacity onPress={() => props.navigation.goBack()}>
                 <Image source={back} style={{ height: 20, width: 20 }} />

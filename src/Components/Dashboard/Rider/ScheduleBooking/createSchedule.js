@@ -175,15 +175,15 @@ const CreateSchedule = (props) => {
         formData.append("seat", seat);
         formData.append("date", date);
         formData.append("txn_km", distance)
-        createSchedule(formData)
+        createSchedule(formData, translations, appLanguage)
             .then((res) => {
-                Alert.alert("Alert", res.message)
+                Alert.alert(translations.ALERT, res.message)
                 getSchedule(userDetails.data.id)
                 props.navigation.goBack()
                 console.log(" onSubmit res", res)
             })
             .catch((err) => {
-                Alert.alert("Alert", err.message)
+                Alert.alert(translations.ALERT, err.message)
             })
     }
 
@@ -213,7 +213,7 @@ const CreateSchedule = (props) => {
     console.log(" coordinates", coordinates)
 
     const contextType = useContext(LocalizationContext)
-    const { translations } = contextType
+    const { translations, appLanguage } = contextType
 
     return (
         <View style={{
@@ -386,7 +386,7 @@ const CreateSchedule = (props) => {
                                             .then(result => {
                                                 console.log(result)
                                                 if (result.errorCode) {
-                                                    Alert.alert("Failed", result.message)
+                                                    Alert.alert(translations.FAILED, result.message)
                                                 } else {
                                                     onSubmit()
                                                 }

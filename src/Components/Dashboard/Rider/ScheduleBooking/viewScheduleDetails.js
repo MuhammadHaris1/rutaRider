@@ -23,9 +23,9 @@ const ViewScheduleDetail = (props) => {
 
     const { schduleDetail, userDetails, startSchduleRide, startSchduleRideReminder, completeSchduleRide, deleteSchdule, getUserDetail, getReviewStatus, getSchedule, getScheduleDetail } = props
     const contextType = useContext(LocalizationContext)
-    const { translations } = contextType
+    const { translations, appLanguage } = contextType
     const onRefresh = () => {
-        getScheduleDetail(userDetails.data.id, schduleDetail.schedule_data.id)
+        getScheduleDetail(userDetails.data.id, schduleDetail.schedule_data.id, translations, appLanguage)
     }
     var startTime = schduleDetail ? new Date().getTime() : null
     var endTime = schduleDetail ? "13:00" : null
@@ -79,7 +79,7 @@ const ViewScheduleDetail = (props) => {
             console.log("check transaction", response)
             onRefresh()
             if (response.status == 200) {
-                Alert.alert("message", response.data.message)
+                Alert.alert(translations.MESSAGE, response.data.message)
             }
         } catch (error) {
             console.log(error)
@@ -204,7 +204,7 @@ const ViewScheduleDetail = (props) => {
                                     <View style={styles.itemContainer}>
                                         {!props.fetching ?
                                             <Button onPress={() => {
-                                                startSchduleRideReminder(schduleDetail.schedule_data.id)
+                                                startSchduleRideReminder(schduleDetail.schedule_data.id, translations, appLanguage)
                                             }} style={styles.btnStyle} full rounded>
                                                 <Text style={{ color: '#fff' }}>
                                                     30 {translations.MIN_REMINDER}
@@ -218,7 +218,7 @@ const ViewScheduleDetail = (props) => {
                                     <View style={styles.itemContainer}>
                                         {!props.fetching ?
                                             <Button onPress={() => {
-                                                deleteSchdule(schduleDetail.schedule_data.id, userDetails.data.id)
+                                                deleteSchdule(schduleDetail.schedule_data.id, userDetails.data.id, translations, appLanguage)
                                             }} style={[styles.btnStyle, { backgroundColor: '#fc0f03' }]} full rounded>
                                                 <Text style={{ color: '#fff' }}>
                                                     {translations.DELETE}
@@ -235,7 +235,7 @@ const ViewScheduleDetail = (props) => {
                                                 {schduleDetail?.schedule_data?.txn_status !== null && schduleDetail?.schedule_data?.txn_status == 3 && <Button
                                                     // disabled
                                                     onPress={() => {
-                                                        startSchduleRide(schduleDetail.schedule_data.id)
+                                                        startSchduleRide(schduleDetail.schedule_data.id, translations, appLanguage)
                                                     }} style={styles.btnStyle} full rounded>
                                                     <Text style={{ color: '#fff' }}>
                                                         {translations.START_RIDE}
@@ -275,7 +275,7 @@ const ViewScheduleDetail = (props) => {
                                     <View style={styles.itemContainer}>
                                         {!props.fetching ?
                                             <Button onPress={() => {
-                                                props.completeSchduleRide(schduleDetail.schedule_data.id)
+                                                props.completeSchduleRide(schduleDetail.schedule_data.id, translations, appLanguage)
                                                     .then((res) => {
                                                         getUserDetail(userDetails.data.id)
                                                         getReviewStatus(userDetails.data.id)

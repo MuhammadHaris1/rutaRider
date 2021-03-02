@@ -46,10 +46,10 @@ const renderReq = (item, index, acceptBooking, userDetails, getBookingReq, rejec
                             acceptBooking(userDetails.data.id, userDetails.role_id, item.booking_schedule_id)
                                 .then((res) => {
                                     getBookingReq(userDetails.data.id)
-                                    Alert.alert("Alert", res.message)
+                                    Alert.alert(translations.ALERT, res.message)
                                 })
                                 .catch((err) => {
-                                    Alert.alert("Alert", err.message)
+                                    Alert.alert(translations.ALERT, err.message)
                                 })
                         }} style={{
                             width: '45%', alignSelf: 'center', backgroundColor: '#fff',
@@ -64,10 +64,10 @@ const renderReq = (item, index, acceptBooking, userDetails, getBookingReq, rejec
                             rejectBooking(userDetails.data.id, userDetails.role_id, item.booking_schedule_id)
                                 .then((res) => {
                                     getBookingReq(userDetails.data.id)
-                                    Alert.alert("Alert", res.message)
+                                    Alert.alert(translations.ALERT, res.message)
                                 })
                                 .catch((err) => {
-                                    Alert.alert("Alert", err.message)
+                                    Alert.alert(translations.ALERT, err.message)
                                 })
                         }} style={{
                             width: '45%', alignSelf: 'center', backgroundColor: '#fff',
@@ -188,10 +188,10 @@ const RideReq = (props) => {
                             acceptBooking(userDetails.data.id, userDetails.role_id, item.booking_schedule_id)
                                 .then((res) => {
                                     getBookingReq(userDetails.data.id)
-                                    Alert.alert("Alert", res.message)
+                                    Alert.alert(translations.ALERT, res.message)
                                 })
                                 .catch((err) => {
-                                    Alert.alert("Alert", err.message)
+                                    Alert.alert(translations.ALERT, err.message)
                                 })
                         }} style={{
                             width: '45%', alignSelf: 'center', backgroundColor: '#fff',
@@ -206,10 +206,10 @@ const RideReq = (props) => {
                             rejectBooking(userDetails.data.id, userDetails.role_id, item.booking_schedule_id)
                                 .then((res) => {
                                     getBookingReq(userDetails.data.id)
-                                    Alert.alert("Alert", res.message)
+                                    Alert.alert(translations.ALERT, res.message)
                                 })
                                 .catch((err) => {
-                                    Alert.alert("Alert", err.message)
+                                    Alert.alert(translations.ALERT, err.message)
                                 })
                         }} style={{
                             width: '45%', alignSelf: 'center', backgroundColor: '#fff',

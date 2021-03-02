@@ -40,6 +40,7 @@ class DriverLogin extends React.Component {
         const { email, password, token } = this.state
         const { login } = this.props
         const { fetchProfileData } = this.props.screenProps
+        const { translations, appLanguage } = this.context
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
         // if(reg.test(email) === false){
@@ -54,7 +55,7 @@ class DriverLogin extends React.Component {
             data.append('password', password);
             data.append('token', token)
             // this.props.screenProps.fetchProfileData(convertVal)
-            login(data, fetchProfileData)
+            login(data, fetchProfileData, translations, appLanguage)
         // }
     }
     static contextType = LocalizationContext

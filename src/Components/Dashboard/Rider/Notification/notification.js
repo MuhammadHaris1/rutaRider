@@ -52,9 +52,9 @@ const Notification = (props) => {
         <View>
             <ImageBackground style={styles.backroundImage} source={require('../../../../../assets/Splash.png')}>
                 <View style={styles.container}>
-                    <View style={{ left: 15 }}>
-                        <HeaderCustom navigation={props.navigation} headerTxt={translations.NOTIFICATION} />
-                        {notification ?
+                    <View style={{  }}>
+                        <HeaderCustom navigation={props.navigation} headerTxt={translations.NOTIFICATION} containerStyle={{ left: 15 }} />
+                        {false ?
                             <FlatList
                                 data={notification}
                                 refreshControl={<RefreshControl colors={["#3A91FA"]} refreshing={fetching} onRefresh={onRefresh} />} contentContainerStyle={{ paddingBottom: 70 }}
@@ -66,7 +66,7 @@ const Notification = (props) => {
                             />
                             :
                             <View style={{ justifyContent: 'center', alignContent: 'center', top: '60%' }}>
-                                <Text style={{ color: "#fff", alignSelf: 'center', fontSize: 20 }}>
+                                <Text style={{ color: "#fff", textAlign: 'center', fontSize: 20 }}>
                                     {translations.YOU_DONT_HAVE_NOTIFICATION}
                             </Text>
                             </View>

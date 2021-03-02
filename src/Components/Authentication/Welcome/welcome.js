@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Button } from 'native-base'
 import { LocalizationContext } from '../../../Localization/LocalizationContext';
 import { Picker } from 'react-native';
+import { checkAppLang } from '../../../Redux/Actions/userAction';
 const welcome = require('../../../../assets/welcome.png')
 const Logo = require('../../../../assets/Logo.png')
 const button = require('../../../../assets/Button.png')
@@ -85,9 +86,10 @@ class Welcome extends React.Component {
                         </View>
 
                     </ScrollView>
-                    <View style={{ flexDirection: "row", position: "absolute", bottom: 30, width: "80%", justifyContent: "space-evenly", alignSelf: "center" }}>
+                    <View style={{ flexDirection: "row", width: "80%", justifyContent: "space-evenly", alignSelf: "center", paddingVertical: 20 }}>
                         <TouchableOpacity onPress={() => {
                             setAppLanguage("en")
+                            // this.props.checkAppLang(translations, appLanguage)
                         }}>
                             <Text style={{ color: appLanguage == "en" ? "#fff" : "#bdbdbd", fontSize: 18 }}>English</Text>
                         </TouchableOpacity>
@@ -112,7 +114,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
+    checkAppLang
 };
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Welcome);

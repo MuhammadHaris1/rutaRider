@@ -126,13 +126,13 @@ const CreateSchedule = (props) => {
             formData.append("date", date);
            createSchedule(formData)
            .then((res) => {
-               Alert.alert("Alert", res.message)
+               Alert.alert(translations.ALERT, res.message)
                getSchedule(userDetails.data.id)
                console.log(" onSubmit res", res, data)
                props.navigation.goBack()
            })       
            .catch((err) => {
-            Alert.alert("Alert", err.message)
+            Alert.alert(translations.ALERT, err.message)
            })
     }
     return(

@@ -18,7 +18,7 @@ const ForgotPassword = (props) => {
     const [userId, setuserId] = useState('')
 
     const contextType = useContext(LocalizationContext)
-    const { translations } = contextType
+    const { translations, appLanguage } = contextType
     const [showModule, setModule] = useState('renderEmail')
 
 
@@ -27,13 +27,13 @@ const ForgotPassword = (props) => {
         var data = new FormData();
         data.append('action', 'forget_pass');
         data.append('email', email);
-        forgotPassword(data)
+        forgotPassword(data, translations, appLanguage)
         .then((res) => {
             if(res.status){
                 setModule('renderCode')
-                Alert.alert('Alert', res.message)
+                Alert.alert(translations.ALERT, res.message)
             }else{
-                Alert.alert('Alert', res.message)
+                Alert.alert(translations.ALERT, res.message)
             }
         })
     }
@@ -50,9 +50,9 @@ const ForgotPassword = (props) => {
             if(res.status){
                 setModule('renderChangePassword')
                 setuserId(res.userId)
-                Alert.alert('Alert', res.message)
+                Alert.alert(translations.ALERT, res.message)
             }else{
-                Alert.alert('Alert', res.message)
+                Alert.alert(translations.ALERT, res.message)
             }
         })
     }
@@ -70,13 +70,13 @@ const ForgotPassword = (props) => {
             .then((res) => {
                 if(res.status){
                     props.navigation.navigate('DriverLogin')
-                    Alert.alert('Alert', res.message)
+                    Alert.alert(translations.ALERT, res.message)
                 }else{
-                    Alert.alert('Alert', res.message)
+                    Alert.alert(translations.ALERT, res.message)
                 }
             })
         }else {
-            Alert.alert('Alert', "Password not matched")
+            Alert.alert(translations.ALERT, translations.PASSWORD_NOT_MATCH)
         }
     }
 
@@ -89,7 +89,7 @@ const ForgotPassword = (props) => {
             <View style={{backgroundColor: 'rgba(43,48,68, 1)', width:'90%', alignSelf:'center', borderRadius:10, padding: 30, marginTop:'10%'}}>
                         <View style={{alignItems:'center'}}> 
                             <Item rounded regular style={{ width: '98%', marginTop: '2%', borderColor:'#3A91FA' }}>
-                                <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => setEmail(e)} placeholder={'Enter Your Email'} />
+                                <Input style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => setEmail(e)} placeholder={translations.EMAIL} />
                             </Item>
                         </View>
 

@@ -69,7 +69,7 @@ class DriverSignup extends React.Component {
 
 
     signup = ( ) => {
-        const { translations } = this.context
+        const { translations, appLanguage } = this.context
         const {fname, lname, email, phone, password, model, licenseNumber, nicNumber, fileName, fileUri, userName} = this.state
 
 
@@ -88,10 +88,9 @@ class DriverSignup extends React.Component {
             }else {
                 if( fname && lname && email && phone && password ){
                     if(/\d/.test(fname)|| /\d/.test(lname)) {
-                        Alert.alert("Alert", "Name cannot have numbers")
-                    }
-                    if (!/^(\d{3})[-](\d{2})[-](\d{4})[-](\d{3})$/.test(phone)) {
-                        Alert.alert("Alert", "Phone number is not in format or complete")
+                        Alert.alert(translations.ALERT, translations.NAME_CANNOT_HAVE_NUMBERS)
+                    } else if (!/^(\d{3})[-](\d{2})[-](\d{4})[-](\d{3})$/.test(phone)) {
+                        Alert.alert(translations.ALERT, translations.PHONE_NUMBER_NOT_FORMAT)
                     }else{
                         let formatedNumber = phone.replace(/\-/g, "")
                         data.append('action', 'user_registration');
@@ -102,10 +101,10 @@ class DriverSignup extends React.Component {
                         data.append('ph_number', formatedNumber.substring(3));
                         data.append('password', password);
                         data.append('username', userName);
-                        this.props.signup(data)
+                        this.props.signup(data, translations, appLanguage)
                     }
             }else {
-                Alert.alert("Alert", "All fields are required")
+                Alert.alert(translations.ALERT, translations.ALL_FIELDS_ARE_REQUIRED)
             }
             }
         
