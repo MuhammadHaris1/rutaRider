@@ -55,6 +55,7 @@ const ViewScheduleDetail = (props) => {
         const formData = new FormData();
         formData.append("action", "performTransaction")
         formData.append("schedule_id", id)
+        console.log(formData)
         try {
             let response = await Axios.post(`${API_ENDPOINT}transactions.php`, formData)
 
@@ -95,7 +96,7 @@ const ViewScheduleDetail = (props) => {
                     <HeaderCustom headerTxt={translations.SCHEDULE_DETAIL} navigation={props.navigation} />
                 </View>
 
-                <ScrollView refreshControl={<RefreshControl colors={["#3A91FA"]} refreshing={props.fetching} />} contentContainerStyle={{ paddingBottom: 70 }}>
+                <ScrollView refreshControl={<RefreshControl colors={["#3A91FA"]} onRefresh={onRefresh} refreshing={props.fetching} />} contentContainerStyle={{ paddingBottom: 70 }}>
 
                     {schduleDetail &&
                         <View>
@@ -242,33 +243,35 @@ const ViewScheduleDetail = (props) => {
                                                     </Text>
                                                 </Button>}
 
-                                                {!schduleDetail?.schedule_data?.txn_id ? <Button
-                                                    // disabled={(Array.isArray(filterdUserOfGenratedTransaction) && filterdUserOfGenratedTransaction.length == 0) ? true : false}
-                                                    onPress={() => {
-                                                        generateTransaction(schduleDetail.schedule_data.id)
-                                                    }} style={styles.btnStyle} full rounded>
-                                                    <Text style={{ color: '#fff' }}>
-                                                        {translations.GET_PAYMENT}
-                                                        {/* {translations.START_RIDE} */}
-                                                    </Text>
-                                                </Button> : null}
 
-
-                                                {(schduleDetail?.schedule_data?.txn_id && schduleDetail?.schedule_data?.txn_status !== "3") ? <Button
-                                                    // disabled={(Array.isArray(filterdUserOfGenratedTransaction) && filterdUserOfGenratedTransaction.length == 0) ? true : false}
-                                                    onPress={() => {
-                                                        checkTransaction(schduleDetail.schedule_data.id)
-                                                    }} style={styles.btnStyle} full rounded>
-                                                    <Text style={{ color: '#fff' }}>
-                                                        {translations.CHECK_PAYMENY}
-                                                        {/* {translations.START_RIDE} */}
-                                                    </Text>
-                                                </Button> : null}
                                             </>
                                             :
                                             <ActivityIndicator size="large" color="#3A91FA" />
                                         }
                                     </View>}
+
+                                {!schduleDetail?.schedule_data?.txn_id ? <Button
+                                    // disabled={(Array.isArray(filterdUserOfGenratedTransaction) && filterdUserOfGenratedTransaction.length == 0) ? true : false}
+                                    onPress={() => {
+                                        generateTransaction(schduleDetail.schedule_data.id)
+                                    }} style={styles.btnStyle} full rounded>
+                                    <Text style={{ color: '#fff' }}>
+                                        {translations.GET_PAYMENT}
+                                        {/* {translations.START_RIDE} */}
+                                    </Text>
+                                </Button> : null}
+
+
+                                {(schduleDetail?.schedule_data?.txn_id && schduleDetail?.schedule_data?.txn_status !== "3") ? <Button
+                                    // disabled={(Array.isArray(filterdUserOfGenratedTransaction) && filterdUserOfGenratedTransaction.length == 0) ? true : false}
+                                    onPress={() => {
+                                        checkTransaction(schduleDetail.schedule_data.id)
+                                    }} style={styles.btnStyle} full rounded>
+                                    <Text style={{ color: '#fff' }}>
+                                        {translations.CHECK_PAYMENY}
+                                        {/* {translations.START_RIDE} */}
+                                    </Text>
+                                </Button> : null}
 
 
                                 {schduleDetail.user_data && schduleDetail.schedule_data.ride_status == 2 &&
