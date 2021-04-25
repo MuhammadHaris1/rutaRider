@@ -1,4 +1,5 @@
 import React, { useContext, useRef } from 'react'
+import { Platform } from 'react-native';
 import { View, Text, Modal, ImagePropTypes } from 'react-native'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { LocalizationContext } from '../../../../Localization/LocalizationContext';
@@ -20,7 +21,7 @@ export const SearchLocation = (props) => {
                     props.closed()
                 }}>
 
-                <View style={{ flex: 1 }}
+                <View style={{ flex: 1,  paddingTop: Platform.OS == "android" ? 0 : 40 }}
                 >
                     <GooglePlacesAutocomplete
                         ref={searchRef}

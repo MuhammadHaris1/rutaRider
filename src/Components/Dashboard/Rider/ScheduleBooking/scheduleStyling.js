@@ -41,7 +41,8 @@ export const styles = StyleSheet.create({
         margin: 5
     },
     whiteNormalTxt: {
-        color:'#fff'
+        color:'#fff',
+        fontSize: 15
     },
     btnStyle: {
         alignSelf:'center', 

@@ -11,6 +11,7 @@ import { updateProfile } from '../../../../Redux/Actions/userAction'
 import ImagePicker from "react-native-image-picker";
 import { TextInputMask } from 'react-native-masked-text'
 import { LocalizationContext } from '../../../../Localization/LocalizationContext';
+import { Platform } from 'react-native';
 
 const showPass = require('../../../../../assets/show.png')
 const hidePass = require('../../../../../assets/hide.png')
@@ -137,7 +138,7 @@ const EditProfile = (props) => {
                             </Item>
                         </View>
                         <View style={styles.itemContainer, { width: '95%', alignSelf: 'center' }}>
-                            <Item regular fixedLabel style={{ width: '90%', alignSelf: 'center', paddingHorizontal: 10, borderRadius: 10 }}>
+                            <Item regular fixedLabel style={{ width: '90%', alignSelf: 'center', paddingHorizontal: 10, borderRadius: 10, paddingVertical: Platform.OS == "android" ? 0 : 18 }}>
                                 <TextInputMask
                                     type={'custom'}
                                     placeholder="000-00-0000-000"

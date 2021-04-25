@@ -60,7 +60,7 @@ const ScheduleBooking = (props) => {
                         <HeaderCustom  add logo navigation={props.navigation}/>
                     </View>
                     
-                    <ScrollView refreshControl={<RefreshControl colors={["#3A91FA"]} refreshing={fetching} onRefresh={onRefresh} />}>
+                    <ScrollView showsVerticalScrollIndicator={false} refreshControl={<RefreshControl colors={["#3A91FA"]} refreshing={fetching} onRefresh={onRefresh} />}>
                      {schedule ?
                         <View>
                             {schedule.map((val, ind) => (

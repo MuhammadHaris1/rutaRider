@@ -20,6 +20,7 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyChHCc-8IkHyZIeHzhGomiY7sBo3fLlzak';
 
 
 import { getDistance } from 'geolib';
+import { TouchableOpacity } from 'react-native'
 
 
 const CreateSchedule = (props) => {
@@ -351,21 +352,24 @@ const CreateSchedule = (props) => {
                             </View>
 
                             <View style={{ width: '90%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center' }}>
-                                <Item onPress={() => {
+                                <TouchableOpacity onPress={() => {
+                                    // alert()
                                     setMode('time')
                                     showDatePicker()
-                                }} fixedLabel style={{ width: '48%', alignSelf: 'center' }}>
-                                    <Input value={time} disabled style={styles.whiteNormalTxt} placeholder={translations.TIMING} placeholderTextColor="#fff" />
-                                </Item>
+                                }} fixedLabel style={{ width: '48%', alignSelf: 'center', borderBottomColor: "#fff", borderBottomWidth: 1, paddingVertical: 15 }}>
+                                    {/* <Input value={time} disabled style={styles.whiteNormalTxt} placeholder={translations.TIMING} placeholderTextColor="#fff" /> */}
+                                    <Text style={styles.whiteNormalTxt}>{time ? time : translations.TIMING}</Text>
+                                </TouchableOpacity>
                                 {/* </View> */}
 
                                 {/* <View style={styles.itemContainer, {width:'95%', alignSelf:'center'}}> */}
-                                <Item onPress={() => {
+                                <TouchableOpacity onPress={() => {
                                     setMode('date')
                                     showDatePicker()
-                                }} fixedLabel style={{ width: '48%', alignSelf: 'center' }}>
-                                    <Input disabled value={date} style={styles.whiteNormalTxt} placeholder={translations.DATE} placeholderTextColor="#fff" />
-                                </Item>
+                                }} fixedLabel style={{ width: '48%', alignSelf: 'center', borderBottomColor: "#fff", borderBottomWidth: 1, paddingVertical: 15 }}>
+                                    {/* <Input disabled value={date} style={styles.whiteNormalTxt} placeholder={translations.DATE} placeholderTextColor="#fff" /> */}
+                                    <Text style={styles.whiteNormalTxt}>{date ? date : translations.DATE}</Text>
+                                </TouchableOpacity>
                             </View>
 
                         </View>

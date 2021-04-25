@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { styles } from '../ScheduleBooking/scheduleStyling';
 import { getReviewStatus, submitScheduleReview, dismissSchedule } from "../../../../Redux/Actions/userAction"
 import { LocalizationContext } from '../../../../Localization/LocalizationContext'
+import { Platform } from 'react-native'
 
 const RenderReviewModal = (props) => {
     
@@ -106,7 +107,7 @@ const RenderReviewModal = (props) => {
                                     />
                                 
                                 <View style={{alignSelf:'center', paddingVertical: 30}}> 
-                                    <Item regular style={{ width: '90%', marginTop: '2%', borderColor:'#3A91FA', borderRadius: 10 }}>
+                                    <Item regular style={{ width: '90%', borderColor:'#3A91FA', borderRadius: 10, paddingVertical: Platform.OS == "android" ? 0 : 10 }}>
                                         <Input
                                         multiline
                                         value={ratingDescription}
@@ -181,7 +182,8 @@ const inPageStyles = StyleSheet.create({
         flex: 1, 
         justifyContent: 'center',
         alignItems: 'center', 
-        height: '100%' 
+        height: '100%' ,
+        paddingTop: Platform.OS == "android" ? 0 : 40
     },
     heading: {
         color:"#fff",

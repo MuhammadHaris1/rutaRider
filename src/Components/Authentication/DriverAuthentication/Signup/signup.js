@@ -18,6 +18,7 @@ const options = {
 };
 import ImagePicker from 'react-native-image-picker'
 import { LocalizationContext } from '../../../../Localization/LocalizationContext';
+import { Platform } from 'react-native';
 
 class DriverSignup extends React.Component {
     constructor(props){
@@ -183,7 +184,7 @@ class DriverSignup extends React.Component {
 
 
                             <View> 
-                                <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA' }}>
+                                <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA', paddingVertical: Platform.OS == "android" ? 0 : 18 }}>
                                 <TextInputMask
                                     type={'custom'}
                                     placeholder={translations.PHONE_NUMBER}
