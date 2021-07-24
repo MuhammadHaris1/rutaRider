@@ -54,28 +54,29 @@ const EditProfile = (props) => {
 
         var formdata = new FormData();
 
+        let formatedNumber = phone
         if (/^(\d{3})[-](\d{2})[-](\d{4})[-](\d{3})$/.test(phone)) {
-            let formatedNumber = phone.replace(/\-/g, "")
-            if (fileName) {
-                formdata.append("image", file);
-            }
-            formdata.append("action", "update_user");
-            formdata.append("id", data.id);
-            formdata.append("first_name", firstName);
-            formdata.append("last_name", lastName);
-            formdata.append("email", email);
-            formdata.append("ph_number", formatedNumber.substring(3));
-            formdata.append("password", password);
-            props.updateProfile(formdata, fetchProfileData)
-                .then((res) => {
-                    props.navigation.goBack()
-                })
-                .catch((err) => {
-                    console.log('err', err)
-                })
-        } else {
-            Alert.alert(translations.ALERT, translations.PHONE_NUMBER_NOT_FORMAT)
+            formatedNumber = phone.replace(/\-/g, "")
         }
+
+        if (fileName) {
+            formdata.append("image", file);
+        }
+        formdata.append("action", "update_user");
+        formdata.append("id", data.id);
+        formdata.append("first_name", firstName);
+        formdata.append("last_name", lastName);
+        formdata.append("email", email);
+        formdata.append("ph_number", formatedNumber.substring(3));
+        formdata.append("password", password);
+        props.updateProfile(formdata, fetchProfileData)
+            .then((res) => {
+                props.navigation.goBack()
+            })
+            .catch((err) => {
+                console.log('err', err)
+            })
+
 
     }
 

@@ -193,6 +193,7 @@ const Drawer = createDrawerNavigator({
         inactiveTintColor: 'black'
     },
     // resetOnBlur:true,
+    drawerWidth: "100%",
     drawerType:"slide",
     overlayColor:"transparent",
     // minSwipeDistance: 0,

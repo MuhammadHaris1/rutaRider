@@ -16,6 +16,7 @@ import { logout } from '../Redux/Actions/userAction'
 import { connect } from 'react-redux';
 import { Avatar, Button, Icon } from "react-native-elements"
 import backgound from "../../assets/welcome2.png";
+const sidebar = require('../../assets/sidebar.png')
 import { LocalizationContext } from "../Localization/LocalizationContext";
 
 const defaultAvatar = 'https://i2.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1'
@@ -232,6 +233,9 @@ function DrawerMenu(props) {
                     </View>
                 </TouchableOpacity>
             </ImageBackground>
+            <TouchableOpacity onPress={() => props.navigation.toggleDrawer()} style={{ position: 'absolute', top: 40, right: 20 }}>
+                <Image source={sidebar} style={{ height: 20, width: 20 }} />
+            </TouchableOpacity>
         </View>
     )
 }

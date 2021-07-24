@@ -188,7 +188,14 @@ const translations = {
     INVALID_EMAIL_PASSWORD: "Invalid Email/Password",
     USER_SIGNUP_FAILED: "User Signup failed",
     GET_PAYMENT: "Get Payment",
-    CHECK_PAYMENY: "Check Payment"
+    CHECK_PAYMENY: "Check Payment",
+    OBJECT_NAME: "Object Name",
+    OBJECT_VALUE: "Object Value",
+    OBJECT_WEIGHT: "Object Weight",
+    I_AGREE_TO_RUTA_TERMS: "I Agree to the ruta Terms & Condition",
+    RIDE_DETAILS: "Ride Details",
+    PICKUP_LOCATION: "Pickup Location",
+    DROPOFF_LOCATION: "DropOff Location",
   },
   ar: {
     LANGUAGE_SETTINGS: 'تغيير اللغة',
@@ -378,7 +385,14 @@ const translations = {
     INVALID_EMAIL_PASSWORD: "Correo electrónico / contraseña no válidos",
     USER_SIGNUP_FAILED: "Error de registro de usuario",
     GET_PAYMENT: "Obtener pago",
-    CHECK_PAYMENY: "Pago con cheque"
+    CHECK_PAYMENY: "Pago con cheque",
+    OBJECT_NAME: "Nombre del objeto",
+    OBJECT_VALUE: "Valor del objeto",
+    OBJECT_WEIGHT: "Peso del objeto",
+    I_AGREE_TO_RUTA_TERMS: "Acepto los Términos y condiciones de ruta",
+    RIDE_DETAILS: "Detalles del viaje",
+    PICKUP_LOCATION: "Lugar de recogida",
+    DROPOFF_LOCATION: "Punto de entrega"
   },
 };
 

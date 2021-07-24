@@ -9,22 +9,23 @@ import {
     Image,
     Modal, Alert, ScrollView, Linking, AsyncStorage, PermissionsAndroid, ActivityIndicator,
 } from 'react-native';
-import MapView ,{
+import MapView, {
     MAP_TYPES,
     PROVIDER_DEFAULT,
     ProviderPropType,
     PROVIDER_GOOGLE,
     UrlTile, MarkerAnimated
-  }  from 'react-native-maps';
-import {SearchBar, Header, Avatar, Rating, AirbnbRating, CheckBox} from 'react-native-elements'
-import {getDistance, getPreciseDistance} from 'geolib';
-import { Item, Input } from 'native-base'
+} from 'react-native-maps';
+import { SearchBar, Header, Avatar, Rating, AirbnbRating, CheckBox } from 'react-native-elements'
+import { getDistance, getPreciseDistance } from 'geolib';
+import { Item, Input, Icon } from 'native-base'
 // const GOOGLE_PLACES_API_KEY = 'AIzaSyA2J_Jl0o3MN_QfkZ55BnF128lpTzO6CxY'; // never save your real api key in a snack!
 
 import Geolocation from '@react-native-community/geolocation';
 import MapViewDirections from 'react-native-maps-directions';
 import FooterComponent from '../Footer/footer'
 const leftArrow = require('../../../../../assets/left-arrow.png')
+const back = require('../../../../../assets/back.png')
 const share = require('../../../../../assets/share.png')
 const location = require('../../../../../assets/location.png')
 const GOOGLE_MAPS_APIKEY = 'AIzaSyChHCc-8IkHyZIeHzhGomiY7sBo3fLlzak';
@@ -41,10 +42,13 @@ import Pusher from 'pusher-js/react-native';
 import pusherConfig from '../../../../Constant/pusher.json'
 
 import { connect } from 'react-redux';
-import { acceptRide, startRide, compeleteRide, getHistory, getUserDetail, setRideDataToAsync, sendLiveLocation, updateRide, getPaymentDetails, giveRating} from '../../.././../Redux/Actions/userAction'
+import { acceptRide, startRide, compeleteRide, getHistory, getUserDetail, setRideDataToAsync, sendLiveLocation, updateRide, getPaymentDetails, giveRating } from '../../.././../Redux/Actions/userAction'
 import RenderParcelRequest from '../Modals/renderParcelRide';
 import downloadfile from '../Constants/downloadfile';
 import { LocalizationContext } from '../../../../Localization/LocalizationContext';
+import { Platform } from 'react-native';
+import Permissions from 'react-native-permissions';
+import { darkMapStyle } from '../Constants/mapStyles';
 class Map extends Component {
     constructor(props) {
         super(props);
@@ -56,7 +60,7 @@ class Map extends Component {
                 longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.0122
             },
             locationChosen: false,
-            address:'',
+            address: '',
             searchLocation: false,
             coordinates: [],
             rideReq: false,
@@ -65,7 +69,7 @@ class Map extends Component {
             rideReqDetails: '',
             rideUserDetails: null,
             status: 'pending',
-            ratingRender:  false,
+            ratingRender: false,
             ratingDescription: '',
             ratingCount: 1,
             parcelReq: false,
@@ -77,8 +81,8 @@ class Map extends Component {
         console.log("puseher", props.screenProps.profileData.data.id)
         this.userChannel = this.pusher.subscribe(props.screenProps.profileData.data.id)
         this.userChannel.bind('new-booking', (e) => {
-                console.log("NEW BOOKING", e)
-                this.handleRideRequest(e)
+            console.log("NEW BOOKING", e)
+            this.handleRideRequest(e)
         })
         this.userChannel.bind('ride-accepted', (e) => {
             console.log("NEW ride-accepted'", e)
@@ -98,13 +102,13 @@ class Map extends Component {
 
 
     locationChanged = (location) => {
-        console.log("{latitude: Number(location.latitude), longitude: Number(location.longitude)},500", {latitude: Number(location.latitude), longitude: Number(location.longitude)},500)
-        this.riderMarker.animateMarkerToCoordinate({latitude: Number(location.latitude), longitude: Number(location.longitude)},500);
+        console.log("{latitude: Number(location.latitude), longitude: Number(location.longitude)},500", { latitude: Number(location.latitude), longitude: Number(location.longitude) }, 500)
+        this.riderMarker.animateMarkerToCoordinate({ latitude: Number(location.latitude), longitude: Number(location.longitude) }, 500);
     }
 
 
     handleExtendBooking = async (e) => {
-        const {updateRide, activeRideData} = this.props
+        const { updateRide, activeRideData } = this.props
         const { coordinates } = this.state
         var obj = {
             latitude: Number(e.drop_latitude),
@@ -117,53 +121,53 @@ class Map extends Component {
         try {
             await AsyncStorage.setItem('activeRide', JSON.stringify(activeRideData));
             console.log("SET SUCCESFULLY")
-          } catch (error) {           
+        } catch (error) {
             console.log('error =>', error)
         }
         coordinates[1] = obj
         this.setState({
             coordinates
         })
-        
+
     }
 
 
     componentDidMount = async () => {
-        const {reqDetailParam} = this.props.navigation.state.params
+        const { reqDetailParam } = this.props.navigation.state.params
         const { activeRideData, setRideDataToAsync } = this.props
         var activeRide = await AsyncStorage.getItem('activeRide')
         this.watchPosition()
         // console.log("activeRideData", activeRideData, " activeRide ", JSON.parse(activeRide))
-        
 
-        if(reqDetailParam) {
+
+        if (reqDetailParam) {
             this.handleRideRequest(reqDetailParam)
         }
-       
-        if(activeRide){
+
+        if (activeRide) {
             var convertVal = JSON.parse(activeRide)
             setRideDataToAsync(convertVal)
             this.setState({
                 coordinates: convertVal.coordinate
             })
-    
-        }else{
 
-            if(activeRideData) {
+        } else {
+
+            if (activeRideData) {
                 this.setState({
                     coordinates: activeRideData.coordinate
                 })
-    
-            }else {
+
+            } else {
                 this.getLocationHandler();
             }
 
         }
-        
+
     }
 
 
-    removeAlert = ( ) => {
+    removeAlert = () => {
         this.setState({
             rideReq: false
         })
@@ -192,7 +196,7 @@ class Map extends Component {
                     {
                         latitude: coords.latitude,
                         longitude: coords.longitude
-                      },
+                    },
                 ],
                 locationChosen: true
             };
@@ -201,28 +205,78 @@ class Map extends Component {
 
     getLocationHandler = async () => {
 
-        Geolocation.getCurrentPosition(pos => {
-            console.log('POSITION POSITION', pos)
-            const coordsEvent = {
-                nativeEvent: {
-                    coordinate: {
-                        latitude: pos.coords.latitude,
-                        longitude: pos.coords.longitude
+
+        const { translations } = this.context
+        if (Platform.OS == "android") {
+
+            try {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                    {
+                        title: translations.ROUTE_APP_LOCATION_PERMISSION,
+                        message:
+                            translations.ROUTE_APP_NEED_YOUR_LOCATION +
+                            translations.SO_YOU_CAN_FIND_RIDE,
+                        // buttonNeutral: "Ask Me Later",
+                        buttonNegative: "Cancel",
+                        buttonPositive: "OK"
                     }
+                );
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+
+                    Geolocation.getCurrentPosition(pos => {
+                        console.log('POSITION POSITION', pos)
+                        const coordsEvent = {
+                            nativeEvent: {
+                                coordinate: {
+                                    latitude: pos.coords.latitude,
+                                    longitude: pos.coords.longitude
+                                }
+                            }
+                        };
+                        this.pickLocationHandler(coordsEvent);
+                    },
+                        err => {
+                            console.log('POSITION POSITION', err);
+                            alert("Fetching the position failed, please enable GPS manually!");
+                        })
+                } else {
+                    console.log("location permission denied");
                 }
-            };
-            this.pickLocationHandler(coordsEvent);
-        },
-            err => {
-                console.log('POSITION POSITION',err);
-                alert("Fetching the position failed, please enable GPS manually!");
-            })
+            } catch (err) {
+                console.warn(err);
+            }
+        } else {
+            Permissions.request(Permissions.PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
+                .then(res => {
+                    console.log("permission ios", res)
+                    if (res == Permissions.RESULTS.GRANTED) {
+
+                        Geolocation.getCurrentPosition(pos => {
+                            console.log('POSITION POSITION', pos)
+                            const coordsEvent = {
+                                nativeEvent: {
+                                    coordinate: {
+                                        latitude: pos.coords.latitude,
+                                        longitude: pos.coords.longitude
+                                    }
+                                }
+                            };
+                            this.pickLocationHandler(coordsEvent);
+                        },
+                            err => {
+                                console.log('POSITION POSITION', err);
+                                alert("Fetching the position failed, please enable GPS manually!");
+                            })
+                    }
+                })
+        }
     }
 
 
-    watchPosition = async() => {
+    watchPosition = async () => {
 
-        const {coordinates} = this.state
+        const { coordinates } = this.state
         const { sendLiveLocation, activeRideData } = this.props
 
         var activeRide = await AsyncStorage.getItem('activeRide')
@@ -250,27 +304,27 @@ class Map extends Component {
                 Geolocation.watchPosition((position) => {
                     console.log("POsition watch", position)
 
-                    
-        
-                      if(activeRide){
+
+
+                    if (activeRide) {
 
                         // this.riderMarker.animateMarkerToCoordinate(
                         //     { latitude: Number(position.coords.latitude), longitude: Number(position.coords.longitude) },
                         //     500
                         //    );
-            
+
                         coordinates[0] = {
                             latitude: position.coords.latitude,
                             longitude: position.coords.longitude
-                          }
-                          this.setState((
-                              coordinates
-                          ))
+                        }
+                        this.setState((
+                            coordinates
+                        ))
 
 
                         var convertVal = JSON.parse(activeRide)
                         // console.log("POsition activeRide", typeof convertVal, "activeRideData ", typeof activeRideData)
-        
+
                         var data = new FormData();
                         data.append('action', 'liveLocation');
                         data.append('user_id', convertVal.rideReqDetails.user_id);
@@ -283,76 +337,76 @@ class Map extends Component {
                         console.log("CALL activeRide")
 
 
-                        
-                
-                        }else{
-                
-                            if(activeRideData) {
-
-                                // this.riderMarker.animateMarkerToCoordinate(
-                                //     { latitude: Number(position.coords.latitude), longitude: Number(position.coords.longitude) },
-                                //     500
-                                //    );
-                    
-                                coordinates[0] = {
-                                    latitude: position.coords.latitude,
-                                    longitude: position.coords.longitude
-                                  }
-                                  this.setState((
-                                      coordinates
-                                  ))
 
 
+                    } else {
 
-                                console.log("POsition activeRide", typeof JSON.parse(activeRide) , "activeRideData ", typeof activeRideData)
-        
-                                var data = new FormData();
-                                data.append('action', 'liveLocation');
-                                data.append('user_id', activeRideData.rideReqDetails.user_id);
-                                data.append('longitude', position.coords.latitude);
-                                data.append('latitude', position.coords.longitude);
-                                data.append('booking_id', activeRideData.rideReqDetails.booking_id);
-                                data.append('rider_id', this.props.userDetails.data.id);
+                        if (activeRideData) {
 
-                                sendLiveLocation(data)
-                                console.log("CALL activeRideData")
-                                
-                            }else {
-                                // this.getLocationHandler();
-                                console.log("CALL ELSE")
+                            // this.riderMarker.animateMarkerToCoordinate(
+                            //     { latitude: Number(position.coords.latitude), longitude: Number(position.coords.longitude) },
+                            //     500
+                            //    );
+
+                            coordinates[0] = {
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude
                             }
-                
+                            this.setState((
+                                coordinates
+                            ))
+
+
+
+                            console.log("POsition activeRide", typeof JSON.parse(activeRide), "activeRideData ", typeof activeRideData)
+
+                            var data = new FormData();
+                            data.append('action', 'liveLocation');
+                            data.append('user_id', activeRideData.rideReqDetails.user_id);
+                            data.append('longitude', position.coords.latitude);
+                            data.append('latitude', position.coords.longitude);
+                            data.append('booking_id', activeRideData.rideReqDetails.booking_id);
+                            data.append('rider_id', this.props.userDetails.data.id);
+
+                            sendLiveLocation(data)
+                            console.log("CALL activeRideData")
+
+                        } else {
+                            // this.getLocationHandler();
+                            console.log("CALL ELSE")
                         }
-        
-                    
+
+                    }
+
+
                 },
-                err => {
-                    console.log(err);
-                    alert("Watching the position failed", err);
-                },
-                { distanceFilter: 0})
-                
+                    err => {
+                        console.log(err);
+                        alert("Watching the position failed", err);
+                    },
+                    { distanceFilter: 0 })
+
             } else {
                 console.log("location permission denied");
             }
         } catch (err) {
             console.warn(err);
         }
-        
 
-        
+
+
     }
 
 
     onDone = () => {
-        const {setLocation} = this.props.navigation.state.params
-        const {focusedlocation} = this.state
+        const { setLocation } = this.props.navigation.state.params
+        const { focusedlocation } = this.state
         // console.log('setLocation', setLocation)
         var coords = {
-            latitude  : focusedlocation.latitude,
-            longitude  : focusedlocation.longitude,
-            latitudeDelta  : focusedlocation.latitudeDelta,
-            longitudeDelta  : focusedlocation.longitudeDelta,
+            latitude: focusedlocation.latitude,
+            longitude: focusedlocation.longitude,
+            latitudeDelta: focusedlocation.latitudeDelta,
+            longitudeDelta: focusedlocation.longitudeDelta,
 
         }
         setLocation(coords);
@@ -377,7 +431,7 @@ class Map extends Component {
                     })) :
                     (this.setState({
                         searchLocation: null,
-    
+
                     }))
             })
             .catch(err => console.log(err))
@@ -394,20 +448,20 @@ class Map extends Component {
         const { coordinates } = this.state
         try {
             const result = await Share.share({
-              message: `https://maps.google.com?q=${coordinates[0].latitude},${coordinates[0].longitude},16z`,
+                message: `https://maps.google.com?q=${coordinates[0].latitude},${coordinates[0].longitude},16z`,
             });
             if (result.action === Share.sharedAction) {
-              if (result.activityType) {
-                // shared with activity type of result.activityType
-              } else {
-                // shared
-              }
+                if (result.activityType) {
+                    // shared with activity type of result.activityType
+                } else {
+                    // shared
+                }
             } else if (result.action === Share.dismissedAction) {
-              // dismissed
+                // dismissed
             }
-          } catch (error) {
+        } catch (error) {
             alert(error.message);
-          }
+        }
     }
 
 
@@ -420,158 +474,159 @@ class Map extends Component {
 
     handleRideRequest = (e) => {
         const { activeRideData } = this.props
-        
-        if( activeRideData ){
+
+        if (activeRideData) {
             this.setState({
                 rideReq: false,
                 rideReqDetails: e
             })
-        }else {
+        } else {
             this.setState({
                 rideReq: true,
                 rideReqDetails: e
             })
         }
-        
+
     }
 
     static contextType = LocalizationContext
-    
+
     renderRideReq = () => {
         const { translations, appLanguage } = this.context
         const { rideReq, rideReqDetails, coordinates, agreement } = this.state
         const { acceptRide } = this.props
         console.log("coordinates coordinates", coordinates)
-        return(
-            <View style={{ flex: 1}}>
-                    <Modal
-                        transparent={true}
-                        visible={rideReq}
-                        onRequestClose={() => {this.setState({rideReq:!rideReq})}}>
-                        <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
-                            <View style={{backgroundColor:'rgb(35, 37, 50)', justifyContent:'center', alignContent:'center', padding:15, width:'100%', borderRadius:10}}>
-                               <ScrollView> 
+        return (
+            <View style={{ flex: 1 }}>
+                <Modal
+                    transparent={true}
+                    visible={rideReq}
+                    onRequestClose={() => { this.setState({ rideReq: !rideReq }) }}>
+                    <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
+                        <View style={{ backgroundColor: 'rgba(35, 37, 50, .75)', justifyContent: 'center', alignContent: 'center', padding: 15, width: '100%', borderRadius: 10 }}>
+                            <ScrollView>
                                 <View>
                                     <CountDown
                                         size={30}
                                         until={2000}
                                         onFinish={() => {
                                             Alert.alert(translations.ALERT, translations.RIDE_EXPIRED)
-                                            this.setState({rideReq: !rideReq})
+                                            this.setState({ rideReq: !rideReq })
                                             this.props.navigation.state.params.reqDetailParam = null
                                         }}
-                                        digitStyle={{backgroundColor: 'transparent',}}
-                                        digitTxtStyle={{color: '#1CC625', 
-                                        // fontFamily: 'digital'
-                                    }}
-                                        timeLabelStyle={{color: 'red', fontWeight: 'bold'}}
-                                        separatorStyle={{color: '#1CC625'}}
-                                        timeToShow={['M','S']}
-                                        timeLabels={{m: null, s: null}}
+                                        digitStyle={{ backgroundColor: 'transparent', }}
+                                        digitTxtStyle={{
+                                            color: '#1CC625',
+                                            // fontFamily: 'digital'
+                                        }}
+                                        timeLabelStyle={{ color: 'red', fontWeight: 'bold' }}
+                                        separatorStyle={{ color: '#1CC625' }}
+                                        timeToShow={['M', 'S']}
+                                        timeLabels={{ m: null, s: null }}
                                         showSeparator
                                     />
                                 </View>
 
 
-                                <View style={{flexDirection:'row', justifyContent:'space-around', width:"100%", padding: 5, marginTop: 10,}}>
-                                    <Text style={{color:'#fff', width:'15%'}}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: "100%", padding: 5, marginTop: 10, }}>
+                                    <Text style={{ color: '#fff', width: '15%' }}>
                                         {translations.FROM} :
                                     </Text>
 
-                                    <Text style={{color:'#fff', width:'75%', textAlign:'right'}}>
-                                        {rideReqDetails ? rideReqDetails.pick_location_name: 'Fetching address Error'}
+                                    <Text style={{ color: '#fff', width: '75%', textAlign: 'right' }}>
+                                        {rideReqDetails ? rideReqDetails.pick_location_name : 'Fetching address Error'}
                                     </Text>
                                 </View>
 
-                               
-                                <View style={{flexDirection:'row', justifyContent:'space-around', backgroundColor:'transparent', width:"100%", padding: 5, marginTop: 10}}>
-                                    <Text style={{color:'#fff', width:'15%'}}>
+
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'transparent', width: "100%", padding: 5, marginTop: 10 }}>
+                                    <Text style={{ color: '#fff', width: '15%' }}>
                                         {translations.TO} :
                                     </Text>
 
-                                    <Text style={{color:'#fff', width:'75%', textAlign:'right'}}>
-                                        {rideReqDetails ? rideReqDetails.drop_location_name: 'Fetching address Error'}
+                                    <Text style={{ color: '#fff', width: '75%', textAlign: 'right' }}>
+                                        {rideReqDetails ? rideReqDetails.drop_location_name : 'Fetching address Error'}
 
                                     </Text>
                                 </View>
 
-                               {rideReqDetails && 
-                                <View>
-                                    {
-                                        rideReqDetails.bookingType == "object" &&
-                                        <View>
-                                            <View style={{flexDirection:'row', justifyContent:'space-around', width:"100%", padding: 5, marginTop: 10,}}>
-                                                <Text style={{color:'#fff', width:'40%', left: 10}}>
-                                                    Object Name :
-                                                </Text>
-
-                                                <Text style={{color:'#fff', width:'65%', textAlign: 'right'}}>
-                                                    {rideReqDetails ? rideReqDetails.obj_name: 'Fetching Name Error'}
-                                                </Text>
-                                            </View>
-
-                                            <View style={{flexDirection:'row', justifyContent:'space-around', width:"100%", padding: 5, marginTop: 10,}}>
-                                                <Text style={{color:'#fff', width:'40%', left: 10}}>
-                                                    Object Value :
-                                                </Text>
-
-                                                <Text style={{color:'#fff', width:'65%', textAlign: 'right'}}>
-                                                    {rideReqDetails ? rideReqDetails.obj_value: 'Fetching Value Error'}
-                                                </Text>
-                                            </View>
-
-                                            <View style={{flexDirection:'row', justifyContent:'space-around', width:"100%", padding: 5, marginTop: 10,}}>
-                                                <Text style={{color:'#fff', width:'40%', left: 10}}>
-                                                    Object Weight :
-                                                </Text>
-
-                                                <Text style={{color:'#fff', width:'65%', textAlign: 'right'}}>
-                                                    {rideReqDetails ? rideReqDetails.obj_weight: 'Fetching Recipient Number Error'}
-                                                </Text>
-                                            </View>
-
-                                            <View style={{flexDirection:'row', justifyContent:'space-around', width:"100%", padding: 5, marginTop: 10,}}>
-                                                <Text style={{color:'#fff', width:'40%', left: 10}}>
-                                                    Recipient Name :
-                                                </Text>
-
-                                                <Text style={{color:'#fff', width:'65%', textAlign: 'right'}}>
-                                                    {rideReqDetails ? rideReqDetails.recipient_name: 'Fetching Recipient Name Error'}
-                                                </Text>
-                                            </View>
-
-                                            <View style={{flexDirection:'row', justifyContent:'space-around', width:"100%", padding: 5, marginTop: 10,}}>
-                                                <Text style={{color:'#fff', width:'40%', left: 10}}>
-                                                    Recipient Number :
-                                                </Text>
-
-                                                <Text style={{color:'#fff', width:'65%', textAlign: 'right'}}>
-                                                    {rideReqDetails ? rideReqDetails.recipient_number: 'Fetching Recipient Number Error'}
-                                                </Text>
-                                            </View>
-
-
-                                            <View style={{flexDirection:'row', justifyContent:'flex-start', padding: 5, marginTop: 10,}}>
-                                                <CheckBox checked={agreement} onPress={() => this.setState({agreement: !agreement})} />
-                                                <TouchableOpacity onPress={() => {
-                                                    downloadfile('http://144.91.105.44/~ruta/public/pdf/agreement.pdf')
-                                                    // Alert.alert("Alert", "agreement")
-                                                }}>
-                                                    <Text style={{color:'#3A91FA', paddingVertical: '5%'}}>
-                                                        I Agree to the ruta Terms & Condition
+                                {rideReqDetails &&
+                                    <View>
+                                        {
+                                            rideReqDetails.bookingType == "object" &&
+                                            <View>
+                                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: "100%", padding: 5, marginTop: 10, }}>
+                                                    <Text style={{ color: '#fff', width: '40%', left: 10 }}>
+                                                        {translations.OBJECT_NAME} :
                                                     </Text>
-                                                </TouchableOpacity>
-                                            </View>
-                                        </View>
-                                    }
-                                </View>}
-                                
 
-                                
+                                                    <Text style={{ color: '#fff', width: '65%', textAlign: 'right' }}>
+                                                        {rideReqDetails ? rideReqDetails.obj_name : 'Fetching Name Error'}
+                                                    </Text>
+                                                </View>
+
+                                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: "100%", padding: 5, marginTop: 10, }}>
+                                                    <Text style={{ color: '#fff', width: '40%', left: 10 }}>
+                                                        {translations.OBJECT_VALUE} :
+                                                    </Text>
+
+                                                    <Text style={{ color: '#fff', width: '65%', textAlign: 'right' }}>
+                                                        {rideReqDetails ? rideReqDetails.obj_value : 'Fetching Value Error'}
+                                                    </Text>
+                                                </View>
+
+                                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: "100%", padding: 5, marginTop: 10, }}>
+                                                    <Text style={{ color: '#fff', width: '40%', left: 10 }}>
+                                                        {translations.OBJECT_WEIGHT} :
+                                                    </Text>
+
+                                                    <Text style={{ color: '#fff', width: '65%', textAlign: 'right' }}>
+                                                        {rideReqDetails ? rideReqDetails.obj_weight : 'Fetching Recipient Number Error'}
+                                                    </Text>
+                                                </View>
+
+                                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: "100%", padding: 5, marginTop: 10, }}>
+                                                    <Text style={{ color: '#fff', width: '40%', left: 10 }}>
+                                                        {translations.RECIPIENT_NAME} :
+                                                    </Text>
+
+                                                    <Text style={{ color: '#fff', width: '65%', textAlign: 'right' }}>
+                                                        {rideReqDetails ? rideReqDetails.recipient_name : 'Fetching Recipient Name Error'}
+                                                    </Text>
+                                                </View>
+
+                                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: "100%", padding: 5, marginTop: 10, }}>
+                                                    <Text style={{ color: '#fff', width: '40%', left: 10 }}>
+                                                        {translations.RECIPIENT_NUMBER} :
+                                                    </Text>
+
+                                                    <Text style={{ color: '#fff', width: '65%', textAlign: 'right' }}>
+                                                        {rideReqDetails ? rideReqDetails.recipient_number : 'Fetching Recipient Number Error'}
+                                                    </Text>
+                                                </View>
+
+
+                                                <View style={{ flexDirection: 'row', justifyContent: 'flex-start', padding: 5, marginTop: 10, }}>
+                                                    <CheckBox checked={agreement} onPress={() => this.setState({ agreement: !agreement })} />
+                                                    <TouchableOpacity onPress={() => {
+                                                        downloadfile('http://144.91.105.44/~ruta/public/pdf/agreement.pdf')
+                                                        // Alert.alert("Alert", "agreement")
+                                                    }}>
+                                                        <Text style={{ color: '#3A91FA', paddingVertical: '5%' }}>
+                                                            {translations.I_AGREE_TO_RUTA_TERMS}
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                            </View>
+                                        }
+                                    </View>}
+
+
+
                                 <TouchableOpacity onPress={() => {
 
-                                    if(rideReqDetails.bookingType == "object"){
-                                        if(agreement){
+                                    if (rideReqDetails.bookingType == "object") {
+                                        if (agreement) {
                                             var data = new FormData();
                                             data.append('action', 'removeAlert');
                                             data.append('rider_id', this.props.userDetails.data.id);
@@ -579,52 +634,52 @@ class Map extends Component {
                                             data.append('rider_latitude', this.state.coordinates[0].latitude);
                                             data.append('rider_longitude', this.state.coordinates[0].longitude);
                                             data.append('rider_location_name', 'DHA');
-        
+
                                             acceptRide(data, rideReqDetails, this.state.coordinates[0], translations, appLanguage)
-                                            .then(async (res) => {
-                                                if(res.status){
-                                                    this.setState(prevState => {
-                                                        return {
-                                                            coordinates: [
-                                                                ...prevState.coordinates,
-                                                                {
-                                                                    latitude: Number(rideReqDetails.pick_latitude),
-                                                                    longitude: Number(rideReqDetails.pick_longitude)
-                                                                  },
-                                                            ],
-                                                            rideReq: false,
-                                                            rideDetail: true,
-                                                            agreement: false,
-                                                            rideUserDetails: res.userData
-                                                        };
-                                                    })
-                                                    console.log("RESPONSE MAP FILE", res)
-        
-        
-                                                    this.props.navigation.state.params.reqDetailParam = null
-                                                }else {
-                                                    Alert.alert(translations.ALERT, res.message)
-                                                    this.props.navigation.state.params.reqDetailParam = null
-        
-                                                }
-                                            })
-        
-                                        }else {
+                                                .then(async (res) => {
+                                                    if (res.status) {
+                                                        this.setState(prevState => {
+                                                            return {
+                                                                coordinates: [
+                                                                    ...prevState.coordinates,
+                                                                    {
+                                                                        latitude: Number(rideReqDetails.pick_latitude),
+                                                                        longitude: Number(rideReqDetails.pick_longitude)
+                                                                    },
+                                                                ],
+                                                                rideReq: false,
+                                                                rideDetail: true,
+                                                                agreement: false,
+                                                                rideUserDetails: res.userData
+                                                            };
+                                                        })
+                                                        console.log("RESPONSE MAP FILE", res)
+
+
+                                                        this.props.navigation.state.params.reqDetailParam = null
+                                                    } else {
+                                                        Alert.alert(translations.ALERT, res.message)
+                                                        this.props.navigation.state.params.reqDetailParam = null
+
+                                                    }
+                                                })
+
+                                        } else {
                                             Alert.alert(translations.ALERT, translations.PLEASE_ACCEPT_TERM)
                                         }
-                                    }else {
+                                    } else {
 
                                         var data = new FormData();
-                                            data.append('action', 'removeAlert');
-                                            data.append('rider_id', this.props.userDetails.data.id);
-                                            data.append('booking_id', rideReqDetails.booking_id);
-                                            data.append('rider_latitude', this.state.coordinates[0].latitude);
-                                            data.append('rider_longitude', this.state.coordinates[0].longitude);
-                                            data.append('rider_location_name', 'DHA');
-        
-                                            acceptRide(data, rideReqDetails, this.state.coordinates[0], translations, appLanguage)
+                                        data.append('action', 'removeAlert');
+                                        data.append('rider_id', this.props.userDetails.data.id);
+                                        data.append('booking_id', rideReqDetails.booking_id);
+                                        data.append('rider_latitude', this.state.coordinates[0].latitude);
+                                        data.append('rider_longitude', this.state.coordinates[0].longitude);
+                                        data.append('rider_location_name', 'DHA');
+
+                                        acceptRide(data, rideReqDetails, this.state.coordinates[0], translations, appLanguage)
                                             .then(async (res) => {
-                                                if(res.status){
+                                                if (res.status) {
                                                     this.setState(prevState => {
                                                         return {
                                                             // focusedlocation: {
@@ -637,7 +692,7 @@ class Map extends Component {
                                                                 {
                                                                     latitude: Number(rideReqDetails.pick_latitude),
                                                                     longitude: Number(rideReqDetails.pick_longitude)
-                                                                  },
+                                                                },
                                                             ],
                                                             rideReq: false,
                                                             rideDetail: true,
@@ -645,27 +700,27 @@ class Map extends Component {
                                                         };
                                                     })
                                                     console.log("RESPONSE MAP FILE", res)
-        
-        
+
+
                                                     this.props.navigation.state.params.reqDetailParam = null
-                                                }else {
+                                                } else {
                                                     Alert.alert(translations.ALERT, res.message)
                                                     this.props.navigation.state.params.reqDetailParam = null
-        
+
                                                 }
                                             })
-                                        
+
                                     }
-                                    
-                                }} style={{backgroundColor:'#3A91FA', width:'60%', alignSelf:'center', flexDirection:'row',  justifyContent:'space-around', padding: 10, borderRadius: 20, marginTop: 20}}>
-                                    <Text style={{color:'#fff' ,}}>{translations.ACCEPT}</Text>
+
+                                }} style={{ backgroundColor: '#3A91FA', width: '60%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'space-around', padding: 10, borderRadius: 20, marginTop: 20 }}>
+                                    <Text style={{ color: '#fff', }}>{translations.ACCEPT}</Text>
                                 </TouchableOpacity>
 
-                                </ScrollView>
-                            </View>
+                            </ScrollView>
                         </View>
-                    </Modal>
-                </View>
+                    </View>
+                </Modal>
+            </View>
         )
     }
 
@@ -677,98 +732,99 @@ class Map extends Component {
 
 
     renderRideDetails = () => {
-        const { rideDetail,  rideUserDetails, rideReqDetails} = this.state
+        const { translations, appLanguage } = this.context
+        const { rideDetail, rideUserDetails, rideReqDetails } = this.state
         const { activeRideData } = this.props
         // console.log(' rideUserDetails rideUserDetails', rideUserDetails, activeRideData)
 
         return (
-            <View style={{ flex: 1, backgroundColor:'rgb(41, 46, 66)', position: 'absolute', top: 0, bottom: 0,left: 0, right: 0, height:'100%' }}>
-                    <Modal
-                        transparent={true}
-                        visible={rideDetail}
-                        onRequestClose={() => {this.setState({rideDetail:!rideDetail})}}
-                    >
-                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-                            <ScrollView>
-                           
-                            <View style={{backgroundColor:'rgb(41, 46, 66)', padding:15, width:'100%', height: height }}>
+            <View style={{ flex: 1, backgroundColor: 'rgb(41, 46, 66)', position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, height: '100%' }}>
+                <Modal
+                    transparent={true}
+                    visible={rideDetail}
+                    onRequestClose={() => { this.setState({ rideDetail: !rideDetail }) }}
+                >
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                        <ScrollView>
 
-                                    <View style={{flexDirection:'row', marginVertical: 15 }}>
-                                        <TouchableOpacity onPress={() => {this.setState({rideDetail:!rideDetail})}} style={{width:'25%'}}>
-                                            <Text style={{backgroundColor:'red', borderRadius: 100, height:20, width: 20, textAlign:'center', color:'#fff'}}>X</Text>
-                                        </TouchableOpacity>
+                            <View style={{ backgroundColor: 'rgba(41, 46, 66, .75)', padding: 15, width: '100%', height: height }}>
 
-                                        <View>
-                                            <Text style={{textAlign:'center', color:'#fff', fontSize: 25, bottom: 7}}>Ride Details</Text>
+                                <View style={{ flexDirection: 'row', marginVertical: 15 }}>
+                                    <TouchableOpacity onPress={() => { this.setState({ rideDetail: !rideDetail }) }} style={{ width: '25%' }}>
+                                        <Text style={{ backgroundColor: 'red', borderRadius: 100, height: 20, width: 20, textAlign: 'center', color: '#fff' }}>X</Text>
+                                    </TouchableOpacity>
+
+                                    <View>
+                                        <Text style={{ textAlign: 'center', color: '#fff', fontSize: 25, bottom: 7 }}>{translations.RIDE_DETAILS}</Text>
+                                    </View>
+                                </View>
+
+
+                                <View style={{ marginRight: 30 }}>
+                                    <View style={{ alignItems: 'center', borderBottomColor: '#fff', }}>
+
+                                        <Avatar
+                                            size="xlarge"
+                                            rounded
+                                            containerStyle={{ borderWidth: 15, borderColor: '#fff', }}
+                                            source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTGkKTkKnqZE23RyW0_npSDjVKIVg_uLRmZbw&usqp=CAU' }}
+                                        />
+
+                                        <View style={{ alignItems: 'center', marginVertical: 10 }}>
+                                            <Text style={{ fontSize: 23, color: '#fff' }}> {rideUserDetails ? rideUserDetails.first_name + " " + rideUserDetails.last_name : 'John Doe'}</Text>
                                         </View>
                                     </View>
 
 
-                                    <View style={{marginRight: 30}}>
-                                            <View style={{alignItems:'center', borderBottomColor:'#fff',}}>
-                                                
-                                                <Avatar
-                                                size="xlarge" 
-                                                rounded
-                                                containerStyle={{borderWidth: 15, borderColor:'#fff',}}
-                                                source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTGkKTkKnqZE23RyW0_npSDjVKIVg_uLRmZbw&usqp=CAU'}}
-                                                />
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: "100%", padding: 5, marginTop: 10, }}>
 
-                                                <View style={{ alignItems:'center', marginVertical: 10 }}>
-                                                    <Text style={{fontSize: 23, color:'#fff'}}> {rideUserDetails  ? rideUserDetails.first_name + " " + rideUserDetails.last_name : 'John Doe'}</Text>
-                                                </View>
-                                            </View>
+                                        <TouchableOpacity onPress={() => {
+                                            Linking.openURL(rideUserDetails ? `tel:${rideUserDetails.ph_number}` : `tel:${activeRideData.userData.ph_number}`)
+                                        }} style={{ height: 50, width: 50, borderRadius: 100, backgroundColor: '#3A91FA', alignItems: 'center' }}>
+                                            <Image source={phone} style={{ height: 35, width: 35, top: 5 }} />
+                                        </TouchableOpacity>
 
-
-                                            <View style={{flexDirection:'row', justifyContent:'space-around', width:"100%", padding: 5, marginTop: 10,}}>
-                                                
-                                                <TouchableOpacity onPress={() =>{
-                                                    Linking.openURL(rideUserDetails ? `tel:${rideUserDetails.ph_number}` : `tel:${activeRideData.userData.ph_number}`)
-                                                }} style={{height: 50, width: 50, borderRadius: 100, backgroundColor:'#3A91FA', alignItems:'center'}}>
-                                                    <Image source={phone} style={{height: 35, width: 35, top: 5}} />
-                                                </TouchableOpacity>
-
-                                                <TouchableOpacity onPress={() =>{
-                                                    Linking.openURL(`whatsapp://send?text=hello&phone=${activeRideData.userData.ph_number}`)
-                                                }} style={{height: 50, width: 50, borderRadius: 100, backgroundColor:'#3A91FA', alignItems:'center'}}>
-                                                    <Image source={whatsapp} style={{height: 35, width: 35, top: 5}} />
-                                                </TouchableOpacity>
-                                            </View>
-
-
-                                            <View style={{flexDirection:'row', justifyContent:'space-around', backgroundColor:'#3A91FA', width:"100%", padding: 5, marginTop: 10, right: 10}}>
-                                                <Text style={{color:'#fff', width:'40%', textAlign:'center'}}>
-                                                    Pickup Location
-                                                </Text>
-
-                                                <Text style={{color:'#fff', width:'40%', textAlign:'center'}}>
-                                                    {rideReqDetails ? rideReqDetails.pick_location_name: 'Garden Super Market'}
-                                                </Text>
-                                            </View>
-
-                                            <View style={{flexDirection:'row', justifyContent:'space-around', backgroundColor:'transparent', width:"100%", padding: 5, marginTop: 10}}>
-                                                <Text style={{color:'#fff', width:'40%', textAlign:'center'}}>
-                                                    DropOff Location
-                                                </Text>
-
-                                                <Text style={{color:'#fff', width:'40%', textAlign:'center'}}>
-                                                    {rideReqDetails ? rideReqDetails.drop_location_name: 'Nazimabad'}
-
-                                                </Text>
-                                            </View>
-
-                    
+                                        <TouchableOpacity onPress={() => {
+                                            Linking.openURL(`whatsapp://send?text=hello&phone=${activeRideData.userData.ph_number}`)
+                                        }} style={{ height: 50, width: 50, borderRadius: 100, backgroundColor: '#3A91FA', alignItems: 'center' }}>
+                                            <Image source={whatsapp} style={{ height: 35, width: 35, top: 5 }} />
+                                        </TouchableOpacity>
                                     </View>
+
+
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#3A91FA', width: "100%", padding: 5, marginTop: 10, right: 10 }}>
+                                        <Text style={{ color: '#fff', width: '40%', textAlign: 'center' }}>
+                                            {translations.PICKUP_LOCATION}
+                                        </Text>
+
+                                        <Text style={{ color: '#fff', width: '40%', textAlign: 'center' }}>
+                                            {rideReqDetails ? rideReqDetails.pick_location_name : 'Garden Super Market'}
+                                        </Text>
+                                    </View>
+
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'transparent', width: "100%", padding: 5, marginTop: 10 }}>
+                                        <Text style={{ color: '#fff', width: '40%', textAlign: 'center' }}>
+                                            {translations.DROPOFF_LOCATION}
+                                        </Text>
+
+                                        <Text style={{ color: '#fff', width: '40%', textAlign: 'center' }}>
+                                            {rideReqDetails ? rideReqDetails.drop_location_name : 'Nazimabad'}
+
+                                        </Text>
+                                    </View>
+
+
+                                </View>
 
 
 
 
                             </View>
- 
-                            </ScrollView>   
-                         
-                        </View>
-                    </Modal>
+
+                        </ScrollView>
+
+                    </View>
+                </Modal>
             </View>
         )
     }
@@ -779,7 +835,7 @@ class Map extends Component {
 
     startRide = async () => {
         const { coordinates } = this.state
-        const { activeRideData , userDetails, startRide, updateRide} = this.props
+        const { activeRideData, userDetails, startRide, updateRide } = this.props
         const { translations, appLanguage } = this.context
         var activeRide = await AsyncStorage.getItem('activeRide')
 
@@ -789,44 +845,44 @@ class Map extends Component {
         // data.append('latitude', coordinates[0].latitude);
         // data.append('longitude', coordinates[0].longitude);
         // data.append('user_id', userDetails.data.id);
-        if(activeRideData){
+        if (activeRideData) {
             data.append('booking_id', activeRideData.rideReqDetails.booking_id);
-        }else {
+        } else {
             data.append('booking_id', JSON.parse(activeRide).rideReqDetails.booking_id);
         }
         // data.append('name', 'Testing location');
 
         startRide(data, activeRideData, translations, appLanguage)
-        .then(async (res) => {
-            if(activeRideData){
-                var obj = {
-                    latitude: Number(activeRideData.rideReqDetails.drop_latitude),
-                    longitude: Number(activeRideData.rideReqDetails.drop_longitude)
-                  }
-            }else {
-                var obj = {
-                    latitude: Number(JSON.parse(activeRide).rideReqDetails.drop_latitude),
-                    longitude: Number(JSON.parse(activeRide).rideReqDetails.drop_longitude)
-                  }
-            }
-            // coordinates[1] = obj
+            .then(async (res) => {
+                if (activeRideData) {
+                    var obj = {
+                        latitude: Number(activeRideData.rideReqDetails.drop_latitude),
+                        longitude: Number(activeRideData.rideReqDetails.drop_longitude)
+                    }
+                } else {
+                    var obj = {
+                        latitude: Number(JSON.parse(activeRide).rideReqDetails.drop_latitude),
+                        longitude: Number(JSON.parse(activeRide).rideReqDetails.drop_longitude)
+                    }
+                }
+                // coordinates[1] = obj
 
-            
-            coordinates.splice(1, 1, obj)
-            activeRideData.coordinate[1] = obj
-            updateRide(activeRideData)
-            try {
-                await AsyncStorage.setItem('activeRide', JSON.stringify(activeRideData));
-                console.log("SET SUCCESFULLY")
-            } catch (error) {           
-                console.log('error =>', error)
-            }
-            
-            this.setState({
-                abc:'',
-                coordinates
+
+                coordinates.splice(1, 1, obj)
+                activeRideData.coordinate[1] = obj
+                updateRide(activeRideData)
+                try {
+                    await AsyncStorage.setItem('activeRide', JSON.stringify(activeRideData));
+                    console.log("SET SUCCESFULLY")
+                } catch (error) {
+                    console.log('error =>', error)
+                }
+
+                this.setState({
+                    abc: '',
+                    coordinates
+                })
             })
-        })
 
 
     }
@@ -836,12 +892,12 @@ class Map extends Component {
     comeleteRide = () => {
         const { coordinates } = this.state;
         const { translations, appLanguage } = this.context
-        const { activeRideData , userDetails, compeleteRide, getHistory, getUserDetail} = this.props;
+        const { activeRideData, userDetails, compeleteRide, getHistory, getUserDetail } = this.props;
         var dis = getDistance(
-            {latitude: activeRideData.rideReqDetails.pick_latitude, longitude: activeRideData.rideReqDetails.pick_longitude},
+            { latitude: activeRideData.rideReqDetails.pick_latitude, longitude: activeRideData.rideReqDetails.pick_longitude },
             coordinates[0],
-          );
-        var disKm = dis/1000
+        );
+        var disKm = dis / 1000
         // Alert.alert("alert", `Distance\n\n${dis} Meter\nOR\n${dis / 1000} KM`);
         var FormData = require('form-data');
         var data = new FormData();
@@ -853,94 +909,94 @@ class Map extends Component {
         data.append('drop_latitude', activeRideData.rideReqDetails.drop_longitude);
         data.append('km', Number(disKm));
         console.log('FormData FormData', data)
-        
-        compeleteRide(data,translations, appLanguage)
-        .then((res) => {
-            getHistory(userDetails.data.id)
-            getUserDetail(userDetails.data.id)
-            getPaymentDetails(userDetails.data.id)
-            this.setState({
-                rideReqDetails: '',
-                ideUserDetails: null,
-                coordinates: [coordinates[0]],
-                ratingRender: false,
-                ratingCount: 0,
-                ratingDescription:''
+
+        compeleteRide(data, translations, appLanguage)
+            .then((res) => {
+                getHistory(userDetails.data.id)
+                getUserDetail(userDetails.data.id)
+                getPaymentDetails(userDetails.data.id)
+                this.setState({
+                    rideReqDetails: '',
+                    ideUserDetails: null,
+                    coordinates: [coordinates[0]],
+                    ratingRender: false,
+                    ratingCount: 0,
+                    ratingDescription: ''
+                })
             })
-        })
-        .catch((err) => {
-            console.log("ERR ERR", err)
-        })
+            .catch((err) => {
+                console.log("ERR ERR", err)
+            })
     }
 
 
     renderRating = () => {
         const { translations, appLanguage } = this.context
         const { ratingRender, ratingCount, ratingDescription } = this.state
-        const {fetching, giveRating, activeRideData , userDetails,  } = this.props
-        return(
-            <View style={{ flex: 1, position: 'absolute', top: 0, bottom: 0,left: 0, right: 0 }}>
+        const { fetching, giveRating, activeRideData, userDetails, } = this.props
+        return (
+            <View style={{ flex: 1, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
                 <Modal
                     transparent={true}
                     visible={ratingRender}
-                    onRequestClose={() => {this.setState({ratingRender:!ratingRender})}}>
+                    onRequestClose={() => { this.setState({ ratingRender: !ratingRender }) }}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
-                            <View style={{backgroundColor:'rgb(35, 37, 50)', justifyContent:'center', alignContent:'center', padding:15, width:'85%', borderRadius:10}}>
-                                <View style={{alignSelf:'center', width:'100%'}}>
-                                    <Text style={{fontWeight:'bold', fontSize: 18, color:'#fff', textAlign:'center'}}>Rating</Text>
+                        <View style={{ backgroundColor: 'rgba(35, 37, 50, .75)', justifyContent: 'center', alignContent: 'center', padding: 15, width: '85%', borderRadius: 10 }}>
+                            <View style={{ alignSelf: 'center', width: '100%' }}>
+                                <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#fff', textAlign: 'center' }}>{translations.RATING}</Text>
 
-                                    <AirbnbRating
-                                        defaultRating={ratingCount}
-                                        count={5}
-                                        onFinishRating={(rating) => this.setState({ratingCount: rating})}
-                                        size={20}
-                                        />
-                                    
-                                    <View style={{alignSelf:'center'}}> 
-                                        <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor:'#3A91FA' }}>
-                                            <Input
+                                <AirbnbRating
+                                    defaultRating={ratingCount}
+                                    count={5}
+                                    onFinishRating={(rating) => this.setState({ ratingCount: rating })}
+                                    size={20}
+                                />
+
+                                <View style={{ alignSelf: 'center' }}>
+                                    <Item rounded regular style={{ width: '80%', marginTop: '2%', borderColor: '#3A91FA' }}>
+                                        <Input
                                             value={this.state.ratingDescription}
-                                            style={{color:'#fff'}}  placeholderTextColor="#fff" onChangeText={(e) => {
-                                                if(e.length <= 30 ) {
-                                                    this.setState({ ratingDescription: e }) 
-                                                }else {
+                                            style={{ color: '#fff' }} placeholderTextColor="#fff" onChangeText={(e) => {
+                                                if (e.length <= 30) {
+                                                    this.setState({ ratingDescription: e })
+                                                } else {
                                                     Alert.alert(translations.ALERT, translations.YOU_REACHED_REVIEW_LIMIT)
                                                 }
                                             }} placeholder='Enter Your Review' />
-                                        </Item>
-                                        <Text style={{color:'red', textAlign:'right'}}>{translations.MAX_30_LETTERS}, {30 - this.state.ratingDescription.length} {translations.REMAINING} 
-                                        </Text>
-                                    </View>
-
-
-                                    {!fetching ? 
-                                    <TouchableOpacity
-                                    onPress={() => {
-                                        const data = new FormData()
-                                        data.append('riderId', userDetails.data.id);
-                                        data.append('booking_id', activeRideData.rideReqDetails.booking_id);
-                                        data.append('rating', ratingCount);
-                                        data.append('review', ratingDescription);
-                                        data.append('action', 'addRating');
-                                        giveRating(data, translations, appLanguage)
-                                        .then(res => {
-                                            this.comeleteRide()
-                                        })
-                                        .catch((err) =>{
-                                            console.log("error", err)
-                                        })
-                                    }}
-                                    style={{backgroundColor:'#3A91FA', width:'60%', alignSelf:'center', flexDirection:'row',  justifyContent:'space-around', padding: 10, borderRadius: 20, marginTop: 20}}>
-                                        <Text style={{color:'#fff' ,}}>{translations.SEND_FEEDBACK}</Text>
-                                    </TouchableOpacity> 
-                                    :
-                                    <ActivityIndicator color="#3A91FA" />
-                                    }
-                                    
-
+                                    </Item>
+                                    <Text style={{ color: 'red', textAlign: 'right' }}>{translations.MAX_30_LETTERS}, {30 - this.state.ratingDescription.length} {translations.REMAINING}
+                                    </Text>
                                 </View>
 
+
+                                {!fetching ?
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            const data = new FormData()
+                                            data.append('riderId', userDetails.data.id);
+                                            data.append('booking_id', activeRideData.rideReqDetails.booking_id);
+                                            data.append('rating', ratingCount);
+                                            data.append('review', ratingDescription);
+                                            data.append('action', 'addRating');
+                                            giveRating(data, translations, appLanguage)
+                                                .then(res => {
+                                                    this.comeleteRide()
+                                                })
+                                                .catch((err) => {
+                                                    console.log("error", err)
+                                                })
+                                        }}
+                                        style={{ backgroundColor: '#3A91FA', width: '60%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'space-around', padding: 10, borderRadius: 20, marginTop: 20 }}>
+                                        <Text style={{ color: '#fff', }}>{translations.SEND_FEEDBACK}</Text>
+                                    </TouchableOpacity>
+                                    :
+                                    <ActivityIndicator color="#3A91FA" />
+                                }
+
+
                             </View>
+
+                        </View>
                     </View>
                 </Modal>
             </View>
@@ -948,7 +1004,7 @@ class Map extends Component {
         )
     }
 
- 
+
     render() {
         const { translations } = this.context
         console.log("coordinates", this.state.coordinates)
@@ -956,108 +1012,117 @@ class Map extends Component {
         let marker = null;
         const { parcelReq } = this.state;
         if (this.state.coordinates.length >= 1) {
-            marker = this.state.coordinates.map((coordinate, index) =>
-                {
-                    if(index == 0) {
-                        return <MarkerAnimated flat={true} ref={(ref) => this.riderMarker = ref}  image={car} title={'Start'} key={`coordinate_${index}`} coordinate={coordinate} />
-                    }else if (index == 1) {
-                       return <MapView.Marker  title={'End'} key={`coordinate_${index}`} coordinate={coordinate} />
-                    }
+            marker = this.state.coordinates.map((coordinate, index) => {
+                if (index == 0) {
+                    return <MarkerAnimated flat={true} ref={(ref) => this.riderMarker = ref} image={car} title={'Start'} key={`coordinate_${index}`} coordinate={coordinate} />
+                } else if (index == 1) {
+                    return <MapView.Marker title={'End'} key={`coordinate_${index}`} coordinate={coordinate} />
                 }
-              )
+            }
+            )
 
         }
 
-        return(
-            <View style={{flex: 1}} >
+        return (
+            <View style={{ flex: 1 }} >
 
                 {this.renderRideReq()}
                 {this.renderRideDetails()}
                 {this.renderRating()}
-                <RenderParcelRequest parcelReq={parcelReq}/>
-                    <MapView
-                        provider={PROVIDER_GOOGLE}
-                        // mapType={this.mapType}
-                        style={{height: "95%", width:'100%', top: 0 , position:'absolute'}} 
-                        initialRegion={this.state.focusedlocation}
-                        // onPress={this.pickLocationHandler}
-                        ref={ref => this.map = ref}
-                        >
-                        {/* <UrlTile
+                <RenderParcelRequest parcelReq={parcelReq} />
+
+
+
+                <MapView
+                    provider={PROVIDER_GOOGLE}
+                    // mapType={this.mapType}
+                    style={{ height: "95%", width: '100%', top: 0, position: 'absolute' }}
+                    initialRegion={this.state.focusedlocation}
+                    // onPress={this.pickLocationHandler}
+                    userInterfaceStyle="dark"
+                    customMapStyle={darkMapStyle}
+                    ref={ref => this.map = ref}
+                >
+                    {/* <UrlTile
                             urlTemplate="http://b.tile.stamen.com/terrain/{z}/{x}/{y}.png"
                             zIndex={-1}
                         /> */}
-                        {marker}
-                        {(this.state.coordinates.length >= 2) && (
-                <MapViewDirections
-                    origin={this.state.coordinates[0]}
-                    waypoints={ (this.state.coordinates.length >= 2) ? this.state.coordinates.slice(1, -1): null}
-                    // waypoints={this.state.coordinates}
-                    destination={this.state.coordinates[this.state.coordinates.length-1]}
-                    apikey={GOOGLE_MAPS_APIKEY}
-                    strokeWidth={3}
-                    strokeColor={"#2E2F41"}
-                    optimizeWaypoints={true}
-                    onStart={(params) => {
-                    console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
-                    }}
-                    onReady={result => {
-                    // console.log("RESULT", result)
-                    this.setState({duration: result.duration})
-                    console.log(`Distance: ${result.distance} km`)
-                    console.log(`Duration: ${result.duration} min.`)
+                    {marker}
+                    {(this.state.coordinates.length >= 2) && (
+                        <MapViewDirections
+                            origin={this.state.coordinates[0]}
+                            waypoints={(this.state.coordinates.length >= 2) ? this.state.coordinates.slice(1, -1) : null}
+                            // waypoints={this.state.coordinates}
+                            destination={this.state.coordinates[this.state.coordinates.length - 1]}
+                            apikey={GOOGLE_MAPS_APIKEY}
+                            strokeWidth={3}
+                            strokeColor={"#2E2F41"}
+                            optimizeWaypoints={true}
+                            onStart={(params) => {
+                                console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
+                            }}
+                            onReady={result => {
+                                // console.log("RESULT", result)
+                                this.setState({ duration: result.duration })
+                                console.log(`Distance: ${result.distance} km`)
+                                console.log(`Duration: ${result.duration} min.`)
 
-                    this.map.fitToCoordinates(result.coordinates, {
-                        edgePadding: {
-                        right: (width / 20),
-                        bottom: (height / 20),
-                        left: (width / 20),
-                        top: (height / 5),
-                        }
-                    });
-                    }}
-                    onError={(errorMessage) => {
-                    console.log('GOT AN ERROR', errorMessage);
-                    }}
+                                this.map.fitToCoordinates(result.coordinates, {
+                                    edgePadding: {
+                                        right: (width / 20),
+                                        bottom: (height / 20),
+                                        left: (width / 20),
+                                        top: (height / 5),
+                                    }
+                                });
+                            }}
+                            onError={(errorMessage) => {
+                                console.log('GOT AN ERROR', errorMessage);
+                            }}
+                        />
+                    )}
+                </MapView>
+                <Header
+                    containerStyle={{ backgroundColor: 'transparent', borderBottomWidth: 0, position: 'absolute', marginTop: 0, width: '100%' }}
+                    leftComponent={
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                            <Image source={back} style={{ height: 30, width: 30 }} />
+                        </TouchableOpacity>
+                    }
+                    rightComponent={
+                        <TouchableOpacity onPress={() => this.onShare()}>
+                            <Image source={share} style={{ height: 30, width: 30 }} />
+                        </TouchableOpacity>
+                    }
                 />
-        )}
-                    </MapView>
-                 <Header  
-                            containerStyle={{backgroundColor:'transparent', borderBottomWidth: 0, position:'absolute', marginTop: 0, width:'100%'}}
-                            leftComponent={
-                            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                                <Image source={leftArrow} style={{height: 30, width:30}} />
-                            </TouchableOpacity>
-                            }
-                            rightComponent={
-                                <TouchableOpacity onPress={() => this.onShare()}>
-                                    <Image source={share} style={{height: 30, width:30}} />
-                                </TouchableOpacity>
-                            }
-                            />
 
-                {               
-                    activeRideData && (activeRideData.status == "pending" ? 
-                    <TouchableOpacity onPress={() =>  this.startRide()} style={{backgroundColor:'#232532',  position:'absolute', bottom:50, width:'100%', paddingVertical: 15}}>
-                        <Text style={{color:'#fff', fontWeight:'bold', textAlign:'center', bottom: 10}}>START</Text> 
-                    </TouchableOpacity>
+                {
+                    activeRideData && (activeRideData.status == "pending" ?
+                        <TouchableOpacity onPress={() => this.startRide()} style={{ backgroundColor: '#232532', position: 'absolute', bottom: 50, width: '100%', paddingVertical: 15 }}>
+                            <Text style={{ color: '#fff', fontWeight: 'bold', textAlign: 'center', bottom: 10 }}>START</Text>
+                        </TouchableOpacity>
 
-                    :
+                        :
 
-                    <TouchableOpacity onPress={() => {
-                        this.setState({
-                            ratingRender: true
-                        })
-                        }} style={{backgroundColor:'#232532',  position:'absolute', bottom:40, width:'100%', paddingVertical: 15}}>
-                        <Text style={{color:'#fff', fontWeight:'bold', textAlign:'center', bottom: 10}}>COMPELETE</Text> 
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            this.setState({
+                                ratingRender: true
+                            })
+                        }} style={{ backgroundColor: '#232532', position: 'absolute', bottom: 40, width: '100%', paddingVertical: 15 }}>
+                            <Text style={{ color: '#fff', fontWeight: 'bold', textAlign: 'center', bottom: 10 }}>COMPELETE</Text>
+                        </TouchableOpacity>
                     )
                 }
-                
-                <FooterComponent goto={(e) => this.props.navigation.navigate(e,  {
-                    reqDetailParam: false 
-                })} active={"location"}  />
-                
+
+                <FooterComponent goto={(e) => this.props.navigation.navigate(e, {
+                    reqDetailParam: false
+                })} active={"location"} />
+
+                {/* createTrip Button */}
+                <TouchableOpacity onPress={() => this.props.navigation.navigate("CreateSchedule")} style={{ position: 'absolute', bottom: 70, right: 20, backgroundColor: "#fff", height: 50, width: 50, borderRadius: 50, alignItems: "center", justifyContent: "center" }} >
+                    <Icon name="add" style={{ fontSize: 30 }} />
+                </TouchableOpacity>
+
             </View>
         )
     }
@@ -1066,7 +1131,7 @@ class Map extends Component {
 
 Map.propTypes = {
     provider: ProviderPropType,
-  };
+};
 
 const styles = StyleSheet.create({
     container: {

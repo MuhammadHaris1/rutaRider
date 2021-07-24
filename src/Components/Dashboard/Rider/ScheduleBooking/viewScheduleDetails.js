@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { View, Image, Text, RefreshControl, ScrollView, ImageBackground, ActivityIndicator, Linking, TouchableOpacity, Alert } from 'react-native'
+import React, { useContext, useState } from 'react'
+import { View, Image, Text, RefreshControl, ScrollView, ImageBackground, ActivityIndicator, Linking, TouchableOpacity, Alert, Modal } from 'react-native'
 import { connect } from 'react-redux'
 import { HeaderCustom } from '../Constants/Header'
 import { styles } from './scheduleStyling'
@@ -12,12 +12,17 @@ import { LocalizationContext } from '../../../../Localization/LocalizationContex
 import Axios from 'axios'
 import { API_ENDPOINT } from '../../../../Constant/constant'
 import OptionsMenu from "react-native-option-menu";
+import WebView from 'react-native-webview'
 
 const phoneImg = require('../../../../../assets/phone.png')
 const whatsapp = require('../../../../../assets/whatsapp.png')
 
 
 const ViewScheduleDetail = (props) => {
+
+
+    const [paymentModalShow, setPaymentModalShow] = useState(false)
+    const [paymentLink, setPaymentLink] = useState("")
 
     const myIcon = (<Icon name="ellipsis-vertical" type='Ionicons' size={30} color="#fff" style={{ color: "#fff" }} />)
 
@@ -59,7 +64,7 @@ const ViewScheduleDetail = (props) => {
         try {
             let response = await Axios.post(`${API_ENDPOINT}transactions.php`, formData)
 
-            console.log("perform transaction", response)
+            console.log("perform transaction", response.data)
             onRefresh()
             if (response.status == 200) {
             }
@@ -86,6 +91,25 @@ const ViewScheduleDetail = (props) => {
             console.log(error)
         }
     }
+
+    // const startTransaction = async (id) => {
+    //     try {
+    //         let {} = Axios.
+    //     } catch ({message}) {
+    //         console.log(message);
+    //     }
+    // }
+
+    const handleResponse = data => {
+        console.log(data);
+        // if (data.title === "success") {
+        //     this.setState({ showModal: false, status: "Complete" });
+        // } else if (data.title === "cancel") {
+        //     this.setState({ showModal: false, status: "Cancelled" });
+        // } else {
+        //     return;
+        // }
+    };
 
     let filterdUserOfGenratedTransaction = schduleDetail?.user_data ? schduleDetail.user_data.filter(x => x.txn_id == null) : []
     console.log("filterdUserOfGenratedTransaction", filterdUserOfGenratedTransaction, Array.isArray(filterdUserOfGenratedTransaction), filterdUserOfGenratedTransaction.length == 0)
@@ -253,6 +277,8 @@ const ViewScheduleDetail = (props) => {
                                 {!schduleDetail?.schedule_data?.txn_id ? <Button
                                     // disabled={(Array.isArray(filterdUserOfGenratedTransaction) && filterdUserOfGenratedTransaction.length == 0) ? true : false}
                                     onPress={() => {
+                                        // startTransaction(schduleDetail.schedule_data.id)
+                                        // setPaymentModalShow(true)
                                         generateTransaction(schduleDetail.schedule_data.id)
                                     }} style={styles.btnStyle} full rounded>
                                     <Text style={{ color: '#fff' }}>
@@ -312,6 +338,18 @@ const ViewScheduleDetail = (props) => {
 
                 </ScrollView>
             </ImageBackground>
+            <Modal
+                visible={paymentModalShow}
+                onRequestClose={() => setPaymentModalShow(false)}
+            >
+                <WebView
+                    source={{ uri: "http://localhost:3000" }}
+                    onNavigationStateChange={data =>
+                        handleResponse(data)
+                    }
+                    // injectedJavaScript={`document.f1.submit()`}
+                />
+            </Modal>
         </View>
     )
 }

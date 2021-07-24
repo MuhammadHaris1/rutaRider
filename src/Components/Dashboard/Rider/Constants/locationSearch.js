@@ -1,5 +1,6 @@
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Platform } from 'react-native';
+import { Keyboard } from 'react-native';
 import { View, Text, Modal, ImagePropTypes } from 'react-native'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { LocalizationContext } from '../../../../Localization/LocalizationContext';
@@ -11,6 +12,42 @@ export const SearchLocation = (props) => {
     const contextType = useContext(LocalizationContext)
     const { translations, appLanguage, setAppLanguage } = contextType
 
+    const [keyboardStatus, setKeyboardStatus] = useState(undefined);
+
+    useEffect(() => {
+        // console.log(searchRe)
+        if (searchRef.current !== null) {
+            if (props.visible) {
+                searchRef.current.focus
+            } else {
+                searchRef.current.blur
+            }
+
+        }
+    }, [props.visible])
+
+
+    useEffect(() => {
+        Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
+        Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+
+        // cleanup function
+        return () => {
+            Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
+            Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
+        };
+    }, []);
+
+
+    const _keyboardDidShow = () => {
+        setKeyboardStatus("Keyboard Shown")
+    };
+
+    const _keyboardDidHide = () => {
+        setKeyboardStatus("Keyboard Hidden")
+        props.closed()
+    };
+
     return (
         <View style={{ flex: 1, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
 
@@ -21,7 +58,7 @@ export const SearchLocation = (props) => {
                     props.closed()
                 }}>
 
-                <View style={{ flex: 1,  paddingTop: Platform.OS == "android" ? 0 : 40 }}
+                <View style={{ flex: 1, paddingTop: Platform.OS == "android" ? 0 : 40 }}
                 >
                     <GooglePlacesAutocomplete
                         ref={searchRef}

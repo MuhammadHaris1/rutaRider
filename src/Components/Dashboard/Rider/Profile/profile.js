@@ -5,10 +5,10 @@ import { getPaymentDetails, updateVehicle, getHistory, getUserDetail, getEmergen
 import { Item, Input, Label, Button } from 'native-base';
 import { Avatar, Header, } from 'react-native-elements'
 import FooterComponent from '../../Rider/Footer/footer'
-const profileBack = require('../../../../../assets/profileBack.png')
 const back = require('../../../../../assets/back.png')
 const sidebar = require('../../../../../assets/sidebar.png')
 const experience = require('../../../../../assets/experience.png')
+const profileBack = require('../../../../../assets/profileBack.png')
 const Trips = require('../../../../../assets/Trips.png')
 const Profilestar = require('../../../../../assets/Profilestar.png')
 const km = require('../../../../../assets/km.png')
@@ -267,7 +267,7 @@ class Profile extends React.Component {
                 >
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
 
-                        <View style={{ backgroundColor: 'rgb(41, 46, 66)', justifyContent: 'center', alignContent: 'center', padding: 15, width: '95%', borderRadius: 10 }}>
+                        <View style={{ backgroundColor: 'rgba(41, 46, 66, .75)', justifyContent: 'center', alignContent: 'center', padding: 15, width: '95%', borderRadius: 10 }}>
 
                             <View style={{ flexDirection: 'row' }}>
                                 <TouchableOpacity onPress={() => { this.setState({ modalVisible: !modalVisible }) }} style={{ width: '25%' }}>
@@ -379,7 +379,7 @@ class Profile extends React.Component {
                         BackHandler.exitApp()
                     }}
                 >
-                    <View style={{ backgroundColor: 'rgb(41, 46, 66)', flex: 1, justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                    <View style={{ backgroundColor: 'rgba(41, 46, 66, .75)', flex: 1, justifyContent: 'center', alignItems: 'center', height: '100%' }}>
 
                         <ScrollView style={{ width: '100%' }}>
 

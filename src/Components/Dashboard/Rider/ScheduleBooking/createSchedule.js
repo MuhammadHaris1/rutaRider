@@ -8,7 +8,7 @@ import { filterSchedule, removeParams, createSchedule, getSchedule } from '../..
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment'
 import { connect } from 'react-redux'
-import MapView, { MarkerAnimated } from 'react-native-maps'
+import MapView, { MarkerAnimated, PROVIDER_GOOGLE } from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
 import Geolocation from '@react-native-community/geolocation'
 import LinearGradient from 'react-native-linear-gradient'
@@ -21,6 +21,7 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyChHCc-8IkHyZIeHzhGomiY7sBo3fLlzak';
 
 import { getDistance } from 'geolib';
 import { TouchableOpacity } from 'react-native'
+import { darkMapStyle } from '../Constants/mapStyles'
 
 
 const CreateSchedule = (props) => {
@@ -232,10 +233,13 @@ const CreateSchedule = (props) => {
             />
 
             <MapView
+                provider={PROVIDER_GOOGLE}
                 style={{ height: heightPercentageToDP(65), width: '100%', position: 'absolute', top: 0 }}
                 initialRegion={focusedlocation}
                 // ref={e => setMapRef(e)}
                 ref={mapRef}
+                customMapStyle={darkMapStyle}
+                userInterfaceStyle="dark"
             >
                 {marker()}
 
@@ -247,7 +251,7 @@ const CreateSchedule = (props) => {
                         destination={coordinates[coordinates.length - 1]}
                         apikey={GOOGLE_MAPS_APIKEY}
                         strokeWidth={3}
-                        strokeColor={"#2E2F41"}
+                        strokeColor={"#fff"}
                         optimizeWaypoints={true}
                         onStart={(params) => {
                             console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
@@ -312,6 +316,7 @@ const CreateSchedule = (props) => {
                                             setVisible(true);
                                             setType('from');
                                         }}
+                                        // editable={false}
                                         style={styles.whiteNormalTxt}
                                         value={fromAddress} placeholder={translations.FROM} placeholderTextColor="#fff" />
                                 </Item>
@@ -330,7 +335,9 @@ const CreateSchedule = (props) => {
                                         }}
                                         style={styles.whiteNormalTxt}
                                         value={toAddress}
-                                        placeholder={translations.TO} placeholderTextColor="#fff" />
+                                        // editable={false}
+                                        placeholder={translations.TO} 
+                                        placeholderTextColor="#fff" />
                                 </Item>
                             </View>
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, Image, AsyncStorage, ImageBackground, Platform } from 'react-native'
-const splashBack = require('../../assets/Splash.png')
+const splashBack = require('../../assets/clientbackground1.jpeg')
 import { Spinner } from 'native-base'
 const Logo = require('../../assets/Logo.png')
 const loader = require('../../assets/loader.gif')
