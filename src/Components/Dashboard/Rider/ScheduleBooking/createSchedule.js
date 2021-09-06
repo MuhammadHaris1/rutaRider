@@ -22,6 +22,7 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyChHCc-8IkHyZIeHzhGomiY7sBo3fLlzak';
 import { getDistance } from 'geolib';
 import { TouchableOpacity } from 'react-native'
 import { darkMapStyle } from '../Constants/mapStyles'
+import Axios from 'axios'
 
 
 const CreateSchedule = (props) => {
@@ -177,6 +178,7 @@ const CreateSchedule = (props) => {
         formData.append("seat", seat);
         formData.append("date", date);
         formData.append("txn_km", distance)
+        console.log(formData)
         createSchedule(formData, translations, appLanguage)
             .then((res) => {
                 Alert.alert(translations.ALERT, res.message)
@@ -387,10 +389,11 @@ const CreateSchedule = (props) => {
                                     <Button onPress={() => {
                                         const userNumber = props.userDetails.data.ph_number.replace(/\-/g, "")
                                         console.log(userNumber, props.userDetails.data.ph_number)
+                                        // console.log(`https://pay.payphonetodoesposible.com/api/Users/${userNumber}/region/593`);
                                         fetch(`https://pay.payphonetodoesposible.com/api/Users/${userNumber}/region/593`, {
+                                            method: "GET",
                                             headers: {
                                                 "Authorization": "Bearer hpUc1ofDa6S1FIsiHmqDlRZoJdv5c4RsprtnkP2-_jeKx6U6AAD3KM0pVDaSKuYojiYJ0Kamm3ttltY9FFIs5cN5_7iLtROR2Z4WoELsKiTOsyZ79evQ_O_7EcSjJjucoXj4RdEVYTy3s3nWVaQFCQx1UtYhYVEUszgF4YwUu0_UEcA1jnAUfbeCfWWF-zTxjUGFTjTw0dKgUMO57Dj7Ejwc8oSYyiIERBbzZE3BBGCD8uH2qhgIoeSytEFzzlAONDv9Rmn6IITYyHjvgWm02Bmc55ZV6kkvtATYzSTLv6q_ejVR4LaW4OLSSq7PW-EKvGD_t0LMEYqf0cf8gF8ZrvWRyss",
-                                                "Accept": "application/json"
                                             }
                                         })
                                             .then(res => res.json())
@@ -405,6 +408,18 @@ const CreateSchedule = (props) => {
                                             .catch(err => {
                                                 console.log(err)
                                             })
+                                        // Axios.get(`https://pay.payphonetodoesposible.com/api/Users/${userNumber}/region/593`, {
+                                        //     headers: {
+                                        //         "Authorization": "Bearer hpUc1ofDa6S1FIsiHmqDlRZoJdv5c4RsprtnkP2-_jeKx6U6AAD3KM0pVDaSKuYojiYJ0Kamm3ttltY9FFIs5cN5_7iLtROR2Z4WoELsKiTOsyZ79evQ_O_7EcSjJjucoXj4RdEVYTy3s3nWVaQFCQx1UtYhYVEUszgF4YwUu0_UEcA1jnAUfbeCfWWF-zTxjUGFTjTw0dKgUMO57Dj7Ejwc8oSYyiIERBbzZE3BBGCD8uH2qhgIoeSytEFzzlAONDv9Rmn6IITYyHjvgWm02Bmc55ZV6kkvtATYzSTLv6q_ejVR4LaW4OLSSq7PW-EKvGD_t0LMEYqf0cf8gF8ZrvWRyss"
+                                        //     }
+                                        // }) .then(result => console.log(result))
+                                        // .catch(err => {
+                                        //     try {
+                                        //         console.log(err)
+                                        //     } catch (error) {
+                                        //         console.log(error)
+                                        //     }
+                                        // })
                                     }
                                     } transparent style={[{ backgroundColor: 'transparent', }]} full rounded >
                                         <Text style={{ color: '#fff', alignSelf: 'center' }}>

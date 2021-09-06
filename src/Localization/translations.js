@@ -196,6 +196,7 @@ const translations = {
     RIDE_DETAILS: "Ride Details",
     PICKUP_LOCATION: "Pickup Location",
     DROPOFF_LOCATION: "DropOff Location",
+    CREATE_TRIP: "Create Schedule"
   },
   ar: {
     LANGUAGE_SETTINGS: 'تغيير اللغة',
@@ -392,7 +393,8 @@ const translations = {
     I_AGREE_TO_RUTA_TERMS: "Acepto los Términos y condiciones de ruta",
     RIDE_DETAILS: "Detalles del viaje",
     PICKUP_LOCATION: "Lugar de recogida",
-    DROPOFF_LOCATION: "Punto de entrega"
+    DROPOFF_LOCATION: "Punto de entrega",
+    CREATE_TRIP: "Crear Viaje"
   },
 };
 

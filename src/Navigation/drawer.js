@@ -95,7 +95,11 @@ function DrawerMenu(props) {
             icon: require('../../assets/schedule.png'),
             navigate: 'ScheduleBooking'
         },
-
+        {
+            name: "Paymentz",
+            icon: require('../../assets/RouteiconActive.png'),
+            navigate: 'Paymentz'
+        },
     ])
 
     useEffect(() => {
@@ -129,6 +133,11 @@ function DrawerMenu(props) {
                 name: translations.SCHEDULE_BOOKING,
                 icon: require('../../assets/schedule.png'),
                 navigate: 'ScheduleBooking'
+            },
+            {
+                name: "Paymentz",
+                icon: require('../../assets/RouteiconActive.png'),
+                navigate: 'Paymentz'
             },
         ])
 

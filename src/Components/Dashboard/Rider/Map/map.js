@@ -73,7 +73,8 @@ class Map extends Component {
             ratingDescription: '',
             ratingCount: 1,
             parcelReq: false,
-            agreement: false
+            agreement: false,
+            createTrip: true
         }
 
 
@@ -829,6 +830,38 @@ class Map extends Component {
         )
     }
 
+    renderCreateTrip = () => {
+        const { translations, appLanguage } = this.context
+        const { createTrip, rideUserDetails, rideReqDetails } = this.state
+        const { activeRideData } = this.props
+        // console.log(' rideUserDetails rideUserDetails', rideUserDetails, activeRideData)
+
+        return (
+
+            <Modal
+                transparent={true}
+                visible={createTrip}
+            // onRequestClose={() => { this.setState({ createTrip: !createTrip }) }}
+            >
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <View style={{ backgroundColor: 'rgba(35, 37, 50, .75)', justifyContent: 'center', alignItems: 'center', padding: 15, width: '85%', borderRadius: 10 }}>
+                        <Text style={{ color: '#fff', textAlign: 'center', fontWeight: 'bold', fontSize: 20, marginTop: 10, textTransform: "uppercase" }}>{translations.CREATE_TRIP}</Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.setState({ createTrip: false })
+                                this.props.navigation.navigate("CreateSchedule")
+                            }} style={{ borderWidth: 1, borderColor: "#fff", padding: 10, borderRadius: 10, marginTop: 10, paddingVertical: 15, paddingHorizontal: 15  }}>
+                            <Image source={require("../../../../../assets/sedan-car-model.png")} style={{ height: 60, width: 60, alignSelf: "center" }} />
+                            {/* <Icon name={"calendar-outline"} style={{ color: "#fff", fontSize: 50, alignSelf: "center" }} /> */}
+                        </TouchableOpacity>
+
+                    </View>
+                </View>
+                <FooterComponent goto={(e) => this.props.navigation.navigate(e)} active={"location"} />
+            </Modal>
+        )
+    }
+
 
 
 
@@ -1026,9 +1059,11 @@ class Map extends Component {
         return (
             <View style={{ flex: 1 }} >
 
+                {this.renderCreateTrip()}
                 {this.renderRideReq()}
                 {this.renderRideDetails()}
                 {this.renderRating()}
+
                 <RenderParcelRequest parcelReq={parcelReq} />
 
 
@@ -1119,9 +1154,9 @@ class Map extends Component {
                 })} active={"location"} />
 
                 {/* createTrip Button */}
-                <TouchableOpacity onPress={() => this.props.navigation.navigate("CreateSchedule")} style={{ position: 'absolute', bottom: 70, right: 20, backgroundColor: "#fff", height: 50, width: 50, borderRadius: 50, alignItems: "center", justifyContent: "center" }} >
+                {/* <TouchableOpacity onPress={() => this.props.navigation.navigate("CreateSchedule")} style={{ position: 'absolute', bottom: 70, right: 20, backgroundColor: "#fff", height: 50, width: 50, borderRadius: 50, alignItems: "center", justifyContent: "center" }} >
                     <Icon name="add" style={{ fontSize: 30 }} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
             </View>
         )
@@ -1154,5 +1189,3 @@ const mapDispatchToProps = {
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Map);
-
-

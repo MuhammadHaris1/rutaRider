@@ -38,7 +38,7 @@ export function login(data, fetchProfileData, translations, appLanguage) {
               await AsyncStorage.setItem('User', JSON.stringify(response.data));
               fetchProfileData(response.data)
               console.log('response.data', response.data)
-              NavigtionService.navigate('Main')
+              NavigtionService.navigate('Map')
               Alert.alert(translations.ALERT, appLanguage == "en" ? response.data.message : response.data.spanishmessage)
             } catch (error) {
               console.log('error =>', error)

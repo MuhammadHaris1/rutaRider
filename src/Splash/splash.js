@@ -58,11 +58,11 @@ class Splash extends Component {
                         if(params.notification) {
                             this.props.navigation.navigate('RideReq')
                         }else {
-                            this.props.navigation.navigate('Main')
+                            this.props.navigation.navigate('Map')
                         }
 
                     }else {
-                        this.props.navigation.navigate('Main')
+                        this.props.navigation.navigate('Map')
                     }
                 }, 3000)
            
